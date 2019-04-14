@@ -20,6 +20,7 @@
 #ifndef EVENT_QUEUE_H
 #define EVENT_QUEUE_H
 
+#include <cstdlib>
 #include <queue>
 #include <vector>
 
