@@ -86,12 +86,6 @@ class ResourceManager
 		double path_fwm_noise(short int lambda, Edge **Path, unsigned short int pathLen, unsigned short int ci);
 
 		double path_xpm_noise(short int lambda, Edge **Path, unsigned short int pathLen, unsigned short int ci);
-
-		void build_nonlinear_datastructure();
-		void load_xpm_database(double *store,int fs_num);
-		
-		int gen_frequency_comb(double *frequencies,double fc,double step, int left,int right, int wo_fc);
-		void build_xpm_database(double *fs, int fs_num,double channel_power,double D,double alphaDB,double gamma,double res_disp);
 		
 		int build_FWM_fs(double *inter_fs,int *inter_indecies, int lambda);
 		int wave_combines(double fc, double *fs,int fs_num, vector<int> &fs_coms);
