@@ -2498,7 +2498,7 @@ void userRunNewSim( int argc, const char* argv[] )
 	for(int i = 0; i < 25; i++){
 		foldName[i] = ASCII;
 	}
-	sprintf(foldName,"OUTPUT/");
+	sprintf(foldName,"output/");
 	place = 7;
 	rectfill(screen, 0, 0, SCRNWID, SCRNHEI, color);
 	textprintf_ex(screen,font,20,15,color2,color,"Choose a name for the new simulation:");

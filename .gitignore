@@ -10,3 +10,4 @@ kshortestpath/libkshortestpath.a
 octave/xpm_database.mat
 octave/xpm_inputs.mat
 raptor
+output/*txt

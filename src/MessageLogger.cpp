@@ -41,7 +41,7 @@ MessageLogger::MessageLogger(const char* topo, const char* lambda, const char* s
 	pthread_mutex_init(&ResultsMutex,NULL);
 
 	char buffer[100];
-	sprintf(buffer,"OUTPUT/EventLog-%s-%s-%s-%s-R%d.txt",topo,lambda,seed,k,runCount);
+	sprintf(buffer,"output/EventLog-%s-%s-%s-%s-R%d.txt",topo,lambda,seed,k,runCount);
 
 	eventLogger.open(buffer);
 }
@@ -135,85 +135,6 @@ void MessageLogger::recordEvent(const string &e, bool print, unsigned short int 
 		pthread_mutex_unlock(&PrintMutex);
 	}
 
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// Function Name:	convertToFormattedTime
-// Description:		Takes the time in seconds and converts it to
-//					the structured time format.
-//
-///////////////////////////////////////////////////////////////////
-FormattedTime MessageLogger::convertToFormattedTime(double t)
-{
-	FormattedTime retval;
-
-	//Get the number of minutes
-	retval.minutes = static_cast<unsigned short>(t / 60.0);
-	retval.seconds = float(t - retval.minutes * 60.0);
-
-	//Get the number of hours
-	retval.hours = static_cast<unsigned short>(static_cast<float>(retval.minutes) / 60.0);
-	retval.minutes = retval.minutes - retval.hours * 60;
-
-	return retval;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// Function Name:	convertToStringTime
-// Description:		Takes the time in the structured format and
-//					converts it to a string
-//
-///////////////////////////////////////////////////////////////////
-string MessageLogger::convertToStringTime(const FormattedTime &t)
-{
-	string retval;
-	char buffer[10];
-
-	//Print the hours
-	if(t.hours >= 10)
-	{
-		itoa(t.hours,buffer,10);
-		retval.append(buffer);
-	}
-	else
-	{
-		itoa(t.hours,buffer,10);
-		retval.append("0");
-		retval.append(buffer);
-	}
-
-	retval.append(":");
-
-	//Print the minutes
-	if(t.minutes >= 10)
-	{
-		itoa(t.minutes,buffer,10);
-		retval.append(buffer);
-	}
-	else
-	{
-		itoa(t.minutes,buffer,10);
-		retval.append("0");
-		retval.append(buffer);
-	}
-
-	retval.append(":");
-
-	//Print the seconds
-	if(t.seconds >= 10)
-	{
-		sprintf(buffer,"%2.3f",t.seconds);
-		retval.append(buffer);
-	}
-	else
-	{
-		sprintf(buffer,"%2.3f",t.seconds);
-		retval.append("0");
-		retval.append(buffer);
-	}
-	return retval;
 }
 
 //Source: http://www.jb.man.ac.uk/~slowe/cpp/itoa.html

@@ -50,10 +50,6 @@ class MessageLogger
 	private:
 		ofstream eventLogger;
 
-		FormattedTime convertToFormattedTime(double t);
-
-		string convertToStringTime(const FormattedTime &t);
-
 		pthread_mutex_t LogMutex;
 		pthread_mutex_t PrintMutex;
 		pthread_mutex_t ResultsMutex;
