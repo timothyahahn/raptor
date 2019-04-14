@@ -99,23 +99,23 @@ Thread::Thread(int ci, int argc, const char* argv[], bool isLPS, int rc)
 	{
 		logger = new MessageLogger(argv[1],argv[2],argv[3],argv[6],rc);
 
-		sprintf(fileName,"INPUT/Quality-%s-%s.txt",argv[1],argv[2]);
+		sprintf(fileName,"input/Quality-%s-%s.txt",argv[1],argv[2]);
 		setQualityParameters(fileName);
 	}
 
 	topology = argv[1];
 
-	sprintf(fileName,"INPUT/Topology-%s.txt",argv[1]);
+	sprintf(fileName,"input/Topology-%s.txt",argv[1]);
 	setTopologyParameters(fileName);
 
-	sprintf(fileName,"INPUT/Workstation-%s-%s.txt",argv[1],argv[2]);
+	sprintf(fileName,"input/Workstation-%s-%s.txt",argv[1],argv[2]);
 	setWorkstationParameters(fileName);
 
 	if(controllerIndex == 0 && isLoadPrevious == false)
 	{
 		qualityParams.max_probes = atoi(argv[6]);
 
-		sprintf(fileName,"INPUT/Algorithm.txt");
+		sprintf(fileName,"input/Algorithm.txt");
 		setAlgorithmParameters(fileName,atoi(argv[5]));
 
 		numberOfConnections = static_cast<unsigned int>(TEN_HOURS) / 
