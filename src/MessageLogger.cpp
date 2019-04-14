@@ -86,7 +86,7 @@ void MessageLogger::recordEvent(const std::string &e, bool print, unsigned short
 
 	char buff[25];
 
-	strftime(buff, sizeof(buff), "%H:%I:%M", current);
+	strftime(buff, sizeof(buff), "%H:%M:%S", current);
 
 	message << buff << " [] " << e << std::endl;
 
