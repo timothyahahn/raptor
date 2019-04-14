@@ -1744,7 +1744,7 @@ void ResourceManager::build_nonlinear_datastructure()
 ///////////////////////////////////////////////////////////////////
 void ResourceManager::build_xpm_database(double *fs, int fs_num,double channel_power,double D,double alphaDB,double gamma,double res_disp)
 {	
-	try { 
+	/*try {
 		mwArray in1(1,fs_num,mxDOUBLE_CLASS);
 		mwArray in2(1,1,mxDOUBLE_CLASS);
 		mwArray in3(1,1,mxDOUBLE_CLASS);
@@ -1786,7 +1786,7 @@ void ResourceManager::build_xpm_database(double *fs, int fs_num,double channel_p
     }
 	catch (...) {
 		std::cerr << "Unexpected error thrown" << std::endl;
-    }  	
+    }*/
 	
 	return;
 }
@@ -1801,14 +1801,14 @@ void ResourceManager::build_xpm_database(double *fs, int fs_num,double channel_p
 ///////////////////////////////////////////////////////////////////
 void ResourceManager::load_xpm_database(double* store,int fs_num)
 {
-	mwArray out(threadZero->getNumberOfWavelengths(),threadZero->getNumberOfWavelengths(),mxDOUBLE_CLASS);
+	/*mwArray out(threadZero->getNumberOfWavelengths(),threadZero->getNumberOfWavelengths(),mxDOUBLE_CLASS);
 	load_libxpm_database(1, out);
 	
 	for(int i=0;i<fs_num;i++)
 		for(int j=0;j<fs_num;j++)
 			store[i * threadZero->getNumberOfWavelengths() + j] = out(i+1,j+1);
 
-	printf("done.\n");
+	printf("done.\n");*/
 
 	return;
 }
