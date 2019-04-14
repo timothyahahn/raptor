@@ -155,13 +155,6 @@ END_OF_MAIN()
 
 void runSimulation(int argc, const char* argv[])
 {
-	const char *opt1 = "-nojvm";
-	const char *opt2 = "-nojit";
-	const char **pStrings = new const char *[2];
-
-	pStrings[0] = opt1;
-	pStrings[1] = opt2;
-
 	int* threadZeroReturn = 0;
 	int runCount = 0;
 
@@ -241,8 +234,6 @@ void runSimulation(int argc, const char* argv[])
 	}
 
 	delete threadZeroReturn;
-
-	delete[] pStrings;
 
 #ifdef RUN_GUI
 
