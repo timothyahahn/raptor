@@ -23,8 +23,6 @@
 #include "ResourceManager.h"
 #include "Thread.h"
 
-#include "nonlinear.h"
-
 #include "pthread.h"
 
 #include <cmath>

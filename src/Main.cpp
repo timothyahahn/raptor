@@ -19,7 +19,6 @@
 #include "ErrorCodes.h"
 #include "Thread.h"
 
-#include "nonlinear.h"
 #include "pthread.h"
 
 #include <iostream>
@@ -163,9 +162,6 @@ void runSimulation(int argc, const char* argv[])
 	pStrings[0] = opt1;
 	pStrings[1] = opt2;
 
-	mclInitializeApplication(pStrings,2);
-	nonlinearInitialize();
-
 	int* threadZeroReturn = 0;
 	int runCount = 0;
 
@@ -245,9 +241,6 @@ void runSimulation(int argc, const char* argv[])
 	}
 
 	delete threadZeroReturn;
-
-	nonlinearTerminate();
-	mclTerminateApplication();
 
 	delete[] pStrings;
 
