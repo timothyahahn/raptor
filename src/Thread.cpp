@@ -1966,8 +1966,8 @@ void Thread::setWorkstationParameters(const char * f)
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	setAlgorithmParameters
-// Description:		Opens up the Quality Paremeters file that was
-//					specified by the command line arguement
+// Description:		Opens up the Quality Parameters file that was
+//					specified by the command line argument
 //
 ///////////////////////////////////////////////////////////////////
 void Thread::setAlgorithmParameters(const char * f, unsigned short int iterationCount)
@@ -2012,7 +2012,10 @@ void Thread::setAlgorithmParameters(const char * f, unsigned short int iteration
 		char *qa = strtok(NULL,",") + strlen("QA=") * sizeof(char);
 		char *run = strtok(NULL,",") + strlen("RUN=") * sizeof(char);
 
-		if(strcmp(run,"1") == 0)
+		int i_qa = std::stoi(qa);
+		int i_run = std::stoi(run);
+
+		if(i_run)
 		{
 			CurrentRoutingAlgorithm = NUMBER_OF_ROUTING_ALGORITHMS;
 			CurrentWavelengthAlgorithm = NUMBER_OF_WAVELENGTH_ALGORITHMS;
@@ -2046,7 +2049,7 @@ void Thread::setAlgorithmParameters(const char * f, unsigned short int iteration
 				}
 			}
 
-			if(strcmp(qa,"1") == 0)
+			if(i_qa)
 			{
 				CurrentQualityAware = true;
 			}
