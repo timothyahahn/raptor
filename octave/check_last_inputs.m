@@ -1,3 +1,5 @@
+#!/usr/bin/octave
+
 function identical = check_last_inputs(fs_new,channel_power_new,D_new,alphaDB_new,gam_new,res_Disp_new,HalfWindow_new)
 
     identical = 1;
@@ -36,3 +38,4 @@ function identical = check_last_inputs(fs_new,channel_power_new,D_new,alphaDB_ne
             end
         end
     end
+endfunction
