@@ -26,6 +26,7 @@
 #include "pthread.h"
 
 #include <cmath>
+#include <stdlib.h>
 
 #include "boost/random.hpp"
 
@@ -35,8 +36,6 @@ extern Thread** threads;
 short int minInt(short int a, short int b);
 
 extern "C" void calc_k_shortest_paths(const kShortestPathParms &params, kShortestPathReturn* retVal);
-
-extern char* itoa( int value, char* result, int base );
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -2585,35 +2584,27 @@ void ResourceManager::build_KSP_EdgeList()
 ///////////////////////////////////////////////////////////////////
 void ResourceManager::print_connection_info(CreateConnectionProbeEvent* ccpe, double Q_factor, double ase, double fwm, double xpm, unsigned short int ci)
 {
-	string line;
-	char buffer[200];
+	std::string line;
 
-	sprintf(buffer,"SETUP CONNECTION: Routers[%d]:",ccpe->connectionLength);
-	line.append(buffer);
+	line.append("SETUP CONNECTION: Routers[" + std::to_string(ccpe->connectionLength) + "]:");
 
 	for(unsigned short int r = 0; r < ccpe->connectionLength; ++r)
 	{
-		itoa(ccpe->connectionPath[r]->getSourceIndex(),buffer,10);
-		line.append(buffer);
+		line.append(std::to_string(ccpe->connectionPath[r]->getSourceIndex()));
 
 		if(r < ccpe->connectionLength)
 			line.append(",");
 	}
 
-	itoa(ccpe->connectionPath[ccpe->connectionLength-1]->getDestinationIndex(),buffer,10);
-	line.append(buffer);
+	line.append(std::to_string(ccpe->connectionPath[ccpe->connectionLength-1]->getDestinationIndex()));
 
-	sprintf(buffer," Wavelength = %d ",ccpe->wavelength);
-	line.append(buffer);
-
-	sprintf(buffer,"Session = %d ",ccpe->session);
-	line.append(buffer);
-
-	sprintf(buffer,"Sequence = %d ",ccpe->sequence);
-	line.append(buffer);
+	line.append(" Wavelength = " + std::to_string(ccpe->wavelength));
+	line.append(" Session = " + std::to_string(ccpe->session));
+	line.append(" Sequence = " + std::to_string(ccpe->sequence));
 
 	if(ccpe->wavelength >= 0)
 	{
+		char buffer[100];
 		sprintf(buffer, "Q-factor = %1.4f, XPM-noise = %e, FWM-noise = %e, ASE-noise = %e\n",
 			Q_factor, xpm, fwm, ase);
 		line.append(buffer);

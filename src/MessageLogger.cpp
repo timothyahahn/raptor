@@ -19,14 +19,14 @@
 #include "MessageLogger.h"
 #include "Thread.h"
 
+#include <ctime>
+#include <sstream>
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 extern Thread* threadZero;
 extern Thread** threads;
-
-char* itoa( int value, char* result, int base );
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -71,102 +71,38 @@ MessageLogger::~MessageLogger()
 ///////////////////////////////////////////////////////////////////
 void MessageLogger::recordEvent(const string &e, bool print, unsigned short int ci)
 {
-	if(threadZero->getQualityParams().detailed_log == true || print == true)
+	if(threadZero->getQualityParams().detailed_log == false && print == false)
 	{
-		pthread_mutex_lock(&LogMutex);
-
-		struct tm *current;
-		time_t now;
-	
-		time(&now);
-		current = localtime(&now);
-
-		eventLogger << ci << ":";
-		
-		if(current->tm_hour < 10)
-			eventLogger << "0" << current->tm_hour << "::";
-		else
-			eventLogger << current->tm_hour << "::";
-
-		if(current->tm_min < 10)
-			eventLogger << "0" << current->tm_min << "::";
-		else
-			eventLogger << current->tm_min << "::";
-
-		if(current->tm_sec < 10)
-			eventLogger << "0" << current->tm_sec;
-		else
-			eventLogger << current->tm_sec;
-
-		eventLogger << " " << e << endl;
-
-		pthread_mutex_unlock(&LogMutex);
+		return;
 	}
+
+	pthread_mutex_lock(&LogMutex);
+
+	struct tm *current;
+	time_t now;
+
+	time(&now);
+	current = localtime(&now);
+
+	std::ostringstream message;
+
+	char buff[25];
+
+	strftime(buff, sizeof(buff), "%H:%I:%M", current);
+
+	message << buff << " [] " << e << std::endl;
+
+	eventLogger << message.str();
+
+	pthread_mutex_unlock(&LogMutex);
 
 	if(print == true)
 	{
 		pthread_mutex_lock(&PrintMutex);
 
-		struct tm *current;
-		time_t now;
-	
-		time(&now);
-		current = localtime(&now);
-
-		cout << ci << ":";
-		
-		if(current->tm_hour < 10)
-			cout << "0" << current->tm_hour << "::";
-		else
-			cout << current->tm_hour << "::";
-
-		if(current->tm_min < 10)
-			cout << "0" << current->tm_min << "::";
-		else
-			cout << current->tm_min << "::";
-
-		if(current->tm_sec < 10)
-			cout << "0" << current->tm_sec;
-		else
-			cout << current->tm_sec;
-
-		cout << " " << e << endl;
+		cout << message.str();
 
 		pthread_mutex_unlock(&PrintMutex);
 	}
 
-}
-
-//Source: http://www.jb.man.ac.uk/~slowe/cpp/itoa.html
-char* itoa( int value, char* result, int base )
-{	
-	// check that the base if valid	
-	if (base < 2 || base > 16)
-	{ 
-		*result = 0; 
-		return result; 
-	}
-	
-	char* out = result;
-	int quotient = value;
-	
-	do {
-	
-		*out = "0123456789abcdef"[ std::abs( quotient % base ) ];
-	
-		++out;
-	
-		quotient /= base;
-	
-	} while ( quotient );
-	
-	// Only apply negative sign for base 10
-	if ( value < 0 && base == 10)
-		*out++ = '-';
-	
-	std::reverse( result, out );
-	
-	*out = 0;
-	
-	return result;
 }

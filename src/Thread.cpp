@@ -39,8 +39,6 @@ extern unsigned short int threadCount;
 
 extern vector<AlgorithmToRun*> algParams;
 
-extern char* itoa( int value, char* result, int base );
-
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	Thread
@@ -1047,29 +1045,22 @@ void Thread::destroy_connection_probe(DestroyConnectionProbeEvent* dcpe)
 
 	if(dcpe->numberOfHops == dcpe->connectionLength)
 	{
-		char buffer[100];
-		string line;
+		std::string line;
 
-		sprintf(buffer,"DESTROY CONNECTION: Routers[%d]:",dcpe->connectionLength);
-		line.append(buffer);
+		line.append("SETUP CONNECTION: Routers[" + std::to_string(dcpe->connectionLength) + "]:");
 
 		for(unsigned short int r = 0; r < dcpe->connectionLength; ++r)
 		{
-			itoa(dcpe->connectionPath[r]->getSourceIndex(),buffer,10);
-			line.append(buffer);
+			line.append(std::to_string(dcpe->connectionPath[r]->getSourceIndex()));
 
 			if(r < dcpe->connectionLength)
 				line.append(",");
 		}
 
-		itoa(dcpe->connectionPath[dcpe->connectionLength - 1]->getDestinationIndex(),buffer,10);
-		line.append(buffer);
+		line.append(std::to_string(dcpe->connectionPath[dcpe->connectionLength - 1]->getDestinationIndex()));
 
-		sprintf(buffer," Wavelength = %d ",dcpe->wavelength);
-		line.append(buffer);
-
-		sprintf(buffer,"Session = %d\n",dcpe->session);
-		line.append(buffer);
+		line.append(" Wavelength = " + std::to_string(dcpe->wavelength));
+		line.append(" Session = " + std::to_string(dcpe->session));
 
 		threadZero->recordEvent(line,false,controllerIndex);
 
