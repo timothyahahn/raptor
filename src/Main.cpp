@@ -107,16 +107,16 @@ int main( int argc, const char* argv[] )
 	edgesbmp = create_bitmap(SCRNWID,SCRNHEI);
 	edgespans = create_bitmap(SCRNWID,SCRNHEI);
 	popup = create_bitmap(SCRNWID,SCRNHEI);
-	graphbackground = load_bitmap("BITMAPS/graphbackground.bmp",NULL);
-	topobackground = load_bitmap("BITMAPS/topobackground2.bmp",NULL);
-	progbarbmp = load_bitmap("BITMAPS/progressbar.bmp",NULL);
-	routerinfo = load_bitmap("BITMAPS/routerinfo.bmp",NULL);
-	editrouterinfo = load_bitmap("BITMAPS/editrouterinfo.bmp",NULL);
-	editedgeinfo = load_bitmap("BITMAPS/editedgeinfo.bmp",NULL);
-	detailinfo = load_bitmap("BITMAPS/configurationinfo.bmp",NULL);
-	colorkey = load_bitmap("BITMAPS/colorkey.bmp",NULL);
-	pointer = load_bitmap("BITMAPS/pointer2.bmp",NULL);
-	topomenu = load_bitmap("BITMAPS/topomenu.bmp",NULL);
+	graphbackground = load_bitmap("bitmaps/graphbackground.bmp",NULL);
+	topobackground = load_bitmap("bitmaps/topobackground2.bmp",NULL);
+	progbarbmp = load_bitmap("bitmaps/progressbar.bmp",NULL);
+	routerinfo = load_bitmap("bitmaps/routerinfo.bmp",NULL);
+	editrouterinfo = load_bitmap("bitmaps/editrouterinfo.bmp",NULL);
+	editedgeinfo = load_bitmap("bitmaps/editedgeinfo.bmp",NULL);
+	detailinfo = load_bitmap("bitmaps/configurationinfo.bmp",NULL);
+	colorkey = load_bitmap("bitmaps/colorkey.bmp",NULL);
+	pointer = load_bitmap("bitmaps/pointer2.bmp",NULL);
+	topomenu = load_bitmap("bitmaps/topomenu.bmp",NULL);
 
 	flash();
 

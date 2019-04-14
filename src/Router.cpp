@@ -463,64 +463,64 @@ void Router::paintNumDests(int n)
 		number = routerIndex;}
 
 	char bmpFile[40];
-	sprintf(bmpFile,"BITMAPS");
+	sprintf(bmpFile,"bitmaps");
 
 	switch(radius){
 		case 10:
 			sprintf(bmpFile,"%s/router0_1",bmpFile);
-			//routerpic = load_bitmap("BITMAPS/router0_1plain.bmp",NULL);
+			//routerpic = load_bitmap("bitmaps/router0_1plain.bmp",NULL);
 			break;
 		case 11:
 			sprintf(bmpFile,"%s/router0_5",bmpFile);
-			//routerpic = load_bitmap("BITMAPS/router0_5plain.bmp",NULL);
+			//routerpic = load_bitmap("bitmaps/router0_5plain.bmp",NULL);
 			break;
 		case 12:
 			sprintf(bmpFile,"%s/router1_0",bmpFile);
-			//routerpic = load_bitmap("BITMAPS/router1_0plain.bmp",NULL);
+			//routerpic = load_bitmap("bitmaps/router1_0plain.bmp",NULL);
 			break;
 		case 13:
 			sprintf(bmpFile,"%s/router5_0",bmpFile);
-			//routerpic = load_bitmap("BITMAPS/router5_0plain.bmp",NULL);
+			//routerpic = load_bitmap("bitmaps/router5_0plain.bmp",NULL);
 			break;
 		case 15:
 			sprintf(bmpFile,"%s/router10_0",bmpFile);
-			//routerpic = load_bitmap("BITMAPS/router10_0plain.bmp",NULL);
+			//routerpic = load_bitmap("bitmaps/router10_0plain.bmp",NULL);
 			break;
 		case 17:
 			sprintf(bmpFile,"%s/router20_0",bmpFile);
-			//routerpic = load_bitmap("BITMAPS/router20_0plain.bmp",NULL);
+			//routerpic = load_bitmap("bitmaps/router20_0plain.bmp",NULL);
 			break;
 		case 21:
 			sprintf(bmpFile,"%s/router30_0",bmpFile);
-			//routerpic = load_bitmap("BITMAPS/router30_0plain.bmp",NULL);
+			//routerpic = load_bitmap("bitmaps/router30_0plain.bmp",NULL);
 			break;
 		case 25:
 			sprintf(bmpFile,"%s/router40_0",bmpFile);
-			//routerpic = load_bitmap("BITMAPS/router40_0plain.bmp",NULL);
+			//routerpic = load_bitmap("bitmaps/router40_0plain.bmp",NULL);
 			break;
 		case 29:
 			sprintf(bmpFile,"%s/router50_0",bmpFile);
-			//routerpic = load_bitmap("BITMAPS/router50_0plain.bmp",NULL);
+			//routerpic = load_bitmap("bitmaps/router50_0plain.bmp",NULL);
 			break;
 		case 33:
 			sprintf(bmpFile,"%s/router60_0",bmpFile);
-			//routerpic = load_bitmap("BITMAPS/router60_0plain.bmp",NULL);
+			//routerpic = load_bitmap("bitmaps/router60_0plain.bmp",NULL);
 			break;
 		case 37:
 			sprintf(bmpFile,"%s/router70_0",bmpFile);
-			//routerpic = load_bitmap("BITMAPS/router70_0plain.bmp",NULL);
+			//routerpic = load_bitmap("bitmaps/router70_0plain.bmp",NULL);
 			break;
 		case 41:
 			sprintf(bmpFile,"%s/router80_0",bmpFile);
-			//routerpic = load_bitmap("BITMAPS/router80_0plain.bmp",NULL);
+			//routerpic = load_bitmap("bitmaps/router80_0plain.bmp",NULL);
 			break;
 		case 45:
 			sprintf(bmpFile,"%s/router90_0",bmpFile);
-			//routerpic = load_bitmap("BITMAPS/router90_0plain.bmp",NULL);
+			//routerpic = load_bitmap("bitmaps/router90_0plain.bmp",NULL);
 			break;
 		case 50:
 			sprintf(bmpFile,"%s/router100_0",bmpFile);
-			//routerpic = load_bitmap("BITMAPS/router100_0plain.bmp",NULL);
+			//routerpic = load_bitmap("bitmaps/router100_0plain.bmp",NULL);
 			break;
 	}
 	if(isSelected)
