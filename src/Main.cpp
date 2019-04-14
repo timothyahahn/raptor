@@ -65,8 +65,6 @@ char folder[50];
 #define SCRNHEI 700
 #endif
 
-using std::vector;
-
 //Hate to make a global instance of the threads, but the other classes
 //need access to the threads information. They can't just include a 
 //pointer to the class due to a circular reference.

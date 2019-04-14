@@ -23,15 +23,10 @@
 
 #include "RaptorTime.h"
 
+#include <cstdio>
 #include <fstream>
 #include <iostream>
-#include <stdio.h>
 #include <string>
-
-using std::cout;
-using std::endl;
-using std::ofstream;
-using std::string;
 
 class MessageLogger
 {
@@ -39,7 +34,7 @@ class MessageLogger
 		MessageLogger(const char*, const char*, const char*, const char*,int runCount);
 		~MessageLogger();
 
-		void recordEvent(const string &e, bool print, unsigned short int ci);
+		void recordEvent(const std::string &e, bool print, unsigned short int ci);
 
 		inline void LockResultsMutex()
 			{ pthread_mutex_lock(&ResultsMutex); };
@@ -48,7 +43,7 @@ class MessageLogger
 			{ pthread_mutex_unlock(&ResultsMutex); };
 
 	private:
-		ofstream eventLogger;
+		std::ofstream eventLogger;
 
 		pthread_mutex_t LogMutex;
 		pthread_mutex_t PrintMutex;

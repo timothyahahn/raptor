@@ -27,10 +27,6 @@
 #include "ErrorCodes.h"
 #include "Event.h"
 
-using std::less;
-using std::priority_queue;
-using std::vector;
-
 class EventQueue
 {
 	public:
@@ -46,7 +42,7 @@ class EventQueue
 			{ return static_cast<unsigned int>(pq.size()); };
 
 	private:
-		priority_queue<Event, vector<Event>,less<vector<Event>::value_type> > pq;
+		std::priority_queue<Event, std::vector<Event>,std::less<std::vector<Event>::value_type> > pq;
 };
 
 static bool operator< (const Event& event1, const Event &event2)

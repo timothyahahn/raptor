@@ -30,9 +30,6 @@
 #include "AllegroWrapper.h"
 #endif
 
-using std::list;
-using std::vector;
-
 enum EdgeStatus {
 	EDGE_FREE,
 	EDGE_USED
@@ -75,7 +72,7 @@ class Edge
 		void updateQMDegredation(unsigned short int ci, unsigned int wavelength);
 		void updateQFactorStats(unsigned short int ci, unsigned int wavelength);
 
-		list <void*> establishedConnections;
+		std::list <void*> establishedConnections;
 
 #ifdef RUN_GUI
 		void updateGUI();

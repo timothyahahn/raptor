@@ -26,7 +26,7 @@
 #include "pthread.h"
 
 #include <cmath>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "boost/random.hpp"
 
@@ -2687,7 +2687,7 @@ void ResourceManager::generateWaveOrdering()
 	if(threadZero->getNumberOfWavelengths() > 1)
 		wave_ordering[1] = threadZero->getNumberOfWavelengths() - 1;
 
-	list< pair<short int,int>* > wavesList;
+	std::list< std::pair<short int,int>* > wavesList;
 
 	for(short int w = 1; w < threadZero->getNumberOfWavelengths() - 1; ++w)
 	{
@@ -2702,16 +2702,16 @@ void ResourceManager::generateWaveOrdering()
 	while(wavesList.size() > 0)
 	{
 		//Calculate the min of the upper and lower bounds
-		for(list< pair<short int,int>* >::iterator iter1 = wavesList.begin(); iter1 != wavesList.end(); ++iter1)
+		for(std::list< std::pair<short int,int>* >::iterator iter1 = wavesList.begin(); iter1 != wavesList.end(); ++iter1)
 		{
 			(*iter1)->second = minInt(getLowerBound((*iter1)->first,static_cast<short int>(threadZero->getNumberOfWavelengths()-wavesList.size())),
 				getUpperBound((*iter1)->first,static_cast<short int>(threadZero->getNumberOfWavelengths()-wavesList.size())));
 		}
 
-		list< pair<short int,int>* >::iterator maxPair = wavesList.begin();
+		std::list< std::pair<short int,int>* >::iterator maxPair = wavesList.begin();
 
 		//Find the wave with the maximum distance
-		for(list< pair<short int,int>* >::iterator iter2 = wavesList.begin(); iter2 != wavesList.end(); ++iter2)
+		for(std::list< std::pair<short int,int>* >::iterator iter2 = wavesList.begin(); iter2 != wavesList.end(); ++iter2)
 		{
 			if((*iter2)->second > (*maxPair)->second)
 			{

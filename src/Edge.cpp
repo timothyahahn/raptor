@@ -23,7 +23,7 @@
 
 #ifdef RUN_GUI
 
-#include <stdlib.h>
+#include <cstdlib>
 
 extern BITMAP *graph;
 extern BITMAP *graphbackground;
@@ -378,7 +378,7 @@ void Edge::updateQMDegredation(unsigned short int ci, unsigned int wavelength)
 
 	double time = threads[ci]->getGlobalTime();
 
-	for(list<void*>::iterator iter = establishedConnections.begin();
+	for(std::list<void*>::iterator iter = establishedConnections.begin();
 		iter != establishedConnections.end(); ++iter)
 	{
 		EstablishedConnection* ec = static_cast<EstablishedConnection*>(*iter);
@@ -467,7 +467,7 @@ void Edge::updateQFactorStats(unsigned short int ci, unsigned int wavelength)
 
 	double time = threads[ci]->getGlobalTime();
 
-	for(list<void*>::iterator iter = establishedConnections.begin();
+	for(std::list<void*>::iterator iter = establishedConnections.begin();
 		iter != establishedConnections.end(); ++iter)
 	{
 		EstablishedConnection* ec = static_cast<EstablishedConnection*>(*iter);
@@ -527,7 +527,7 @@ void Edge::removeEstablishedConnection(void* dcpe_void)
 	DestroyConnectionProbeEvent* dcpe = static_cast<DestroyConnectionProbeEvent*>(dcpe_void);
 	EstablishedConnection* ec;
 
-	for(list<void*>::iterator iter = establishedConnections.begin();
+	for(std::list<void*>::iterator iter = establishedConnections.begin();
 		iter != establishedConnections.end(); ++iter)
 	{
 		ec = static_cast<EstablishedConnection*>(*iter);

@@ -24,11 +24,11 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+#include <cmath>
+#include <cstdio>
 #include <iostream>
 #include <fstream>
-#include <math.h>
 #include <queue>
-#include <stdio.h>
 #include <string>
 #include <vector>
 

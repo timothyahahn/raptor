@@ -18,7 +18,7 @@
 
 #ifdef RUN_GUI
 #include "AllegroWrapper.h"
-#include <stdlib.h>
+#include <cstdlib>
 #include "Edge.h"
 #include "Thread.h"
 

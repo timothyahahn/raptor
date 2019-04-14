@@ -24,8 +24,6 @@
 
 #include <vector>
 
-using std::vector;
-
 #include "QYInclude.h"
 
 enum EventType {
