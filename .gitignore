@@ -6,5 +6,7 @@ kshortestpath/CMakeCache.txt
 kshortestpath/CMakeFiles/
 kshortestpath/Makefile
 kshortestpath/cmake_install.cmake
+kshortestpath/libkshortestpath.a
 octave/xpm_database.mat
 octave/xpm_inputs.mat
+raptor
