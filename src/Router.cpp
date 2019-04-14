@@ -3,8 +3,8 @@
 //  General Information:
 //
 //  File Name:      Router.cpp
-//  Author:         Timothy Hahn, Montana State University
-//  Project:        RWASimulator
+//  Author:         Timothy Hahn, PhD
+//  Project:        raptor
 //
 //  Description:    The file contains the declaration of the Router class.
 //					The purpose of the Router is to simulate the optical
@@ -16,6 +16,7 @@
 //  Revision History:
 //
 //  05/20/2009	v1.0	Initial Version.
+//  04/14/2019  v2.0    Reworked version based upon cmake and octave
 //
 // ____________________________________________________________________________
 
@@ -35,7 +36,7 @@ extern Thread* threadZero;
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	Router
-// Description:		Default constructor with no arguements.
+// Description:		Default constructor with no arguments.
 //
 ///////////////////////////////////////////////////////////////////
 Router::Router()
@@ -63,7 +64,7 @@ Router::Router()
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	~Router
-// Description:		Default destructor with no arguements.
+// Description:		Default destructor with no arguments.
 //
 ///////////////////////////////////////////////////////////////////
 Router::~Router()

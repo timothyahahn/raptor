@@ -3,8 +3,8 @@
 //  General Information:
 //
 //  File Name:      Thread.cpp
-//  Author:         Timothy Hahn, Montana State University
-//  Project:        RWASimulator
+//  Author:         Timothy Hahn, PhD
+//  Project:        raptor
 //
 //  Description:    The file contains the implementation of the controller class.
 //					The purpose of the controller is to manage the simulation and
@@ -18,6 +18,7 @@
 //
 //  05/20/2009	v1.0	Initial Version.
 //  06/02/2009	v1.02	Minor optimizations and bug fixes.
+//  04/14/2019  v2.0    Reworked version based upon cmake and octave
 //
 // ____________________________________________________________________________
 
@@ -42,21 +43,21 @@ extern vector<AlgorithmToRun*> algParams;
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	Thread
-// Description:		Default constructor with no arguements, terminates
+// Description:		Default constructor with no arguments, terminates
 //					the program as command line arguments are
 //					required.
 //
 ///////////////////////////////////////////////////////////////////
 Thread::Thread()
 {
-	threadZero->recordEvent(string("Unable to initialize the controller without command line arguements.\n"),true,controllerIndex);
+	threadZero->recordEvent(string("Unable to initialize the controller without command line arguments.\n"),true,controllerIndex);
 	exit(ERROR_THREAD_INIT);
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	Thread
-// Description:		Constructor that takes the command line arguements
+// Description:		Constructor that takes the command line arguments
 //					and initializes the controller.
 //
 ///////////////////////////////////////////////////////////////////

@@ -3,8 +3,8 @@
 //  General Information:
 //
 //  File Name:      Workstation.cpp
-//  Author:         Timothy Hahn, Montana State University
-//  Project:        RWASimulator
+//  Author:         Timothy Hahn, PhD
+//  Project:        raptor
 //
 //  Description:    The file contains the implementation of the Workstation class.
 //					The purpose of the Workstations are to generate traffic for
@@ -14,6 +14,7 @@
 //  Revision History:
 //
 //  05/20/2009	v1.0	Initial Version.
+//  04/14/2019  v2.0    Reworked version based upon cmake and octave
 //
 // ____________________________________________________________________________
 
@@ -22,7 +23,7 @@
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	Workstation
-// Description:		Default constructor with no arguements.
+// Description:		Default constructor with no arguments.
 //
 ///////////////////////////////////////////////////////////////////
 Workstation::Workstation()
@@ -33,7 +34,7 @@ Workstation::Workstation()
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	Workstation
-// Description:		Default destructor with no arguements.
+// Description:		Default destructor with no arguments.
 //
 ///////////////////////////////////////////////////////////////////
 Workstation::~Workstation()

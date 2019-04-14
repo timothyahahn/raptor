@@ -3,8 +3,8 @@
 //  General Information:
 //
 //  File Name:      Thread.h
-//  Author:         Timothy Hahn, Montana State University
-//  Project:        RWASimulator
+//  Author:         Timothy Hahn, PhD
+//  Project:        raptor
 //
 //  Description:    The file contains the declaration of the thread class.
 //					The purpose of the controller is to manage the simulation and
@@ -18,6 +18,7 @@
 //
 //  05/20/2009	v1.0	Initial Version.
 //  06/02/2009	v1.02	Minor optimizations and bug fixes.
+//  04/14/2019  v2.0    Reworked version based upon cmake and octave
 //
 // ____________________________________________________________________________
 

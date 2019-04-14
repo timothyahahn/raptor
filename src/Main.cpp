@@ -3,16 +3,17 @@
 //  General Information:
 //
 //  File Name:      Main.cpp
-//  Author:         Timothy Hahn, Montana State University
-//  Project:        RWASimulator
+//  Author:         Timothy Hahn, PhD
+//  Project:        raptor
 //
 //  Description:    The file contains the implementation of main(), whose only
-//					purpose is to pass the command line arguements to the controller.
+//					purpose is to pass the command line arguments to the controller.
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
 //
 //  05/20/2009	v1.0	Initial Version.
+//  04/14/2019  v2.0    Reworked version based upon cmake and octave
 //
 // ____________________________________________________________________________
 

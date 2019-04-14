@@ -3,8 +3,8 @@
 //  General Information:
 //
 //  File Name:      Edge.cpp
-//  Author:         Timothy Hahn, Montana State University
-//  Project:        RWASimulator
+//  Author:         Timothy Hahn, PhD
+//  Project:        raptor
 //
 //  Description:    The file contains the declaration of the Edge class.
 //					The purpose of the Edge class is to connect the routers
@@ -15,6 +15,7 @@
 //
 //  05/20/2009	v1.0	Initial Version.
 //  06/02/2009	v1.02	Minor optimizations and bug fixes.
+//  04/14/2019  v2.0    Reworked version based upon cmake and octave
 //
 // ____________________________________________________________________________
 
@@ -52,7 +53,7 @@ extern vector<Router*> topoRouters;
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	Edge
-// Description:		Default constructor with no arguements.
+// Description:		Default constructor with no arguments.
 //
 ///////////////////////////////////////////////////////////////////
 Edge::Edge()
@@ -63,7 +64,7 @@ Edge::Edge()
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	Edge
-// Description:		Constructor with arguements to set the source,
+// Description:		Constructor with arguments to set the source,
 //					destination, and number of spans.
 //
 ///////////////////////////////////////////////////////////////////
@@ -108,7 +109,7 @@ Edge::Edge(unsigned short int src, unsigned short int dest, unsigned short int s
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	Edge
-// Description:		Default destructor with no arguements.
+// Description:		Default destructor with no arguments.
 //
 ///////////////////////////////////////////////////////////////////
 Edge::~Edge()

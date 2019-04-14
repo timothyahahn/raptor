@@ -3,8 +3,8 @@
 //  General Information:
 //
 //  File Name:      AlgorithmParameters.h
-//  Author:         Timothy Hahn, Montana State University
-//  Project:        RWASimulator
+//  Author:         Timothy Hahn, PhD
+//  Project:        raptor
 //
 //  Description:    The file contains the declaration of the AlgoirthmParameters
 //					struct, which are used to calculate the Q factor
@@ -13,6 +13,7 @@
 //  Revision History:
 //
 //  05/20/2009	v1.0	Initial Version.
+//  04/14/2019  v2.0    Reworked version based upon cmake and octave
 //
 // ____________________________________________________________________________
 

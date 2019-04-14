@@ -3,8 +3,8 @@
 //  General Information:
 //
 //  File Name:      AllegroWrapper.h
-//  Author:         Timothy Hahn, Montana State University
-//  Project:        RWASimulator
+//  Author:         Timothy Hahn, PhD
+//  Project:        raptor
 //
 //  Description:    The file contains the allegro includes, but undefined
 //					some data structures so that Boost can use them.
@@ -12,7 +12,8 @@
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
 //
-//  06/02/2009	v1.02	Initial Verison.
+//  06/02/2009	v1.02	Initial Version.
+//  04/14/2019  v2.0    Reworked version based upon cmake and octave
 //
 // ____________________________________________________________________________
 
