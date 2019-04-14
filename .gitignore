@@ -7,3 +7,4 @@ kshortestpath/CMakeFiles/
 kshortestpath/Makefile
 kshortestpath/cmake_install.cmake
 octave/xpm_database.mat
+octave/xpm_inputs.mat
