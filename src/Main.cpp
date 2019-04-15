@@ -84,7 +84,17 @@ int main( int argc, const char* argv[] )
 {
 	if(argc != 7)
 	{
-		std::cout << "Usage: " << argv[0] << " <Topology> <Wavelengths> <Random Seed> <Thread Count> <Iteration Count> <Probe Count>" << std::endl;
+		std::cerr << "Usage: " << argv[0] << " <Topology> <Wavelengths> <Random Seed> <Thread Count> <Iteration Count> <Probe Count>" << std::endl;
+
+		std::cerr << std::endl;
+
+		std::cerr << "Topology: NSF, Mesh, Mesh6x6, Mesh8x8, Mesh10x10" << std::endl;
+		std::cerr << "Wavelengths: 21, 41, 81, 161, 321, 641, 1281" << std::endl;
+		std::cerr << "Random Seed: <any valid unsigned short int>" << std::endl;
+		std::cerr << "Thread Count: <maximum number of threads to run, 1 to n>" << std::endl;
+		std::cerr << "Iteration Count: <number of iterations, 1 to n>" << std::endl;
+		std::cerr << "Probe Count: <number of probes, 1 to n>" << std::endl;
+
 		return ERROR_INVALID_PARAMETERS;
 	}
 
