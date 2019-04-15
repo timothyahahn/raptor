@@ -63,7 +63,19 @@ Scanning dependencies of target raptor
 [100%] Linking CXX executable raptor
 [100%] Built target raptor
 ```
-4. Run it!
+4. Run it with no parameters
+```
+[thahn@localhost raptor]$ ./raptor 
+Usage: ./raptor <Topology> <Wavelengths> <Random Seed> <Thread Count> <Iteration Count> <Probe Count>
+
+Topology: NSF, Mesh, Mesh6x6, Mesh8x8, Mesh10x10
+Wavelengths: 21, 41, 81, 161, 321, 641, 1281
+Random Seed: <any valid unsigned short int>
+Thread Count: <maximum number of threads to run, 1 to n>
+Iteration Count: <number of iterations, 1 to n>
+Probe Count: <number of probes, 1 to n>
+```
+5. Run it for real!
 ```
 [thahn@localhost raptor]$ ./raptor NSF 21 123456789 4 10 10
 21:26:26 [] Reading Quality Parameters from input/Quality-NSF-21.txt file.
