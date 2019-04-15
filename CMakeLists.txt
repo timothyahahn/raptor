@@ -53,15 +53,20 @@ if(UNIX)
 
     find_library( OCTAVE_LIB
                   NAMES octave
-                  HINTS "/usr/lib64/octave/4.2.2"
                 )
 
     find_library( OCTINTERP_LIB
                   NAMES octinterp
-                  HINTS "/usr/lib64/octave/4.2.2"
                 )
 
-    include_directories(/usr/include/octave-4.2.2/octave)
+	file(GLOB CANDIDATE_OCTAVE_HEADER_DIRS /usr/include/octave*/octave /usr/include/octave)
+
+	find_path( OCTAVE_HEADERS
+			   NAMES octave.h
+			   HINTS ${CANDIDATE_OCTAVE_HEADER_DIRS}
+			 )
+
+    include_directories(${OCTAVE_HEADERS})
 endif(UNIX)
 
 if(OCTAVE_LIB)

@@ -18,6 +18,11 @@
 
 #include "OctaveWrapper.h"
 
+#ifndef NO_OCTAVE
+#include <oct.h>
+#include <octave.h>
+#endif //NO_OCTAVE
+
 #include "Thread.h"
 
 extern Thread* threadZero;
@@ -44,8 +49,9 @@ void OctaveWrapper::build_nonlinear_datastructure(double* sys_fs, double* sys_li
 #ifdef NO_OCTAVE
         std::cout << "Octave support not enabled, no xpm calculations possible" << std::endl;
         return;
-#endif
-	build_xpm_database(sys_fs,sys_fs_num,threadZero->getQualityParams().channel_power,
+#endif //NO_OCTAVE
+
+        build_xpm_database(sys_fs,sys_fs_num,threadZero->getQualityParams().channel_power,
 		threadZero->getQualityParams().D,threadZero->getQualityParams().alphaDB,
 		threadZero->getQualityParams().gamma,res_disp);
 
