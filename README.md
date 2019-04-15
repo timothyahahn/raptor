@@ -11,7 +11,7 @@ sudo yum install gcc-c++
 sudo yum install octave-devel
 sudo yum install boost-devel
 ```
-2. Run cmake
+2. Run cmake (you will need to update the paths based on the versions installed and their location)
 ```
 [thahn@localhost raptor]$ cmake .
 -- The C compiler identification is GNU 8.3.1
@@ -132,4 +132,62 @@ Calculating router distances...done.
 21:26:55 [] AVERAGE Q: MIN = 3.319328, MAX = 12.417975, AVG = 7.607907
 21:26:55 [] % TIME Q BELOW: MIN = 0.000000, MAX = 0.998599, AVG = 0.086621
 21:26:55 [] ***********************************************
+```
+## Windows Installation Instructions
+
+These instructions have been tested on a fresh installation of Windows 10. This is a work in progress...
+
+1. Install the required dependancies.
+* boost - https://www.boost.org/users/download/
+* cmake - https://cmake.org/download/
+* mingw-w64 - https://mingw-w64.org/doku.php/download/mingw-builds
+* octave - https://www.gnu.org/software/octave/download.html
+2. Run cmake (you will need to update the paths based on the versions installed and their location)
+'''
+C:\Users\Tim Hahn\raptor>cmake . -G "MinGW Makefiles"
+-- The C compiler identification is GNU 8.1.0
+-- The CXX compiler identification is GNU 8.1.0
+-- Check for working C compiler: C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/gcc.exe
+-- Check for working C compiler: C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/gcc.exe -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/g++.exe
+-- Check for working CXX compiler: C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/g++.exe -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Looking for pthread_create
+-- Looking for pthread_create - found
+-- Found Threads: TRUE
+-- Configuring done
+-- Generating done
+-- Build files have been written to: C:/Users/Tim Hahn/raptor
+```
+3. Build the program
+```
+C:\Users\Tim Hahn\raptor>mingw32-make
+Scanning dependencies of target kshortestpath
+[  6%] Building CXX object kshortestpath/CMakeFiles/kshortestpath.dir/src/MainP.cpp.obj
+[ 12%] Building CXX object kshortestpath/CMakeFiles/kshortestpath.dir/src/QYDirectedGraph.cpp.obj
+[ 18%] Building CXX object kshortestpath/CMakeFiles/kshortestpath.dir/src/QYKShortestPaths.cpp.obj
+[ 25%] Building CXX object kshortestpath/CMakeFiles/kshortestpath.dir/src/QYShortestPath.cpp.obj
+[ 31%] Linking CXX static library libkshortestpath.a
+[ 31%] Built target kshortestpath
+Scanning dependencies of target raptor
+[ 37%] Building CXX object CMakeFiles/raptor.dir/src/Edge.cpp.obj
+In file included from C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/system_error:39,
+                 from C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/ios_base.h:46,
+                 from C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ios:42,
+                 from C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ostream:38,
+                 from C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/iostream:39,
+                 from C:/Users/TIMHAH~1/raptor/include/Thread.h:30,
+                 from C:\Users\Tim Hahn\raptor\src\Edge.cpp:23:
+C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/error_constants.h:53:25: error: 'EBADMSG' was not declared in this scope
+       bad_message =     EBADMSG,
+                         ^~~~~~~
 ```
