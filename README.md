@@ -64,3 +64,60 @@ Scanning dependencies of target raptor
 [100%] Built target raptor
 ```
 4. Run it!
+```
+[thahn@localhost raptor]$ ./raptor NSF 21 123456789 4 10 10
+21:26:26 [] Reading Quality Parameters from input/Quality-NSF-21.txt file.
+21:26:26 [] 	arrival_interval = 250.000000
+21:26:26 [] 	duration = 250.000000
+21:26:26 [] 	nonlinear_halfwin = 10
+21:26:26 [] 	halfwavelength = 10
+21:26:26 [] 	sys_wavelength = 21
+21:26:26 [] 	fc = 193100001574912.000000
+21:26:26 [] 	f_step = 49999998976.000000
+21:26:26 [] 	channel_power = 0.001000
+21:26:26 [] 	L = 80.000000
+21:26:26 [] 	alphaDB = 0.250000
+21:26:26 [] 	D = 0.004000
+21:26:26 [] 	S = 80000.000000
+21:26:26 [] 	gamma = 2.600000
+21:26:26 [] 	QFactor_factor = 0.950000
+21:26:26 [] 	EDFA_Noise_Figure = 3.500000
+21:26:26 [] 	EDFA_Gain = 21.600000
+21:26:26 [] 	B_w = 1.000000e+10
+21:26:26 [] 	usage_update_interval = 4.000000
+21:26:26 [] 	gui_update_interval = 6
+21:26:26 [] 	beta = 1.200000
+21:26:26 [] 	refractive_index = 1.500000
+21:26:26 [] 	q_factor_stats = 1
+21:26:26 [] 	detailed_log = 0
+21:26:26 [] 	DP_alpha = 1.000000
+21:26:26 [] 	ACO_ants = 20
+21:26:26 [] 	ACO_alpha = 1.000000
+21:26:26 [] 	ACO_beta = 5.000000
+21:26:26 [] 	ACO_rho = 0.100000
+21:26:26 [] 	MM_ACO_gamma = 0.100000
+21:26:26 [] 	MM_ACO_N_iter = 20
+21:26:26 [] 	MM_ACO_N_reset = 2
+Calculating router distances...done.
+21:26:26 [] Created 4 threads.
+
+21:26:55 [] **ALGORITHM = DP-Q-FF, WORKS = 280, PROBE = PARALLEL, QA = 1**
+21:26:55 [] OVERALL BLOCKING (658/4438) = 0.148265
+21:26:55 [] COLLISIONS (0/4438) = 0.000000
+21:26:55 [] BAD QUALITY (0/4438) = 0.000000
+21:26:55 [] NON RESOURCES (658/4438) = 0.148265
+21:26:55 [] AVERAGE PROBES PER REQUEST (4438/4438) = 1.000000
+21:26:55 [] AVERAGE REQUEST DELAY TIME (67.459469/3780) = 0.017846
+21:26:55 [] AVERAGE CONNECTION HOP COUNT (9209/3780) = 2.436243
+21:26:55 [] AVERAGE CONNECTION SPAN COUNT (133974/3780) = 35.442856
+21:26:55 [] AVERAGE ASE NOISE (0.000110/3780) = 2.913904e-08
+21:26:55 [] AVERAGE FWM NOISE (0.000022/3780) = 5.922165e-09
+21:26:55 [] AVERAGE XPM NOISE (0.000000/3780) = 0.000000e+00
+21:26:55 [] AVERAGE RA RUN TIME (14.000000/4438) = 3.154574e-03
+21:26:55 [] DROPPED CONNECTIONS (597/4438) = 0.134520
+21:26:55 [] OVERALL W/DROPPED (1255/4438) = 0.282785
+21:26:55 [] INITIAL Q: MIN = 5.860601, MAX = 12.420026, AVG = 7.720318
+21:26:55 [] AVERAGE Q: MIN = 3.319328, MAX = 12.417975, AVG = 7.607907
+21:26:55 [] % TIME Q BELOW: MIN = 0.000000, MAX = 0.998599, AVG = 0.086621
+21:26:55 [] ***********************************************
+```
