@@ -1,5 +1,13 @@
 cmake_minimum_required(VERSION 2.8.12.2)
 
+include(ProcessorCount)
+ProcessorCount(N)
+if(NOT N EQUAL 0)
+    message("Using ${N} cores")
+    set(CTEST_BUILD_FLAGS -j${N})
+    set(ctest_test_args ${ctest_test_args} PARALLEL_LEVEL ${N})
+endif()
+
 if(WIN32)
     set(CMAKE_CXX_COMPILER "C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/c++.exe")
 endif(WIN32)
