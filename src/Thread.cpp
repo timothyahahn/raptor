@@ -1910,7 +1910,17 @@ void Thread::setWorkstationParameters(const char * f)
 	{
 		ifstream inFile(f);
 
-		inFile.getline(buffer,199);
+		if(!inFile.is_open())
+		{
+			std::cerr << "Error opening workstation file: " << f << std::endl;
+			exit(ERROR_WORKSTATION_FILE);
+		}
+
+		if(!inFile.getline(buffer,199))
+		{
+			std::cerr << "Error reading workstation file: " << f << std::endl;
+			exit(ERROR_WORKSTATION_FILE);
+		}
 
 		char *param;
 		char *parent;
