@@ -59,10 +59,6 @@ void OctaveWrapper::build_nonlinear_datastructure(double* sys_fs, double* sys_li
 ///////////////////////////////////////////////////////////////////
 void OctaveWrapper::build_xpm_database(double *fs, int fs_num,double channel_power,double D,double alphaDB,double gamma,double res_disp)
 {
-	const char * argvv [] = {};
-
-	octave_main (2, (char **) argvv, true /* embedded */);
-
 	/*try {
 		mwArray in1(1,fs_num,mxDOUBLE_CLASS);
 		mwArray in2(1,1,mxDOUBLE_CLASS);
