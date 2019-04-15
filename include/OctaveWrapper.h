@@ -19,8 +19,6 @@
 #ifndef OCTAVE_WRAPPER_H
 #define OCTAVE_WRAPPER_H
 
-#include <octave.h>
-
 class OctaveWrapper
 {
 	public:
