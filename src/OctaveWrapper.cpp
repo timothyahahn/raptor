@@ -41,6 +41,10 @@ void OctaveWrapper::build_nonlinear_datastructure(double* sys_fs, double* sys_li
 		for(unsigned short int j = 0; j < threadZero->getNumberOfWavelengths(); j++)
 			sys_link_xpm_database[i * threadZero->getNumberOfWavelengths() + j] = 0.0;
 
+#ifdef NO_OCTAVE
+        std::cout << "Octave support not enabled, no xpm calculations possible" << std::endl;
+        return;
+#endif
 	build_xpm_database(sys_fs,sys_fs_num,threadZero->getQualityParams().channel_power,
 		threadZero->getQualityParams().D,threadZero->getQualityParams().alphaDB,
 		threadZero->getQualityParams().gamma,res_disp);

@@ -64,12 +64,6 @@ namespace asu_emit_qyan
 		CQYDirectedGraph(const CQYDirectedGraph& rGraph);
 		CQYDirectedGraph& operator=(const CQYDirectedGraph& rGraph);
 		
-		// The methods below play the persistent role. 
-		void PrintOut(const std::string& out_file_name) const;
-		void PrintOut(std::ostream& out_stream) const;
-		void PrintOutAllEdges(std::ostream& os) const;
-		
-
 		void RemoveEdge(int i, int j);
 		void AddEdge(int i, int j, double weight);
 

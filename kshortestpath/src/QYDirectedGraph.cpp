@@ -108,39 +108,6 @@ namespace asu_emit_qyan
 		m_pDirectedEdges = new CQYConfigCenter::IntPair_Double_Map();
 	}
 
-
-	void CQYDirectedGraph::PrintOut( std::ostream& out_stream ) const
-	{
-		out_stream << m_nNumberOfVertices << endl << endl;
-		PrintOutAllEdges(out_stream);
-	}
-
-	void CQYDirectedGraph::PrintOut( const std::string& out_file_name ) const
-	{
-		ofstream ofs;
-		ofs.open(out_file_name.c_str(), ios::out);
-		if (!ofs)
-		{
-			cout << "The file " << out_file_name << " can't be openned!" << endl;
-			exit(1);
-		}
-
-		PrintOut(ofs);
-
-		ofs.close();
-	}
-
-	void CQYDirectedGraph::PrintOutAllEdges( std::ostream& os ) const
-	{
-		CQYConfigCenter::IntPair_Double_Map_Iterator edge_pos;
-		for (edge_pos=m_pDirectedEdges->begin(); edge_pos!=m_pDirectedEdges->end(); ++edge_pos)
-		{
-			os << edge_pos->first.first << "	"; // start point of the edge
-			os << edge_pos->first.second << "	"; // end point of the edge
-			os << edge_pos->second << endl;
-		}
-	}
-
 	void CQYDirectedGraph::RemoveEdge( int i, int j )
 	{
 		CQYConfigCenter::IntPair_Double_Map_Iterator pos = m_pDirectedEdges->find(pair<int, int>(i,j));
