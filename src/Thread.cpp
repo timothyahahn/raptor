@@ -1911,62 +1911,62 @@ void Thread::setWorkstationParameters(const char * f)
 		ifstream inFile(f);
 
 		inFile.getline(buffer,199);
+
+		char *param;
+		char *parent;
+		char *traffic;
+
+		param = strtok(buffer,"=");
+		parent = strtok(NULL," ,\t");
+
+		if(strcmp(param,"NumberOfWorkstations") == 0)
+			numberOfWorkstations = atoi(parent);
+		else
+		{
+			threadZero->recordEvent("ERROR: Invalid line in the input file!!!",true,0);
+			exit(ERROR_WORKSTATION_INPUT_QUANTITY);
+		}
+
+		//Add the specific configuration of workstations, if specified.
+		while(inFile.getline(buffer,199))
+		{
+			Workstation* w = new Workstation();
+
+			param = strtok(buffer,"=");
+			parent = strtok(NULL," ,\t");
+			traffic = strtok(NULL," ,\t");
+
+			if(strcmp(param,"Workstation") == 0)
+			{
+				w->setParentRouterIndex(atoi(parent));
+			}
+			else
+			{
+				threadZero->recordEvent("ERROR: Invalid line in the input file!!!",true,0);
+				inFile.close();
+				exit(ERROR_WORKSTATION_INPUT_PARENT);
+			}
+
+			addWorkstation(w);
+		}
+
+		//If workstations are not specified, then just uniformly distribute them amongst the routers.
+		for(unsigned short int n = static_cast<unsigned short int>(workstations.size()); n < numberOfWorkstations; ++n)
+		{
+			Workstation* w = new Workstation();
+
+			w->setParentRouterIndex(n % getNumberOfRouters());
+
+			addWorkstation(w);
+		}
+
+		inFile.close();
 	}
 	catch(...)
 	{
 		std::cerr << "Error reading/opening workstation file: " << f << std::endl;
 		exit(ERROR_WORKSTATION_FILE);
 	}
-
-	char *param;
-	char *parent;
-	char *traffic;
-		
-	param = strtok(buffer,"=");
-	parent = strtok(NULL," ,\t");
-
-	if(strcmp(param,"NumberOfWorkstations") == 0)
-		numberOfWorkstations = atoi(parent);
-	else
-	{
-		threadZero->recordEvent("ERROR: Invalid line in the input file!!!",true,0);
-		exit(ERROR_WORKSTATION_INPUT_QUANTITY);
-	}
-
-	//Add the specific configuration of workstations, if specified.
-	while(inFile.getline(buffer,199))
-	{
-		Workstation* w = new Workstation();
-
-		param = strtok(buffer,"=");
-		parent = strtok(NULL," ,\t");
-		traffic = strtok(NULL," ,\t");
-
-		if(strcmp(param,"Workstation") == 0)
-		{
-			w->setParentRouterIndex(atoi(parent));
-		}
-		else
-		{
-			threadZero->recordEvent("ERROR: Invalid line in the input file!!!",true,0);
-			inFile.close();
-			exit(ERROR_WORKSTATION_INPUT_PARENT);
-		}
-
-		addWorkstation(w);
-	}
-
-	//If workstations are not specified, then just uniformly distribute them amongst the routers.
-	for(unsigned short int n = static_cast<unsigned short int>(workstations.size()); n < numberOfWorkstations; ++n)
-	{
-		Workstation* w = new Workstation();
-
-		w->setParentRouterIndex(n % getNumberOfRouters());
-
-		addWorkstation(w);
-	}
-
-	inFile.close();
 
 	sprintf(buffer,"\tCreated %d workstations.",numberOfWorkstations);
 	threadZero->recordEvent(buffer,false,0);
