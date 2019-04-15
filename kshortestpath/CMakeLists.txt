@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.14)
 
-project (kshortestpath)
+project (kshortestpath CXX)
 
 add_library(kshortestpath src/MainP.cpp src/QYDirectedGraph.cpp src/QYKShortestPaths.cpp src/QYShortestPath.cpp)
 
