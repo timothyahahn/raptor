@@ -143,7 +143,7 @@ These instructions have been tested on a fresh installation of Windows 10. This 
 * mingw-w64 - https://mingw-w64.org/doku.php/download/mingw-builds
 * octave - https://www.gnu.org/software/octave/download.html
 2. Run cmake (you will need to update the paths based on the versions installed and their location)
-'''
+```
 C:\Users\Tim Hahn\raptor>cmake . -G "MinGW Makefiles"
 -- The C compiler identification is GNU 8.1.0
 -- The CXX compiler identification is GNU 8.1.0
@@ -189,5 +189,4 @@ In file included from C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/lib/gcc/x86_64-w
                  from C:\Users\Tim Hahn\raptor\src\Edge.cpp:23:
 C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/error_constants.h:53:25: error: 'EBADMSG' was not declared in this scope
        bad_message =     EBADMSG,
-                         ^~~~~~~
 ```
