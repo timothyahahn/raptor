@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.14)
 
+if(WIN32)
+	set(CMAKE_C_COMPILER "C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/gcc.exe")
+	set(CMAKE_CXX_COMPILER "C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/g++.exe")
+endif(WIN32)
+
 project(raptor)
 
 set(CMAKE_SUPPRESS_REGENERATION true)
@@ -17,9 +22,7 @@ find_package(Threads REQUIRED)
 target_link_libraries(raptor Threads::Threads)
 
 if(WIN32)
-	include_directories("C:\\Users\\Tim Hahn\\pthreads-w32-2-9-1-release\\Pre-built.2\\include")
-
-	include_directories("C:\\Users\\Tim Hahn\\boost_1_66_0")
+	include_directories("C:/Users/Tim Hahn/boost_1_66_0")
 endif(WIN32)
 
 if(WIN32)
@@ -28,15 +31,15 @@ if(WIN32)
 
     find_library( OCTAVE_LIB
                   NAMES liboctave-4
-                  HINTS "C:\\Octave\\Octave-4.2.2\\bin"
+                  HINTS "C:/Octave/Octave-4.2.2/bin"
                 )
 
     find_library( OCTINTERP_LIB
                   NAMES liboctinterp-4
-                  HINTS "C:\\Octave\\Octave-4.2.2\\bin"
+                  HINTS "C:/Octave/Octave-4.2.2/bin"
                 )
                 
-	include_directories("C:\\Octave\\Octave-4.2.2\\include")
+	include_directories("C:/Octave/Octave-4.2.2/include")
 endif(WIN32)
 
 if(UNIX)
