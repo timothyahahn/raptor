@@ -1906,9 +1906,17 @@ void Thread::setWorkstationParameters(const char * f)
 	strcpy(wkstFile,f);
 #endif
 
-	ifstream inFile(f);
+	try
+	{
+		ifstream inFile(f);
 
-	inFile.getline(buffer,199);
+		inFile.getline(buffer,199);
+	}
+	catch(...)
+	{
+		std::cerr << "Error reading/opening workstation file: " << f << std::endl;
+		exit(ERROR_WORKSTATION_FILE);
+	}
 
 	char *param;
 	char *parent;
