@@ -8,10 +8,6 @@ if(NOT N EQUAL 0)
     set(ctest_test_args ${ctest_test_args} PARALLEL_LEVEL ${N})
 endif()
 
-if(WIN32)
-    set(CMAKE_CXX_COMPILER "C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/c++.exe")
-endif(WIN32)
-
 project(raptor CXX C)
 
 include(CheckCXXCompilerFlag)
@@ -31,28 +27,50 @@ target_include_directories(raptor PUBLIC include)
 add_subdirectory(kshortestpath)
 target_link_libraries(raptor kshortestpath)
 
-find_package(Threads REQUIRED)
-target_link_libraries(raptor ${CMAKE_THREAD_LIBS_INIT})
+if(WIN32)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+
+	add_definitions(-D_USE_MATH_DEFINES)
+endif(WIN32)
 
 if(WIN32)
 	include_directories("C:/Users/Tim Hahn/boost_1_66_0")
 endif(WIN32)
 
 if(WIN32)
-    SET(CMAKE_FIND_LIBRARY_PREFIXES "")
-    SET(CMAKE_FIND_LIBRARY_SUFFIXES ".lib" ".dll")
+    set(CMAKE_FIND_LIBRARY_PREFIXES "")
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
+
+	find_library( PTHREAD_VC2_LIB
+                  NAMES pthreadVC2.lib
+                  HINTS "C:/pthreads"
+                )
+
+	include_directories("C:/pthreads")
+
+	target_link_libraries(raptor ${PTHREAD_VC2_LIB})
+endif(WIN32)
+
+if(UNIX)
+	find_package(Threads REQUIRED)
+	target_link_libraries(raptor ${CMAKE_THREAD_LIBS_INIT})
+endif(UNIX)
+
+if(WIN32)
+    set(CMAKE_FIND_LIBRARY_PREFIXES "")
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib" ".dll")
 
     find_library( OCTAVE_LIB
-                  NAMES liboctave-4
-                  HINTS "C:/Octave/Octave-4.2.2/bin"
+                  NAMES liboctave-7
+                  HINTS "C:/Octave/Octave-5.1.0.0/bin"
                 )
 
     find_library( OCTINTERP_LIB
-                  NAMES liboctinterp-4
-                  HINTS "C:/Octave/Octave-4.2.2/bin"
+                  NAMES liboctinterp-7
+                  HINTS "C:/Octave/Octave-5.1.0.0/bin"
                 )
-                
-    include_directories("C:/Octave/Octave-4.2.2/include")
+
+    include_directories("C:/Octave/Octave-5.1.0.0/mingw32/include/octave-5.1.0/octave")
 endif(WIN32)
 
 if(UNIX)
