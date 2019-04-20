@@ -87,7 +87,7 @@ void copyResults(std::vector<CQYDirectedPath*> &topK_shortest_paths, const kShor
 
 	for(unsigned int a = 0; a < topK_shortest_paths.size(); ++a)
 	{
-		retVal->pathcost[a] = float(topK_shortest_paths[a]->GetCost());
+		retVal->pathcost[a] = double(topK_shortest_paths[a]->GetCost());
 		retVal->pathlen[a] = topK_shortest_paths[a]->GetLength();
 
 		for(unsigned int b = 0; b < retVal->pathlen[a]; ++b)
@@ -98,7 +98,7 @@ void copyResults(std::vector<CQYDirectedPath*> &topK_shortest_paths, const kShor
 
 	for(size_t d = topK_shortest_paths.size(); d < params.k_paths; ++d)
 	{
-		retVal->pathcost[d] = std::numeric_limits<float>::infinity();
+		retVal->pathcost[d] = std::numeric_limits<double>::infinity();
 		retVal->pathlen[d] = std::numeric_limits<int>::infinity();
 	}
 }

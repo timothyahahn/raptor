@@ -67,7 +67,7 @@ class Router
 			{ ++numWorkstations; };
 		inline int getNumWorkstations()
 			{ return numWorkstations; };
-		void setRadius(float pct);
+		void setRadius(double pct);
 		inline void addTopoEdge(Edge* e)
 		{	edgeList.push_back(e);	};
 		void scaleEdgesTo(int spns, int px);
@@ -111,7 +111,7 @@ class Router
 			{ return static_cast<unsigned int>(edgeList.size()); };
 
 		void generateACOProbabilities(unsigned int dest);
-		Edge* chooseEdge(float p);
+		Edge* chooseEdge(double p);
 
 #ifdef RUN_GUI
 		void refreshedgebmps(bool useThread);
@@ -140,8 +140,8 @@ class Router
 		{	ypercent = y;	};
 		inline void setXYPixels()
 		{
-			xPixel = (((float)xpercent / 100.0) * realTopoWidthPx);
-			yPixel = (((float)ypercent / 100.0) * realTopoHeightPx);
+			xPixel = (((double)xpercent / 100.0) * realTopoWidthPx);
+			yPixel = (((double)ypercent / 100.0) * realTopoHeightPx);
 		}
 		inline void moveXYPixels(int x, int y)
 		{

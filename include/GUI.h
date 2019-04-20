@@ -96,7 +96,7 @@ bool is_exploring, showcolorkey,showmaximums,showaverages;//showindexes,showwks,
 
 vector<Router*> topoRouters; //for building topology
 
-float clickdist,rx,ry,dmx,dmy,shrinkConstant;
+double clickdist,rx,ry,dmx,dmy,shrinkConstant;
 Edge* edge;
 
 BITMAP* flashscreen;

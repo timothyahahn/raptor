@@ -81,13 +81,13 @@ class Edge
 		void initializetopobmps();
 #endif
 
-		inline float getAlgorithmUsage()
+		inline double getAlgorithmUsage()
 			{ return algorithmUsage; };
 		inline void resetAlgorithmUsage()
 			{ algorithmUsage = 0.0; };
 		void resetQMDegredation();
 
-		inline float getQMDegredation()
+		inline double getQMDegredation()
 			{ return QMDegredation; };
 
 		inline double getPheremone()
@@ -130,10 +130,10 @@ private:
 		int *activeSession;
 		EdgeStatus *status;
 
-		float algorithmUsage;
+		double algorithmUsage;
 		int actualUsage;
 
-		float QMDegredation;
+		double QMDegredation;
 
 		double* degredation;
 
@@ -142,7 +142,7 @@ private:
 		int r3x,r3y,r4x,r4y; //points to draw to for edge width (these change)
 		int putX,putY;
 		int thdIndx;
-		float invunitX, invunitY, currX, currY, oldX, oldY, average_usage, painted_usage;//inverse unit vectors
+		double invunitX, invunitY, currX, currY, oldX, oldY, average_usage, painted_usage;//inverse unit vectors
 		int painted_percent; 
 		int max_actual_usage;
 		vector<int> usageList;

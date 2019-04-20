@@ -208,7 +208,7 @@ void Router::generateACOProbabilities(unsigned int dest)
 //					probabilities.
 //
 ///////////////////////////////////////////////////////////////////
-Edge* Router::chooseEdge(float p)
+Edge* Router::chooseEdge(double p)
 {
 	if(p <= acoProbs[0])
 		return getEdgeByIndex(0);
@@ -424,14 +424,14 @@ void Router::paintNumDests(int n)
 {
 	int black = makecol(0,0,0);
 	int number = 5; //whatever
-	float quotient;
+	double quotient;
 	
 	if(n <= 0) //in this case, total active wks are passed in as a negative number
 	{
 		if(n == 0)
 			quotient = 100.0;
 		else{
-			quotient = 100.0 *  float(numWorkstations)/float(-1 * n);
+			quotient = 100.0 *  double(numWorkstations)/double(-1 * n);
 		}
 		setRadius(quotient);
 		number = routerIndex;
@@ -453,13 +453,13 @@ void Router::paintNumDests(int n)
 		number = quotient;
 	}
 	else if(n == 3)
-	{	quotient = 100.0 *  float(numWorkstations)/float(threadZero->getCurrentActiveWorkstations() );
+	{	quotient = 100.0 *  double(numWorkstations)/double(threadZero->getCurrentActiveWorkstations() );
 		setRadius(quotient);
 		number = numWorkstations;
 	}
 	else if(n == 4) //0 means paint indexes
 	{
-		quotient = 100.0 *  float(numWorkstations)/float(threadZero->getCurrentActiveWorkstations() );
+		quotient = 100.0 *  double(numWorkstations)/double(threadZero->getCurrentActiveWorkstations() );
 		setRadius(quotient);
 		number = routerIndex;}
 
@@ -563,7 +563,7 @@ void Router::selectScreen()
 	textprintf_ex(popup,font,startX+15,startY+35,black,-1,"\"%s\"", name);
 	numtopaint = numWorkstations;
 	textprintf_right_ex(popup,font,startX + 129,startY+57, black,-1,"%d", numtopaint);
-	numtopaint = 100.0 *  float(numWorkstations)/float(threadZero->getCurrentActiveWorkstations() );
+	numtopaint = 100.0 *  double(numWorkstations)/double(threadZero->getCurrentActiveWorkstations() );
 	textprintf_right_ex(popup,font,startX + 129,startY+72, black,-1,"%d", numtopaint);
 	numtopaint = edgeList.size();
 	textprintf_right_ex(popup,font,startX + 129,startY+90, black,-1,"%d", numtopaint);
@@ -625,11 +625,11 @@ void Router::setNumWorkstations(int w)
 
 ///////////////////////////////////////////////////////////////////
 //
-// Function Name:	setRadius(float percentage)
+// Function Name:	setRadius(double percentage)
 // Description:		sets router radius according to percentage passed in.
 //
 ///////////////////////////////////////////////////////////////////
-void Router::setRadius(float pct)
+void Router::setRadius(double pct)
 {
 	if(int(pct) == 0)
 		radius = 10;

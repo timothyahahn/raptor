@@ -198,7 +198,7 @@ void Thread::initPriorityQueue(unsigned int w)
 
 	Event* deactivate = new Event;
 	deactivate->e_type = DEACTIVATE_WORKSTATIONS;
-	deactivate->e_time = HUNDRED_HOURS - 1.0;
+	deactivate->e_time = std::numeric_limits<double>::infinity();
 	deactivate->e_data = 0;
 
 	queue->addEvent(*deactivate);
@@ -390,7 +390,7 @@ void Thread::activate_workstations()
 {
 #ifdef RUN_GUI
 	ConnsPerPx = (threadZero->getNumberOfConnections() * getCurrentActiveWorkstations()) / progBarLengthpx;
-	multFactor = 600.0 / float(getCurrentActiveWorkstations() * threadZero->getNumberOfConnections());
+	multFactor = 600.0 / double(getCurrentActiveWorkstations() * threadZero->getNumberOfConnections());
 #endif
 
 	stats.ConnectionRequests = 0;
@@ -417,12 +417,12 @@ void Thread::activate_workstations()
 
 	//Random generator for duration time
 	rng2.seed(boost::uint32_t(getRandomSeed()));
-	dt = new boost::exponential_distribution<>(1.0 / float(threadZero->getQualityParams().duration));
+	dt = new boost::exponential_distribution<>(1.0 / double(threadZero->getQualityParams().duration));
 	generateRandomDuration = new boost::variate_generator<boost::mt19937&, boost::exponential_distribution<> >(rng2, *dt);
 
 	//Random generator for arrival interval
 	rng3.seed(boost::uint32_t(getRandomSeed() * getRandomSeed()));
-	ai = new boost::exponential_distribution<>(1.0 / float(threadZero->getQualityParams().arrival_interval));
+	ai = new boost::exponential_distribution<>(1.0 / double(threadZero->getQualityParams().arrival_interval));
 	generateArrivalInterval = new boost::variate_generator<boost::mt19937&, boost::exponential_distribution<> >(rng3, *ai);
 
 	//Random generator for zero to one
@@ -552,49 +552,49 @@ void Thread::deactivate_workstations()
 	strcpy(probing,threadZero->getProbeStyleName(CurrentProbeStyle)->c_str());
 	qualityAware = getCurrentQualityAware();
 	
-	overallBlocking = float(stats.ConnectionRequests - stats.ConnectionSuccesses) / float(stats.ConnectionRequests);
-	collisions = float(stats.CollisionFailures) / float(stats.ConnectionRequests);
-	badquality = float(stats.QualityFailures) / float(stats.ConnectionRequests);
-	nonresource = float(stats.NoPathFailures) / float(stats.ConnectionRequests);
-	avgprobesperrequest = float(stats.ProbeSentCount) / float(stats.ConnectionRequests);
-	avgrequestdelaytime = stats.totalSetupDelay / float(stats.ConnectionSuccesses);
-	avgconnhopcount = float(stats.totalHopCount) / float(stats.ConnectionSuccesses);
-	avgconnspancount = float(stats.totalSpanCount) / float(stats.ConnectionSuccesses);
+	overallBlocking = double(stats.ConnectionRequests - stats.ConnectionSuccesses) / double(stats.ConnectionRequests);
+	collisions = double(stats.CollisionFailures) / double(stats.ConnectionRequests);
+	badquality = double(stats.QualityFailures) / double(stats.ConnectionRequests);
+	nonresource = double(stats.NoPathFailures) / double(stats.ConnectionRequests);
+	avgprobesperrequest = double(stats.ProbeSentCount) / double(stats.ConnectionRequests);
+	avgrequestdelaytime = stats.totalSetupDelay / double(stats.ConnectionSuccesses);
+	avgconnhopcount = double(stats.totalHopCount) / double(stats.ConnectionSuccesses);
+	avgconnspancount = double(stats.totalSpanCount) / double(stats.ConnectionSuccesses);
 	avgASEnoise = stats.aseNoiseTotal / double(stats.ConnectionSuccesses);
 	avgFWMnoise = stats.fwmNoiseTotal / double(stats.ConnectionSuccesses);
 	avgXPMnoise = stats.xpmNoiseTotal / double(stats.ConnectionSuccesses);
 #endif
 
 	sprintf(buffer,"OVERALL BLOCKING (%d/%d) = %f", stats.ConnectionRequests - stats.ConnectionSuccesses, stats.ConnectionRequests, 
-		float(stats.ConnectionRequests - stats.ConnectionSuccesses) / float(stats.ConnectionRequests));
+		double(stats.ConnectionRequests - stats.ConnectionSuccesses) / double(stats.ConnectionRequests));
 	threadZero->recordEvent(buffer,true,controllerIndex);
 	
 	sprintf(buffer,"COLLISIONS (%d/%d) = %f", stats.CollisionFailures, 
-		stats.ConnectionRequests, float(stats.CollisionFailures) / float(stats.ConnectionRequests));
+		stats.ConnectionRequests, double(stats.CollisionFailures) / double(stats.ConnectionRequests));
 	threadZero->recordEvent(buffer,true,controllerIndex);
 
 	sprintf(buffer,"BAD QUALITY (%d/%d) = %f", stats.QualityFailures, stats.ConnectionRequests, 
-		float(stats.QualityFailures) / float(stats.ConnectionRequests));
+		double(stats.QualityFailures) / double(stats.ConnectionRequests));
 	threadZero->recordEvent(buffer,true,controllerIndex);
 
 	sprintf(buffer,"NON RESOURCES (%d/%d) = %f", stats.NoPathFailures, stats.ConnectionRequests, 
-		float(stats.NoPathFailures) / float(stats.ConnectionRequests));
+		double(stats.NoPathFailures) / double(stats.ConnectionRequests));
 	threadZero->recordEvent(buffer,true,controllerIndex);
 
 	sprintf(buffer,"AVERAGE PROBES PER REQUEST (%d/%d) = %f", stats.ProbeSentCount, stats.ConnectionRequests, 
-		float(stats.ProbeSentCount) / float(stats.ConnectionRequests));
+		double(stats.ProbeSentCount) / double(stats.ConnectionRequests));
 	threadZero->recordEvent(buffer,true,controllerIndex);
 
 	sprintf(buffer,"AVERAGE REQUEST DELAY TIME (%f/%d) = %f", stats.totalSetupDelay, stats.ConnectionSuccesses, 
-		stats.totalSetupDelay / float(stats.ConnectionSuccesses));
+		stats.totalSetupDelay / double(stats.ConnectionSuccesses));
 	threadZero->recordEvent(buffer,true,controllerIndex);
 
 	sprintf(buffer,"AVERAGE CONNECTION HOP COUNT (%d/%d) = %f", stats.totalHopCount, stats.ConnectionSuccesses, 
-		float(stats.totalHopCount) / float(stats.ConnectionSuccesses));
+		double(stats.totalHopCount) / double(stats.ConnectionSuccesses));
 	threadZero->recordEvent(buffer,true,controllerIndex);
 
 	sprintf(buffer,"AVERAGE CONNECTION SPAN COUNT (%d/%d) = %f", stats.totalSpanCount, stats.ConnectionSuccesses, 
-		float(stats.totalSpanCount) / float(stats.ConnectionSuccesses));
+		double(stats.totalSpanCount) / double(stats.ConnectionSuccesses));
 	threadZero->recordEvent(buffer,true,controllerIndex);
 
 	sprintf(buffer,"AVERAGE ASE NOISE (%f/%d) = %e", stats.aseNoiseTotal, stats.ConnectionSuccesses,
@@ -615,15 +615,15 @@ void Thread::deactivate_workstations()
 
 	if(threadZero->getQualityParams().q_factor_stats == true)
 	{
-		double worstInitQ = std::numeric_limits<float>::infinity();
+		double worstInitQ = std::numeric_limits<double>::infinity();
 		double bestInitQ = 0.0;
 		double averageInitQ = 0.0;
 
-		double worstAvgQ = std::numeric_limits<float>::infinity();
+		double worstAvgQ = std::numeric_limits<double>::infinity();
 		double bestAvgQ = 0.0;
 		double averageAvgQ = 0.0;
 
-		double worstPerQ = std::numeric_limits<float>::infinity();
+		double worstPerQ = std::numeric_limits<double>::infinity();
 		double bestPerQ = 0.0;
 		double averagePerQ = 0.0;
 
@@ -668,11 +668,11 @@ void Thread::deactivate_workstations()
 		}
 
 		sprintf(buffer,"DROPPED CONNECTIONS (%d/%d) = %f", int(droppedTotal), stats.ConnectionRequests, 
-			droppedTotal / float(stats.ConnectionRequests));
+			droppedTotal / double(stats.ConnectionRequests));
 		threadZero->recordEvent(buffer,true,controllerIndex);
 
 		sprintf(buffer,"OVERALL W/DROPPED (%d/%d) = %f", int(stats.ConnectionRequests - stats.ConnectionSuccesses + droppedTotal), stats.ConnectionRequests, 
-			float(stats.ConnectionRequests - stats.ConnectionSuccesses + droppedTotal) / float(stats.ConnectionRequests));
+			double(stats.ConnectionRequests - stats.ConnectionSuccesses + droppedTotal) / double(stats.ConnectionRequests));
 		threadZero->recordEvent(buffer,true,controllerIndex);
 
 		sprintf(buffer,"INITIAL Q: MIN = %f, MAX = %f, AVG = %f",worstInitQ,bestInitQ,averageInitQ / countTotal);
@@ -751,11 +751,11 @@ void Thread::generateTrafficEvent(unsigned int session)
 	Event* tr = new Event();
 	ConnectionRequestEvent* tr_data = new ConnectionRequestEvent();
 
-	tr->e_time = getGlobalTime() + float((*generateArrivalInterval)());
+	tr->e_time = getGlobalTime() + double((*generateArrivalInterval)());
 	tr->e_type = CONNECTION_REQUEST;
 	tr->e_data = tr_data;
 
-	tr_data->connectionDuration = float((*generateRandomDuration)());
+	tr_data->connectionDuration = double((*generateRandomDuration)());
 
 	if(tr_data->connectionDuration < threadZero->getMinDuration())
 		tr_data->connectionDuration = threadZero->getMinDuration();
@@ -1461,11 +1461,11 @@ void Thread::collision_notification(CollisionNotificationEvent* cne)
 
 ///////////////////////////////////////////////////////////////////
 //
-// Function Name:	getKthParameterFloat
-// Description:		Gets the kth parameter and returns it as a float.
+// Function Name:	getKthParameterdouble
+// Description:		Gets the kth parameter and returns it as a double.
 //
 ///////////////////////////////////////////////////////////////////
-float Thread::getKthParameterFloat(char* f)
+double Thread::getKthParameterdouble(char* f)
 {
 	if(strchr(f,',') == 0)
 	{
@@ -1474,7 +1474,7 @@ float Thread::getKthParameterFloat(char* f)
 	else
 	{
 		char* token = strtok(f,",");
-		float retVal;
+		double retVal;
 		int t = 0;
 
 		while(token != 0)
@@ -1556,13 +1556,13 @@ void Thread::setQualityParameters(const char* f)
 
 		if(strcmp(param,"arrival_interval") == 0)
 		{
-			qualityParams.arrival_interval = getKthParameterFloat(value);
+			qualityParams.arrival_interval = getKthParameterdouble(value);
 			sprintf(buffer,"\tarrival_interval = %f",qualityParams.arrival_interval);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"duration") == 0)
 		{
-			qualityParams.duration = getKthParameterFloat(value);
+			qualityParams.duration = getKthParameterdouble(value);
 			sprintf(buffer,"\tduration = %f",qualityParams.duration);
 			threadZero->recordEvent(buffer,true,0);
 		}
@@ -1584,86 +1584,86 @@ void Thread::setQualityParameters(const char* f)
 		}
 		else if(strcmp(param,"fc") == 0)
 		{
-			qualityParams.fc = getKthParameterFloat(value);
+			qualityParams.fc = getKthParameterdouble(value);
 			sprintf(buffer,"\tfc = %f",qualityParams.fc);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"f_step") == 0)
 		{
-			qualityParams.f_step = getKthParameterFloat(value);
+			qualityParams.f_step = getKthParameterdouble(value);
 			sprintf(buffer,"\tf_step = %f",qualityParams.f_step);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"channel_power") == 0)
 		{
-			qualityParams.channel_power = getKthParameterFloat(value);
+			qualityParams.channel_power = getKthParameterdouble(value);
 			sprintf(buffer,"\tchannel_power = %f",qualityParams.channel_power);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"L") == 0)
 		{
-			qualityParams.L = getKthParameterFloat(value);
+			qualityParams.L = getKthParameterdouble(value);
 			sprintf(buffer,"\tL = %f",qualityParams.L);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"alphaDB") == 0)
 		{
-			qualityParams.alphaDB = getKthParameterFloat(value);
-			qualityParams.alpha = float(qualityParams.alphaDB * 0.1 / log10(exp(1.0)));
+			qualityParams.alphaDB = getKthParameterdouble(value);
+			qualityParams.alpha = double(qualityParams.alphaDB * 0.1 / log10(exp(1.0)));
 			sprintf(buffer,"\talphaDB = %f",qualityParams.alphaDB);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"D") == 0)
 		{
-			qualityParams.D = getKthParameterFloat(value);
+			qualityParams.D = getKthParameterdouble(value);
 			sprintf(buffer,"\tD = %f",qualityParams.D);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"S") == 0)
 		{
-			qualityParams.S = getKthParameterFloat(value);
+			qualityParams.S = getKthParameterdouble(value);
 			sprintf(buffer,"\tS = %f",qualityParams.S);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"gamma") == 0)
 		{
-			qualityParams.gamma = getKthParameterFloat(value);
+			qualityParams.gamma = getKthParameterdouble(value);
 			sprintf(buffer,"\tgamma = %f",qualityParams.gamma);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"QFactor_factor") == 0)
 		{
-			qualityParams.QFactor_factor = getKthParameterFloat(value);
+			qualityParams.QFactor_factor = getKthParameterdouble(value);
 			sprintf(buffer,"\tQFactor_factor = %f",qualityParams.QFactor_factor);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"EDFA_Noise_Figure") == 0)
 		{
-			qualityParams.EDFA_Noise_Figure = getKthParameterFloat(value);
+			qualityParams.EDFA_Noise_Figure = getKthParameterdouble(value);
 			sprintf(buffer,"\tEDFA_Noise_Figure = %f",qualityParams.EDFA_Noise_Figure);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"EDFA_Gain") == 0)
 		{
-			qualityParams.EDFA_Gain = getKthParameterFloat(value);
+			qualityParams.EDFA_Gain = getKthParameterdouble(value);
 			sprintf(buffer,"\tEDFA_Gain = %f",qualityParams.EDFA_Gain);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"B_w") == 0)
 		{
-			qualityParams.B_w = getKthParameterFloat(value);
+			qualityParams.B_w = getKthParameterdouble(value);
 			sprintf(buffer,"\tB_w = %e",qualityParams.B_w);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"usage_update_interval") == 0)
 		{
-			qualityParams.usage_update_interval = getKthParameterFloat(value);
+			qualityParams.usage_update_interval = getKthParameterdouble(value);
 			sprintf(buffer,"\tusage_update_interval = %f",qualityParams.usage_update_interval);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"beta") == 0)
 		{
-			qualityParams.beta = getKthParameterFloat(value);
+			qualityParams.beta = getKthParameterdouble(value);
 			sprintf(buffer,"\tbeta = %f",qualityParams.beta);
 			threadZero->recordEvent(buffer,true,0);
 		}
@@ -1675,7 +1675,7 @@ void Thread::setQualityParameters(const char* f)
 		}
 		else if(strcmp(param,"refractive_index") == 0)
 		{
-			qualityParams.refractive_index = getKthParameterFloat(value);
+			qualityParams.refractive_index = getKthParameterdouble(value);
 			sprintf(buffer,"\trefractive_index = %f",qualityParams.refractive_index);
 			threadZero->recordEvent(buffer,true,0);
 		}
@@ -1731,7 +1731,7 @@ void Thread::setQualityParameters(const char* f)
 		}
 		else if(strcmp(param,"DP_alpha") == 0)
 		{
-			qualityParams.DP_alpha = getKthParameterFloat(value);
+			qualityParams.DP_alpha = getKthParameterdouble(value);
 			sprintf(buffer,"\tDP_alpha = %f",qualityParams.DP_alpha);
 			threadZero->recordEvent(buffer,true,0);
 		}
@@ -1743,25 +1743,25 @@ void Thread::setQualityParameters(const char* f)
 		}
 		else if(strcmp(param,"ACO_alpha") == 0)
 		{
-			qualityParams.ACO_alpha = getKthParameterFloat(value);
+			qualityParams.ACO_alpha = getKthParameterdouble(value);
 			sprintf(buffer,"\tACO_alpha = %f",qualityParams.ACO_alpha);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"ACO_beta") == 0)
 		{
-			qualityParams.ACO_beta = getKthParameterFloat(value);
+			qualityParams.ACO_beta = getKthParameterdouble(value);
 			sprintf(buffer,"\tACO_beta = %f",qualityParams.ACO_beta);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"ACO_rho") == 0)
 		{
-			qualityParams.ACO_rho = getKthParameterFloat(value);
+			qualityParams.ACO_rho = getKthParameterdouble(value);
 			sprintf(buffer,"\tACO_rho = %f",qualityParams.ACO_rho);
 			threadZero->recordEvent(buffer,true,0);
 		}
 		else if(strcmp(param,"MM_ACO_gamma") == 0)
 		{
-			qualityParams.MM_ACO_gamma = getKthParameterFloat(value);
+			qualityParams.MM_ACO_gamma = getKthParameterdouble(value);
 			sprintf(buffer,"\tMM_ACO_gamma = %f",qualityParams.MM_ACO_gamma);
 			threadZero->recordEvent(buffer,true,0);
 		}
@@ -1785,7 +1785,7 @@ void Thread::setQualityParameters(const char* f)
 		}
 	}
 
-	qualityParams.ASE_perEDFA = new float[getNumberOfWavelengths()];
+	qualityParams.ASE_perEDFA = new double[getNumberOfWavelengths()];
 
 	for(unsigned int w = 0; w < getNumberOfWavelengths(); ++w)
 	{
@@ -2086,8 +2086,8 @@ void Thread::setAlgorithmParameters(const char * f, unsigned int iterationCount)
 			}
 			else
 			{
-				unsigned int iterationWorkstationDelta = static_cast<unsigned int>(float(1.0) / float(iterationCount) *
-					float(threadZero->getNumberOfWorkstations()));
+				unsigned int iterationWorkstationDelta = static_cast<unsigned int>(double(1.0) / double(iterationCount) *
+					double(threadZero->getNumberOfWorkstations()));
 
 				for(unsigned int i = 0; i < iterationCount; ++i)
 				{
@@ -2262,7 +2262,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 		{
 			for(unsigned int w = probesSkipped; w < threadZero->getNumberOfWavelengths(); ++w)
 			{
-				if(kPath->pathcost[w] != std::numeric_limits<float>::infinity())
+				if(kPath->pathcost[w] != std::numeric_limits<double>::infinity())
 				{
 					++probesTotal;
 
@@ -2280,7 +2280,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 
 			for(unsigned int w = probesSkipped; w < max_probes; ++w)
 			{
-				if(kPath->pathcost[w] != std::numeric_limits<float>::infinity())
+				if(kPath->pathcost[w] != std::numeric_limits<double>::infinity())
 				{
 					++probesTotal;
 
@@ -2317,7 +2317,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 
 					time(&start);
 
-					float minCost = std::numeric_limits<float>::infinity();
+					double minCost = std::numeric_limits<double>::infinity();
 
 					for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
 					{
@@ -2328,7 +2328,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 						}
 					}
 
-					if(minCost == std::numeric_limits<float>::infinity())
+					if(minCost == std::numeric_limits<double>::infinity())
 						probesToSend = 0;
 
 					time(&end);
@@ -2348,7 +2348,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 	{
 		probeStart = 0;
 
-		if(kPath->pathcost[0] != std::numeric_limits<float>::infinity())
+		if(kPath->pathcost[0] != std::numeric_limits<double>::infinity())
 		{
 			probesToSend = 1;
 		}
@@ -2363,7 +2363,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 
 		for(unsigned int a = probesSkipped; a < threadZero->getQualityParams().max_probes; ++a)
 		{
-			if(kPath->pathcost[a] != std::numeric_limits<float>::infinity())
+			if(kPath->pathcost[a] != std::numeric_limits<double>::infinity())
 			{
 				probeStart = a;
 				probesToSend = 1;
@@ -2378,7 +2378,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 
 		for(unsigned int p = 0; p < threadZero->getQualityParams().max_probes; ++p)
 		{
-			if(kPath->pathcost[p] != std::numeric_limits<float>::infinity())
+			if(kPath->pathcost[p] != std::numeric_limits<double>::infinity())
 				++probesToSend;
 		}
 
@@ -2426,7 +2426,7 @@ void Thread::sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath,
 		{
 			if(CurrentRoutingAlgorithm == IMPAIRMENT_AWARE || CurrentRoutingAlgorithm == DYNAMIC_PROGRAMMING)
 			{
-				while(kPath->pathcost[p] == std::numeric_limits<float>::infinity())
+				while(kPath->pathcost[p] == std::numeric_limits<double>::infinity())
 				{
 					++newProbesSkipped;
 					++p;
@@ -2470,7 +2470,7 @@ void Thread::sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath,
 					{
 						for(unsigned int a = 0; a < threadZero->getQualityParams().max_probes; ++a)
 						{
-							if(kPath->pathcost[a] != std::numeric_limits<float>::infinity())
+							if(kPath->pathcost[a] != std::numeric_limits<double>::infinity())
 								++cre->max_sequence;
 						}
 					}
@@ -2478,7 +2478,7 @@ void Thread::sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath,
 					{
 						for(unsigned int a = 0; a < threadZero->getNumberOfWavelengths(); ++a)
 						{
-							if(kPath->pathcost[a] != std::numeric_limits<float>::infinity())
+							if(kPath->pathcost[a] != std::numeric_limits<double>::infinity())
 								++cre->max_sequence;
 						}
 					}
@@ -2486,7 +2486,7 @@ void Thread::sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath,
 					{
 						for(unsigned int a = 0; a < threadZero->getQualityParams().max_probes; ++a)
 						{
-							if(kPath->pathcost[a] != std::numeric_limits<float>::infinity())
+							if(kPath->pathcost[a] != std::numeric_limits<double>::infinity())
 								++cre->max_sequence;
 						}
 					}
@@ -2520,7 +2520,7 @@ void Thread::sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath,
 
 			if(CurrentRoutingAlgorithm != SHORTEST_PATH)
 			{
-				kPath->pathcost[p] = std::numeric_limits<float>::infinity();
+				kPath->pathcost[p] = std::numeric_limits<double>::infinity();
 				kPath->pathlen[p] = std::numeric_limits<int>::infinity();
 			}
 
@@ -2709,8 +2709,8 @@ void Thread::setMinDuration(unsigned int spans)
 ///////////////////////////////////////////////////////////////////
 void Thread::setQFactorMin(unsigned int spans)
 {
-	qualityParams.TH_Q = static_cast<float>(qualityParams.QFactor_factor * 10.0 * 
-		log10(qualityParams.channel_power / sqrt(qualityParams.ASE_perEDFA[qualityParams.halfwavelength] * float(spans))));
+	qualityParams.TH_Q = static_cast<double>(qualityParams.QFactor_factor * 10.0 * 
+		log10(qualityParams.channel_power / sqrt(qualityParams.ASE_perEDFA[qualityParams.halfwavelength] * double(spans))));
 
 	double Q = qualityParams.TH_Q;
 	maxSpans = spans;
@@ -2719,7 +2719,7 @@ void Thread::setQFactorMin(unsigned int spans)
 	{
 		++maxSpans;
 
-		Q = 10.0 * log10(qualityParams.channel_power / sqrt(qualityParams.ASE_perEDFA[qualityParams.halfwavelength] * float(maxSpans+1)));
+		Q = 10.0 * log10(qualityParams.channel_power / sqrt(qualityParams.ASE_perEDFA[qualityParams.halfwavelength] * double(maxSpans+1)));
 	}
 }
 
@@ -2796,7 +2796,7 @@ void Thread::updateQFactorStats(Edge **connectionPath, unsigned int connectionLe
 // Description:		Returns the value of beta for threadZero
 //
 ///////////////////////////////////////////////////////////////////
-float Thread::getBeta()
+double Thread::getBeta()
 {
 	return threadZero->getQualityParams().beta;
 }

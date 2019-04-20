@@ -139,7 +139,7 @@ class Thread
 		inline void setCurrentActiveWorkstations(unsigned int w)
 			{ CurrentActiveWorkstations = w;	}
 
-		float getBeta();
+		double getBeta();
 
 		inline double getMinDuration()
 			{ return minDuration; };
@@ -162,9 +162,9 @@ class Thread
 
 		void saveThread(char* dir);
 
-		inline void setMaxMaxUsage(float m)
+		inline void setMaxMaxUsage(double m)
 			{ maxMaxUsage = m; };
-		inline float getMaxMaxUsage()
+		inline double getMaxMaxUsage()
 			{ return maxMaxUsage; };
 
 		inline void setPaintDir()
@@ -304,13 +304,13 @@ class Thread
 		unsigned int numOfWavelengths;
 
 #ifdef RUN_GUI
-		float maxMaxUsage;
+		double maxMaxUsage;
 		bool paintDir; //true if all edges must be repainted.
 		bool paintSpans;
 		bool paintRealTime;
 		int progBarLengthpx; //length of full progress bar
 		double ConnsPerPx;
-		float multFactor;
+		double multFactor;
 		int paintedConns;
 		int numUsagesToDisplay;
 		int usageHistStartTime;
@@ -397,7 +397,7 @@ class Thread
 		boost::variate_generator<boost::mt19937&, boost::exponential_distribution<> > *generateArrivalInterval;
 
 		int getKthParameterInt(char *f);
-		float getKthParameterFloat(char *f);
+		double getKthParameterdouble(char *f);
 
 		int runCount;
 		int maxRunCount;

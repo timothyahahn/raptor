@@ -167,7 +167,7 @@ void refreshedges()
 void explore_history()
 {
 	initialize_topbuttons();
-	float aPercent = 0.0;
+	double aPercent = 0.0;
 	paintNum = 4; //initialize to paint router indexes
 	bool showSpans = false;
 	bool whatev;//does't matter, but this should be false.
@@ -839,7 +839,7 @@ void graphpoint()
 ///////////////////////////////////////////////////////////////////
 void graphzoomin()
 {
-	float aPercent;
+	double aPercent;
 	int overx = 0;
 	for(int i = 0; i < 3; i++)
 	{	overx += graphbutton[i]->w;	}
@@ -857,7 +857,7 @@ void graphzoomin()
 	{
 		if(usageWindow > 50)
 		{
-			aPercent = float(explore_time - threadZero->getUsageHistStartTime()) / float(usageWindow);
+			aPercent = double(explore_time - threadZero->getUsageHistStartTime()) / double(usageWindow);
 			startTime = ceil(threadZero->getUsageHistStartTime() + aPercent * shrinkConstant * usageWindow);
 			threadZero->setUsageHistStartTime(startTime);
 			usageWindow -= ceil(shrinkConstant * usageWindow);
@@ -884,7 +884,7 @@ void graphzoomin()
 void graphzoomout()//turns itself on/off. turns point/move off
 {
 	int overx = 0;
-	float aPercent;
+	double aPercent;
 	mx = mouse_x;
 	for(int i = 0; i < 4; i++)
 	{	overx += graphbutton[i]->w;	}
@@ -900,7 +900,7 @@ void graphzoomout()//turns itself on/off. turns point/move off
 	blit(graphbuttons,screen,0,0,0,graphY1-graphbutton[0]->h,SCRNWID,SCRNHEI);
 	while(key[KEY_DOWN] || (mouse_b & 1))
 	{
-		aPercent = float(explore_time - threadZero->getUsageHistStartTime()) / float(usageWindow);
+		aPercent = double(explore_time - threadZero->getUsageHistStartTime()) / double(usageWindow);
 		startTime = ceil(threadZero->getUsageHistStartTime() - aPercent * (shrinkConstant) * usageWindow);
 		if(startTime < 0)
 		{	startTime = 0;	}
@@ -1533,8 +1533,8 @@ void buildtopoplacerouter()
 		Router* r = new Router;
 		int sz = topoRouters.size();
 		r->setIndex(sz);
-		r->setXPercent(ceil(100.0 * ( (float)mosx - (float)bkgrndX )/ ((float)realTopoWidthPx) ) );
-		r->setYPercent(ceil(100.0 * ( (float)mosy - (float)bkgrndY )/ ((float)realTopoHeightPx) ) );
+		r->setXPercent(ceil(100.0 * ( (double)mosx - (double)bkgrndX )/ ((double)realTopoWidthPx) ) );
+		r->setYPercent(ceil(100.0 * ( (double)mosy - (double)bkgrndY )/ ((double)realTopoHeightPx) ) );
 		topoRouters.push_back(r);
 		topoRouters[sz]->setXYPixels();
 		topoRouters[sz]->moveXYPixels(0,topbuttons->h);//initially translate below top button bar
@@ -1701,7 +1701,7 @@ void buildtopoeditrouter()
 	textprintf_ex(popup,font,startX+15,startY+35,black,-1,"\"%s\"", topoRouters[chosen]->getName());
 	numtopaint = topoRouters[chosen]->getNumWorkstations();
 	textprintf_right_ex(popup,font,startX + 129,startY+57, black,-1,"%d", numtopaint);
-	numtopaint = 100.0 *  float(topoRouters[chosen]->getNumWorkstations())/float(numTopoWorkstations);
+	numtopaint = 100.0 *  double(topoRouters[chosen]->getNumWorkstations())/double(numTopoWorkstations);
 	textprintf_right_ex(popup,font,startX + 129,startY+72, black,-1,"%d", numtopaint);
 	numtopaint = topoRouters[chosen]->getNumberOfEdges();
 	textprintf_right_ex(popup,font,startX + 129,startY+90, black,-1,"%d", numtopaint);
@@ -1785,10 +1785,10 @@ void buildtopoeditedge()
 		if(edge != 0)
 		{
 			clear_to_color(popup,makecol(255,0,255));
-			int startX = ceil(float(topoRouters[edge->getSourceIndex()]->getXPixel() 
-				+ topoRouters[edge->getDestinationIndex()]->getXPixel())/2.0 - float(editedgeinfo->w)/2.0);
-			int startY = ceil(float(topoRouters[edge->getSourceIndex()]->getYPixel() 
-				+ topoRouters[edge->getDestinationIndex()]->getYPixel())/2.0 - float(editedgeinfo->h)/2.0);
+			int startX = ceil(double(topoRouters[edge->getSourceIndex()]->getXPixel() 
+				+ topoRouters[edge->getDestinationIndex()]->getXPixel())/2.0 - double(editedgeinfo->w)/2.0);
+			int startY = ceil(double(topoRouters[edge->getSourceIndex()]->getYPixel() 
+				+ topoRouters[edge->getDestinationIndex()]->getYPixel())/2.0 - double(editedgeinfo->h)/2.0);
 			int numtopaint;
 			int black = makecol(0,0,0);
 
@@ -1828,10 +1828,10 @@ void buildtopoeditedge()
 				{
 					int sor = edge->getSourceIndex();
 					int des = edge->getDestinationIndex();
-					float x1 = (float)topoRouters[sor]->getXPixel();
-					float x2 = (float)topoRouters[des]->getXPixel();
-					float y1 = (float)topoRouters[sor]->getYPixel();
-					float y2 = (float)topoRouters[des]->getYPixel();
+					double x1 = (double)topoRouters[sor]->getXPixel();
+					double x2 = (double)topoRouters[des]->getXPixel();
+					double y1 = (double)topoRouters[sor]->getYPixel();
+					double y2 = (double)topoRouters[des]->getYPixel();
 					int px = ceil(sqrt( (x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1) ));
 					scaleAllEdgesTo(edge->getNumberOfSpans(), px);
 				}

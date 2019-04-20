@@ -29,9 +29,9 @@ struct EstablishedConnection
 	int wavelength;
 	double connectionStartTime;
 	double connectionEndTime;
-	float initQFactor;
-	float belowQFactor;
-	float averageQFactor;
+	double initQFactor;
+	double belowQFactor;
+	double averageQFactor;
 	vector<double> *QFactors;
 	vector<double> *QTimes;
 };

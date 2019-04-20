@@ -33,7 +33,7 @@
 struct kShortestPathEdges {
 	unsigned int src_node;
 	unsigned int dest_node;
-	float edge_cost;
+	double edge_cost;
 };
 
 struct kShortestPathParms {
@@ -47,7 +47,7 @@ struct kShortestPathParms {
 
 struct kShortestPathReturn {
 	unsigned int *pathinfo;
-	float *pathcost;
+	double *pathcost;
 	unsigned int *pathlen;
 };
 

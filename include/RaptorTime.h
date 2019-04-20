@@ -20,15 +20,8 @@
 #ifndef RAPTOR_TIME_H
 #define RAPTOR_TIME_H
 
-const double TEN_HOURS = /*10.0 **/ 60.0 * 60.0;
-const double HUNDRED_HOURS = 10.0 * TEN_HOURS;
+const double TEN_HOURS = 10.0 * 60.0 * 60.0;
 
 const double SPEED_OF_LIGHT = double(299792458);
-
-struct FormattedTime {
-	unsigned int hours;
-	unsigned int minutes;
-	float seconds;
-};
 
 #endif

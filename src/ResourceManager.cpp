@@ -137,7 +137,7 @@ kShortestPathReturn* ResourceManager::calculate_SP_path(unsigned int src, unsign
 	kShortestPathReturn *kSP_return = new kShortestPathReturn();
 
 	kSP_return->pathinfo = new unsigned int[kSP_params.k_paths * (kSP_params.total_nodes - 1)];
-	kSP_return->pathcost = new float[kSP_params.k_paths];
+	kSP_return->pathcost = new double[kSP_params.k_paths];
 	kSP_return->pathlen = new unsigned int[kSP_params.k_paths];
 
 	calc_k_shortest_paths(kSP_params, kSP_return);
@@ -183,7 +183,7 @@ unsigned int ResourceManager::calculate_span_distance(unsigned int src, unsigned
 	kShortestPathReturn *kSP_return = new kShortestPathReturn();
 
 	kSP_return->pathinfo = new unsigned int[1 * (kSP_params.total_nodes - 1)];
-	kSP_return->pathcost = new float[1];
+	kSP_return->pathcost = new double[1];
 	kSP_return->pathlen = new unsigned int[1];
 
 	calc_k_shortest_paths(kSP_params, kSP_return);
@@ -237,7 +237,7 @@ kShortestPathReturn* ResourceManager::calculate_LORA_path(unsigned int src, unsi
 			if(edgeID >= 0)
 			{
 				kSP_params.edge_list[num].edge_cost = pow(threadZero->getBeta(),
-					float(routerA->getEdgeByIndex(edgeID)->getAlgorithmUsage()));
+					double(routerA->getEdgeByIndex(edgeID)->getAlgorithmUsage()));
 
 				++num;
 			}
@@ -247,7 +247,7 @@ kShortestPathReturn* ResourceManager::calculate_LORA_path(unsigned int src, unsi
 	kShortestPathReturn *kSP_return = new kShortestPathReturn();
 
 	kSP_return->pathinfo = new unsigned int[kSP_params.k_paths * (kSP_params.total_nodes - 1)];
-	kSP_return->pathcost = new float[kSP_params.k_paths];
+	kSP_return->pathcost = new double[kSP_params.k_paths];
 	kSP_return->pathlen = new unsigned int[kSP_params.k_paths];
 
 	calc_k_shortest_paths(kSP_params, kSP_return);
@@ -299,7 +299,7 @@ kShortestPathReturn* ResourceManager::calculate_IA_path(unsigned int src, unsign
 						kSP_params[w].edge_list[kSP_params[w].total_edges].dest_node = b;
 
 						kSP_params[w].edge_list[kSP_params[w].total_edges].edge_cost = 
-							float(edge->getNumberOfSpans());
+							double(edge->getNumberOfSpans());
 
 						++kSP_params[w].total_edges;
 					}
@@ -311,13 +311,13 @@ kShortestPathReturn* ResourceManager::calculate_IA_path(unsigned int src, unsign
 	kShortestPathReturn *kSP_temp = new kShortestPathReturn;
 
 	kSP_temp->pathinfo = new unsigned int[kSP_params[0].total_nodes - 1];
-	kSP_temp->pathcost = new float[1];
+	kSP_temp->pathcost = new double[1];
 	kSP_temp->pathlen = new unsigned int[1];
 
 	kShortestPathReturn *kSP_return = new kShortestPathReturn;
 
 	kSP_return->pathinfo = new unsigned int[(kSP_params[0].total_nodes - 1) * threadZero->getNumberOfWavelengths()];
-	kSP_return->pathcost = new float[threadZero->getNumberOfWavelengths()];
+	kSP_return->pathcost = new double[threadZero->getNumberOfWavelengths()];
 	kSP_return->pathlen = new unsigned int[threadZero->getNumberOfWavelengths()];
 
 	for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
@@ -370,11 +370,11 @@ kShortestPathReturn* ResourceManager::calculate_PAR_path(unsigned int src_index,
 
 		if(k == 1)
 		{
-			kProduct = static_cast<unsigned int>(pow(float(k+1),iterationCount-1));
+			kProduct = static_cast<unsigned int>(pow(double(k+1),iterationCount-1));
 		}
 		else
 		{
-			kProduct = static_cast<unsigned int>(pow(float(k),iterationCount));
+			kProduct = static_cast<unsigned int>(pow(double(k),iterationCount));
 		}
 
 		kShortestPathReturn* lora_ksp = calculate_LORA_path(src_index,dest_index,kProduct,ci);
@@ -384,7 +384,7 @@ kShortestPathReturn* ResourceManager::calculate_PAR_path(unsigned int src_index,
 
 		for(unsigned int a = 0; a < kProduct; ++a)
 		{
-			if(lora_ksp->pathcost[a] == std::numeric_limits<float>::infinity())
+			if(lora_ksp->pathcost[a] == std::numeric_limits<double>::infinity())
 			{
 				kPathsStatus[a] = PATH_INFINITY;
 			}
@@ -420,7 +420,7 @@ kShortestPathReturn* ResourceManager::calculate_PAR_path(unsigned int src_index,
 			kShortestPathReturn *kSP_return = new kShortestPathReturn();
 
 			kSP_return->pathinfo = new unsigned int[k * (threadZero->getNumberOfRouters() - 1)];
-			kSP_return->pathcost = new float[k];
+			kSP_return->pathcost = new double[k];
 			kSP_return->pathlen = new unsigned int[k];
 	
 			unsigned int kIndex = 0;
@@ -461,7 +461,7 @@ kShortestPathReturn* ResourceManager::calculate_PAR_path(unsigned int src_index,
 			kShortestPathReturn *kSP_return = new kShortestPathReturn();
 
 			kSP_return->pathinfo = new unsigned int[k * (threadZero->getNumberOfRouters() - 1)];
-			kSP_return->pathcost = new float[k];
+			kSP_return->pathcost = new double[k];
 			kSP_return->pathlen = new unsigned int[k];
 	
 			unsigned int kIndex = 0;
@@ -574,7 +574,7 @@ kShortestPathReturn* ResourceManager::calculate_QM_path(unsigned int src, unsign
 	kShortestPathReturn *kSP_return = new kShortestPathReturn();
 
 	kSP_return->pathinfo = new unsigned int[kSP_params.k_paths * (kSP_params.total_nodes - 1)];
-	kSP_return->pathcost = new float[kSP_params.k_paths];
+	kSP_return->pathcost = new double[kSP_params.k_paths];
 	kSP_return->pathlen = new unsigned int[kSP_params.k_paths];
 
 	calc_k_shortest_paths(kSP_params, kSP_return);
@@ -600,7 +600,7 @@ kShortestPathReturn* ResourceManager::calculate_AQoS_path(unsigned int src, unsi
 	//Determine the amount of wavelengths available on each edge.
 	for(unsigned int p = 0; p < k * 2; ++p)
 	{
-		if(QM_paths->pathcost[p] == std::numeric_limits<float>::infinity())
+		if(QM_paths->pathcost[p] == std::numeric_limits<double>::infinity())
 		{
 			QM_paths_availability[p] = 0;
 		}
@@ -630,7 +630,7 @@ kShortestPathReturn* ResourceManager::calculate_AQoS_path(unsigned int src, unsi
 	kShortestPathReturn *kSP_return = new kShortestPathReturn();
 
 	kSP_return->pathinfo = new unsigned int[k * (threadZero->getNumberOfRouters() - 1)];
-	kSP_return->pathcost = new float[k];
+	kSP_return->pathcost = new double[k];
 	kSP_return->pathlen = new unsigned int[k];
 
 	for(unsigned int a = 0; a < k; ++a)
@@ -662,7 +662,7 @@ kShortestPathReturn* ResourceManager::calculate_AQoS_path(unsigned int src, unsi
 		}
 		else
 		{
-			kSP_return->pathcost[a] = std::numeric_limits<float>::infinity();
+			kSP_return->pathcost[a] = std::numeric_limits<double>::infinity();
 			kSP_return->pathlen[a] = std::numeric_limits<int>::infinity();
 
 			for(unsigned int c = 0; c < threadZero->getNumberOfRouters() - 1; ++c)
@@ -700,7 +700,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(unsigned int src, unsig
 
 	kShortestPathReturn* kSP_return = new kShortestPathReturn();
 
-	kSP_return->pathcost = new float[k];
+	kSP_return->pathcost = new double[k];
 	kSP_return->pathlen = new unsigned int[k];
 	kSP_return->pathinfo = new unsigned int[k * threadZero->getNumberOfRouters() - 1];
 
@@ -772,7 +772,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(unsigned int src, unsig
 			}
 
 			double bestQ = 0.0;
-			float pathWeight = 0.0;
+			double pathWeight = 0.0;
 
 			for(unsigned int w3 = 0; w3 < threadZero->getNumberOfWavelengths(); ++w3)
 			{
@@ -931,7 +931,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(unsigned int src, unsig
 	{
 		if(kSP_return->pathlen[k1] == 0 && threads[ci]->getCurrentRoutingAlgorithm() == ACO)
 		{
-			kSP_return->pathcost[k1] = std::numeric_limits<float>::infinity();
+			kSP_return->pathcost[k1] = std::numeric_limits<double>::infinity();
 			kSP_return->pathlen[k1] = std::numeric_limits<int>::infinity();
 		}
 	}
@@ -951,7 +951,7 @@ kShortestPathReturn* ResourceManager::calculate_MM_ACO_path(unsigned int src, un
 	kShortestPathReturn* kSP_return = new kShortestPathReturn();
 	kShortestPathReturn** mmACO_iters = new kShortestPathReturn*[threadZero->getQualityParams().MM_ACO_N_reset + 1];
 
-	kSP_return->pathcost = new float[k];
+	kSP_return->pathcost = new double[k];
 	kSP_return->pathlen = new unsigned int[k];
 	kSP_return->pathinfo = new unsigned int[k * threadZero->getNumberOfRouters() - 1];
 
@@ -1013,7 +1013,7 @@ kShortestPathReturn* ResourceManager::calculate_MM_ACO_path(unsigned int src, un
 	{
 		if(kSP_return->pathlen[k5] == 0)
 		{
-			kSP_return->pathcost[k5] = std::numeric_limits<float>::infinity();
+			kSP_return->pathcost[k5] = std::numeric_limits<double>::infinity();
 			kSP_return->pathlen[k5] = std::numeric_limits<int>::infinity();
 		}
 	}
@@ -1340,7 +1340,7 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(unsigned int src, unsign
 	//Populate return structure with data from DP_node
 	kShortestPathReturn* kSP_return = new kShortestPathReturn();
 
-	kSP_return->pathcost = new float[k];
+	kSP_return->pathcost = new double[k];
 	kSP_return->pathlen = new unsigned int[k];
 	kSP_return->pathinfo = new unsigned int[k * threadZero->getNumberOfRouters() - 1];
 
@@ -1364,7 +1364,7 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(unsigned int src, unsign
 		}
 		else
 		{
-			kSP_return->pathcost[k1] = std::numeric_limits<float>::infinity();
+			kSP_return->pathcost[k1] = std::numeric_limits<double>::infinity();
 			kSP_return->pathlen[k1] = std::numeric_limits<int>::infinity();
 		}
 	}
@@ -2122,7 +2122,7 @@ int ResourceManager::quality_first_fit_with_ordering(CreateConnectionProbeEvent*
 int ResourceManager::least_quality_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available)
 {
 	int minQualityWave = -1;
-	double minQualityQFactor = std::numeric_limits<float>::infinity();
+	double minQualityQFactor = std::numeric_limits<double>::infinity();
 
 	double minXPM = 0.0;
 	double minFWM = 0.0;

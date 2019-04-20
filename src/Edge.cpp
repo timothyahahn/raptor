@@ -177,7 +177,7 @@ void Edge::resetPheremone(unsigned int ci, unsigned int spans)
 ///////////////////////////////////////////////////////////////////
 void Edge::addPheremone(unsigned int hops, unsigned int ci)
 {
-	pheremone = pheremone + 1.0 / float(hops);
+	pheremone = pheremone + 1.0 / double(hops);
 
 	if(threads[ci]->getCurrentRoutingAlgorithm() == MAX_MIN_ACO)
 	{
@@ -213,7 +213,7 @@ void Edge::initializetopobmps()
 ///////////////////////////////////////////////////////////////////
 void Edge::refreshbmps(bool useThread)
 {
-	float dist, doubR1X, doubR1Y, doubR2X, doubR2Y;
+	double dist, doubR1X, doubR1Y, doubR2X, doubR2Y;
 	painted_usage = 0.0;
 	painted_percent = -1;
 
@@ -263,7 +263,7 @@ void Edge::refreshbmps(bool useThread)
 			invunitY = (r2x - r1x) / dist ;			
 		}
 
-		float angle = atan((float)(r2y - r1y) / (float)(r2x - r1x)) * (256)/(2*PI);
+		double angle = atan((double)(r2y - r1y) / (double)(r2x - r1x)) * (256)/(2*PI);
 
 		if( (r1x == r2x || r1y == r2y) && sourceIndex > destinationIndex)
 		{
@@ -327,13 +327,13 @@ void Edge::refreshbmps(bool useThread)
 
 void Edge::scaleEdgesTo(int spns, int px)
 {
-	float dist,doubR1X, doubR1Y, doubR2X, doubR2Y;
-	doubR1X = (float)topoRouters[sourceIndex]->getXPixel(); //set coordinates of routers
-	doubR1Y = (float)topoRouters[sourceIndex]->getYPixel();
-	doubR2X = (float)topoRouters[destinationIndex]->getXPixel();
-	doubR2Y = (float)topoRouters[destinationIndex]->getYPixel();
+	double dist,doubR1X, doubR1Y, doubR2X, doubR2Y;
+	doubR1X = (double)topoRouters[sourceIndex]->getXPixel(); //set coordinates of routers
+	doubR1Y = (double)topoRouters[sourceIndex]->getYPixel();
+	doubR2X = (double)topoRouters[destinationIndex]->getXPixel();
+	doubR2Y = (double)topoRouters[destinationIndex]->getYPixel();
 	dist = sqrt( ( doubR2X - doubR1X )*( doubR2X - doubR1X ) + (doubR2Y - doubR1Y)*(doubR2Y - doubR1Y) );//distance formula
-	unsigned int newspans = (unsigned int)ceil(dist * (float)spns / (float)px);
+	unsigned int newspans = (unsigned int)ceil(dist * (double)spns / (double)px);
 	numberOfSpans = newspans;
 }
 #endif
@@ -345,11 +345,11 @@ void Edge::scaleEdgesTo(int spns, int px)
 ///////////////////////////////////////////////////////////////////
 void Edge::updateUsage()
 {
-	float newUsage = 0.0;
+	double newUsage = 0.0;
 
 	if(threadZero->getQualityParams().q_factor_stats == true)
 	{
-		newUsage = float(establishedConnections.size());
+		newUsage = double(establishedConnections.size());
 	}
 	else
 	{
@@ -360,7 +360,7 @@ void Edge::updateUsage()
 		}
 	}
 
-	algorithmUsage = (algorithmUsage + newUsage) / float(2.0);
+	algorithmUsage = (algorithmUsage + newUsage) / double(2.0);
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -421,9 +421,9 @@ void Edge::updateQMDegredation(unsigned int ci, unsigned int wavelength)
 					p == ec->connectionLength - 1)
 				{
 					if(ec->QFactors->size() == 0)
-						ec->initQFactor = float(dest_Q);
+						ec->initQFactor = double(dest_Q);
 
-					ec->QFactors->push_back(float(dest_Q));
+					ec->QFactors->push_back(double(dest_Q));
 					ec->QTimes->push_back(time);
 				}
 
@@ -445,11 +445,11 @@ void Edge::updateQMDegredation(unsigned int ci, unsigned int wavelength)
 	}
 
 	if(activeLightpaths == threadZero->getNumberOfWavelengths())
-		QMDegredation = std::numeric_limits<float>::infinity();
+		QMDegredation = std::numeric_limits<double>::infinity();
 	else if(activeLightpaths == 0)
 		QMDegredation = 2.0;
 	else if(activeLightpaths > 0)
-		QMDegredation = float(cumulativeDegradation) / float(activeLightpaths);
+		QMDegredation = double(cumulativeDegradation) / double(activeLightpaths);
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -481,13 +481,13 @@ void Edge::updateQFactorStats(unsigned int ci, unsigned int wavelength)
 				double fwm = 0.0;
 				double ase = 0.0;
 
-				ec->QFactors->push_back(float(rm->estimate_Q(
+				ec->QFactors->push_back(double(rm->estimate_Q(
 					ec->wavelength,ec->connectionPath,
 					ec->connectionLength,&xpm,&fwm,&ase,ci)));
 
 				ec->QTimes->push_back(time);
 
-				ec->initQFactor = float(ec->QFactors->at(0));
+				ec->initQFactor = double(ec->QFactors->at(0));
 			}
 			else if(ec->QTimes->back() != time)
 			{
@@ -495,7 +495,7 @@ void Edge::updateQFactorStats(unsigned int ci, unsigned int wavelength)
 				double fwm = 0.0;
 				double ase = 0.0;
 
-				ec->QFactors->push_back(float(rm->estimate_Q(
+				ec->QFactors->push_back(double(rm->estimate_Q(
 					ec->wavelength,ec->connectionPath,
 					ec->connectionLength,&xpm,&fwm,&ase,ci)));
 
@@ -585,9 +585,9 @@ void Edge::removeEstablishedConnection(void* dcpe_void)
 			timebelow += ec->connectionEndTime - ec->QTimes->at(s);
 		}
 
-		ec->averageQFactor = float(weight / (ec->connectionEndTime - ec->connectionStartTime));
+		ec->averageQFactor = double(weight / (ec->connectionEndTime - ec->connectionStartTime));
 
-		ec->belowQFactor = float(timebelow / (ec->connectionEndTime - ec->connectionStartTime));
+		ec->belowQFactor = double(timebelow / (ec->connectionEndTime - ec->connectionStartTime));
 
 #ifdef RUN_GUI
 		int src = dcpe->connectionPath[0]->getSourceIndex();
@@ -636,9 +636,9 @@ void Edge::removeEstablishedConnection(void* dcpe_void)
 ///////////////////////////////////////////////////////////////////
 void Edge::resetEdgeStats()
 {
-	stats->minInitalQFactor = std::numeric_limits<float>::infinity();
-	stats->minAverageQFactor = std::numeric_limits<float>::infinity();
-	stats->minPercentQFactor = std::numeric_limits<float>::infinity();
+	stats->minInitalQFactor = std::numeric_limits<double>::infinity();
+	stats->minAverageQFactor = std::numeric_limits<double>::infinity();
+	stats->minPercentQFactor = std::numeric_limits<double>::infinity();
 	stats->maxInitalQFactor = 0.0;
 	stats->maxAverageQFactor = 0.0;
 	stats->maxPercentQFactor = 0.0;
@@ -693,7 +693,7 @@ void Edge::updateGUI()
 ///////////////////////////////////////////////////////////////////
 void Edge::calculateAverageUsage()
 {
-	float total = 0;
+	double total = 0;
 
 	for(unsigned int u = threadZero->getUsageHistStartTime(); u < (threadZero->getUsageHistStartTime() + threadZero->getNumUsagesToDisplay()); ++u )
 	{
@@ -787,10 +787,10 @@ void Edge::paintUsage(int p)
 ///////////////////////////////////////////////////////////////////
 void Edge::paintUsageHistory(int x1,int y1, int x2,int y2,int t)
 {
-	float bwidth = (x2 - x1 - 50); //calculates bar width
-	float help = threadZero->getNumUsagesToDisplay();//15.0;//usageList.size();
+	double bwidth = (x2 - x1 - 50); //calculates bar width
+	double help = threadZero->getNumUsagesToDisplay();//15.0;//usageList.size();
 	bwidth = bwidth/help;
-	float realx = x1 + 40;
+	double realx = x1 + 40;
 	int x = realx;
 	int col = makecol(0,255,0);
 	int bla = makecol(0,0,0);
@@ -827,12 +827,12 @@ void Edge::paintUsageHistory(int x1,int y1, int x2,int y2,int t)
 		{	timeUnitModder = 5000;	}
 
 		int bheight;
-		float realBH;
-		float mid = 0.40 * static_cast<float>(threadZero->getNumberOfWavelengths()); //drawing parameters
+		double realBH;
+		double mid = 0.40 * static_cast<double>(threadZero->getNumberOfWavelengths()); //drawing parameters
 		int green, red, increment, unit;
-		float use;
+		double use;
 		//sets stretch and units of graph based on max_usage. 
-		float realIncrement = (y2 - 20 - y1 - 10)/(threadZero->getMaxMaxUsage() + 0.5);
+		double realIncrement = (y2 - 20 - y1 - 10)/(threadZero->getMaxMaxUsage() + 0.5);
 		increment = ceil(realIncrement); 
 		unit = 0;
 		rectfill(graph, x1, y1, x2, y2, bla); //paint graph black first

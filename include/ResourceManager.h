@@ -140,7 +140,7 @@ struct Ant
 	Router* location;
 	Edge** path;
 	int pathlen;
-	float Q;
+	double Q;
 };
 
 #endif
