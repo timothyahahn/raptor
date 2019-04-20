@@ -20,6 +20,7 @@
 #include "ErrorCodes.h"
 #include "Thread.h"
 
+#define HAVE_STRUCT_TIMESPEC
 #include "pthread.h"
 
 #include <iostream>

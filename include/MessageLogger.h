@@ -20,6 +20,7 @@
 #ifndef MESSAGE_LOGGER_H
 #define MESSAGE_LOGGER_H
 
+#define HAVE_STRUCT_TIMESPEC
 #include "pthread.h"
 
 #include "RaptorTime.h"
