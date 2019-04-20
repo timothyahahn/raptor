@@ -10,9 +10,6 @@ endif()
 
 project(raptor CXX C)
 
-include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-
 set(PROPERTIES CXX_STANDARD 11)
 set(PROPERTIES CXX_STANDARD_REQUIRED ON)
 
@@ -54,20 +51,21 @@ if(UNIX)
 endif(UNIX)
 
 if(WIN32)
-    set(CMAKE_FIND_LIBRARY_PREFIXES "")
-    set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib" ".dll")
+     add_definitions("-DNO_OCTAVE")
+#    set(CMAKE_FIND_LIBRARY_PREFIXES "")
+#    set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib" ".dll")
 
-    find_library( OCTAVE_LIB
-                  NAMES liboctave-7
-                  HINTS "C:/Octave/Octave-5.1.0.0/bin"
-                )
+#    find_library( OCTAVE_LIB
+#                  NAMES liboctave-7
+#                  HINTS "C:/Octave/Octave-5.1.0.0/bin"
+#                )
 
-    find_library( OCTINTERP_LIB
-                  NAMES liboctinterp-7
-                  HINTS "C:/Octave/Octave-5.1.0.0/bin"
-                )
+#    find_library( OCTINTERP_LIB
+#                  NAMES liboctinterp-7
+#                  HINTS "C:/Octave/Octave-5.1.0.0/bin"
+#                )
 
-    include_directories("C:/Octave/Octave-5.1.0.0/mingw32/include/octave-5.1.0/octave")
+#   include_directories("C:/Octave/Octave-5.1.0.0/mingw32/include/octave-5.1.0/octave")
 endif(WIN32)
 
 if(UNIX)
