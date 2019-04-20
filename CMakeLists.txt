@@ -13,11 +13,8 @@ project(raptor CXX C)
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 
-if(COMPILER_SUPPORTS_CXX11)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-else()
-        message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
-endif()
+set(PROPERTIES CXX_STANDARD 11)
+set(PROPERTIES CXX_STANDARD_REQUIRED ON)
 
 add_executable(raptor src/Edge.cpp src/EventQueue.cpp src/GUI.cpp src/Main.cpp src/MessageLogger.cpp src/OctaveWrapper.cpp src/ResourceManager.cpp src/Router.cpp src/Thread.cpp src/Workstation.cpp)
 
@@ -42,11 +39,11 @@ if(WIN32)
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
 
 	find_library( PTHREAD_VC2_LIB
-                  NAMES pthreadVC2.lib
-                  HINTS "C:/pthreads"
+                  NAMES pthreadVC2.dll
+                  HINTS "C:/pthreads/Pre-built.2/dll/x86"
                 )
 
-	include_directories("C:/pthreads")
+	include_directories("C:/pthreads/Pre-built.2/include")
 
 	target_link_libraries(raptor ${PTHREAD_VC2_LIB})
 endif(WIN32)
