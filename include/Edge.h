@@ -70,8 +70,8 @@ class Edge
 
 		void updateUsage();
 		
-		void updateQMDegredation(int ci, int wavelength);
-		void updateQFactorStats(int ci, int wavelength);
+		void updateQMDegredation(unsigned int ci, unsigned int wavelength);
+		void updateQFactorStats(unsigned int ci, unsigned int wavelength);
 
 		std::list <void*> establishedConnections;
 
@@ -92,10 +92,10 @@ class Edge
 
 		inline double getPheremone()
 			{ return pheremone; };
-		 void resetPheremone(int ci, int spans);
+		 void resetPheremone(unsigned int ci, unsigned int spans);
 
-		void evaporatePheremone(int ci);
-		void addPheremone(int hops, int ci);
+		void evaporatePheremone(unsigned int ci);
+		void addPheremone(unsigned int hops, unsigned int ci);
 
 #ifdef RUN_GUI
 		inline int getMaxActualUsage()

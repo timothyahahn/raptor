@@ -68,7 +68,7 @@ Edge::Edge()
 //					destination, and number of spans.
 //
 ///////////////////////////////////////////////////////////////////
-Edge::Edge(unsigned int src, unsigned int dest, unsigned int spans)
+Edge::Edge(int src, int dest, int spans)
 {
 	sourceIndex = src;
 	destinationIndex = dest;
