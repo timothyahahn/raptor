@@ -22,13 +22,13 @@ add_subdirectory(kshortestpath)
 target_link_libraries(raptor kshortestpath)
 
 if(WIN32)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
 
-	add_definitions(-D_USE_MATH_DEFINES)
+    add_definitions(-D_USE_MATH_DEFINES)
 endif(WIN32)
 
 if(WIN32)
-	include_directories("C:/Users/Tim Hahn/boost_1_66_0")
+    include_directories("C:/boost_1_70_0")
 endif(WIN32)
 
 if(WIN32)
