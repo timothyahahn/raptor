@@ -40,7 +40,7 @@ MessageLogger::MessageLogger(const char* topo, const char* lambda, const char* s
 	pthread_mutex_init(&ResultsMutex,nullptr);
 
 	std::ostringstream buffer;
-	buffer << "output/EventLog-" << topo << "-" << lambda << "-" << seed << "-" << k << "-" << runCount << std::endl;
+	buffer << "output/EventLog-" << topo << "-" << lambda << "-" << seed << "-" << k << "-R" << runCount << ".txt";
 
 	eventLogger.open(buffer.str());
 }
