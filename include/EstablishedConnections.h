@@ -25,8 +25,8 @@
 struct EstablishedConnection
 {
 	Edge **connectionPath;
-	unsigned short int connectionLength;
-	short int wavelength;
+	unsigned int connectionLength;
+	int wavelength;
 	double connectionStartTime;
 	double connectionEndTime;
 	float initQFactor;

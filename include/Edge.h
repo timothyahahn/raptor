@@ -40,38 +40,38 @@ class Edge
 {
 	public:
 		Edge();
-		Edge(unsigned short int src, unsigned short int dest, unsigned short int spans);
+		Edge(int src, int dest, int spans);
 
 		~Edge();
 
-		inline unsigned short int getSourceIndex() 
+		inline int getSourceIndex() 
 			{ return sourceIndex; };
-		inline unsigned short int getDestinationIndex() 
+		inline int getDestinationIndex() 
 			{ return destinationIndex; };
 		inline void setSourceIndex(short int s)
 			{	sourceIndex = s;	};
 		inline void setDestinationIndex(short int d)
 			{	destinationIndex = d;	};
 
-		inline unsigned short int getNumberOfSpans() 
+		inline int getNumberOfSpans() 
 			{ return numberOfSpans; };
 		inline void setNumberOfSpans(int s) 
 			{ numberOfSpans = s; };
 
-		inline EdgeStatus getStatus(unsigned short int w)
+		inline EdgeStatus getStatus(int w)
 			{ return status[w]; };
-		inline int getActiveSession(unsigned short int w)
+		inline int getActiveSession(int w)
 			{ return activeSession[w]; };
 
-		inline void setUsed(int session, unsigned short int w)
+		inline void setUsed(int session, int w)
 			{ status[w] = EDGE_USED; activeSession[w] = session; };
-		inline void setFree(unsigned short int w)
+		inline void setFree(int w)
 			{ status[w] = EDGE_FREE; activeSession[w] = -1; degredation[w] = 0.0; };
 
 		void updateUsage();
 		
-		void updateQMDegredation(unsigned short int ci, unsigned int wavelength);
-		void updateQFactorStats(unsigned short int ci, unsigned int wavelength);
+		void updateQMDegredation(int ci, int wavelength);
+		void updateQFactorStats(int ci, int wavelength);
 
 		std::list <void*> establishedConnections;
 
@@ -92,19 +92,19 @@ class Edge
 
 		inline double getPheremone()
 			{ return pheremone; };
-		 void resetPheremone(unsigned int ci, unsigned int spans);
+		 void resetPheremone(int ci, int spans);
 
-		void evaporatePheremone(unsigned int ci);
-		void addPheremone(unsigned int hops, unsigned int ci);
+		void evaporatePheremone(int ci);
+		void addPheremone(int hops, int ci);
 
 #ifdef RUN_GUI
-		inline unsigned short int getMaxActualUsage()
+		inline int getMaxActualUsage()
 			{ return max_actual_usage; };
 		inline int getUsageNums()
 			{ return static_cast<int>(usageList.size()); };
-		inline void addUsage(unsigned short int u)
+		inline void addUsage(int u)
 			{ usageList.push_back(u); }
-		inline void setMaxUsage(unsigned short int u)
+		inline void setMaxUsage(int u)
 			{ max_actual_usage = u; }
 		void scaleEdgesTo(int spns, int px);
 		void paintSpans();
@@ -123,15 +123,15 @@ class Edge
 		void removeEstablishedConnection(void* dcpe_void);
 
 private:
-		unsigned short int sourceIndex;
-		unsigned short int destinationIndex;
-		unsigned short int numberOfSpans;
+		int sourceIndex;
+		int destinationIndex;
+		int numberOfSpans;
 
 		int *activeSession;
 		EdgeStatus *status;
 
 		float algorithmUsage;
-		unsigned short int actualUsage;
+		int actualUsage;
 
 		float QMDegredation;
 
@@ -141,11 +141,11 @@ private:
 		int r1x,r1y,r2x,r2y; //coordinates of routers
 		int r3x,r3y,r4x,r4y; //points to draw to for edge width (these change)
 		int putX,putY;
-		unsigned short int thdIndx;
+		int thdIndx;
 		float invunitX, invunitY, currX, currY, oldX, oldY, average_usage, painted_usage;//inverse unit vectors
 		int painted_percent; 
-		unsigned short int max_actual_usage;
-		vector<unsigned short int> usageList;
+		int max_actual_usage;
+		vector<int> usageList;
 		BITMAP* edgeBmps[14];
 		BITMAP* edgeBmp;
 #endif

@@ -48,31 +48,31 @@ struct Event {
 
 struct ConnectionRequestEvent
 {
-	unsigned short int sourceRouterIndex;
-	unsigned short int destinationRouterIndex;
-	short int wavelength;
+	unsigned int sourceRouterIndex;
+	unsigned int destinationRouterIndex;
+	int wavelength;
 	double connectionDuration;
 	double requestBeginTime;
 	unsigned int session;
-	unsigned short int sequence;
-	unsigned short int max_sequence;
+	unsigned int sequence;
+	unsigned int max_sequence;
 	bool qualityFail;
 };
 
 struct CreateConnectionProbeEvent
 {
-	unsigned short int sourceRouterIndex;
-	unsigned short int destinationRouterIndex;
+	unsigned int sourceRouterIndex;
+	unsigned int destinationRouterIndex;
 	double connectionDuration;
 	double requestBeginTime;
 	double decisionTime;
 	Edge **connectionPath;
-	unsigned short int connectionLength;
-	unsigned short int numberOfHops;
-	short int wavelength;
+	unsigned int connectionLength;
+	unsigned int numberOfHops;
+	int wavelength;
 	unsigned int session;
-	unsigned short int sequence;
-	unsigned short int max_sequence;
+	unsigned int sequence;
+	unsigned int max_sequence;
 	kShortestPathReturn *kPaths;
 	CreateConnectionProbeEvent **probes;
 	bool atDestination;
@@ -81,33 +81,33 @@ struct CreateConnectionProbeEvent
 
 struct CollisionNotificationEvent
 {
-	unsigned short int sourceRouterIndex;
-	unsigned short int destinationRouterIndex;
+	unsigned int sourceRouterIndex;
+	unsigned int destinationRouterIndex;
 	Edge **connectionPath;
-	unsigned short int connectionLength;
-	unsigned short int numberOfHops;
+	unsigned int connectionLength;
+	unsigned int numberOfHops;
 	unsigned int session;
-	unsigned short int sequence;
-	unsigned short int max_sequence;
-	short int wavelength;
+	unsigned int sequence;
+	unsigned int max_sequence;
+	int wavelength;
 	CreateConnectionProbeEvent **probes;
 	bool finalFailure;
 };
 
 struct CreateConnectionConfirmationEvent
 {
-	unsigned short int sourceRouterIndex;
-	unsigned short int destinationRouterIndex;
+	unsigned int sourceRouterIndex;
+	unsigned int destinationRouterIndex;
 	double connectionDuration;
 	double requestBeginTime;
 	Edge **connectionPath;
-	unsigned short int connectionLength;
-	unsigned short int numberOfHops;
-	unsigned short int max_sequence;
-	short int wavelength;
-	short int originalWavelength;
+	unsigned int connectionLength;
+	unsigned int numberOfHops;
+	unsigned int max_sequence;
+	int wavelength;
+	int originalWavelength;
 	unsigned int session;
-	unsigned short int sequence;
+	unsigned int sequence;
 	kShortestPathReturn *kPaths;
 	CreateConnectionProbeEvent **probes;
 	bool finalFailure;
@@ -116,11 +116,11 @@ struct CreateConnectionConfirmationEvent
 struct DestroyConnectionProbeEvent
 {
 	Edge **connectionPath;
-	unsigned short int connectionLength;
-	unsigned short int numberOfHops;
+	unsigned int connectionLength;
+	unsigned int numberOfHops;
 	unsigned int session;
-	unsigned short int sequence;
-	short int wavelength;
+	unsigned int sequence;
+	int wavelength;
 	CreateConnectionProbeEvent **probes;
 };
 

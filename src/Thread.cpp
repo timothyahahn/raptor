@@ -36,7 +36,7 @@ extern BITMAP *popup;
 
 extern Thread* threadZero;
 extern Thread** threads;
-extern unsigned short int threadCount;
+extern unsigned int threadCount;
 
 extern vector<AlgorithmToRun*> algParams;
 
@@ -74,7 +74,7 @@ Thread::Thread(int ci, int argc, const char* argv[], bool isLPS, int rc)
 	if(ci == 0)
 		threadZero = this;
 	else
-		setMinDuration(static_cast<unsigned short>(ceil(threadZero->maxSpans * threadZero->getQualityParams().QFactor_factor)));
+		setMinDuration(static_cast<unsigned>(ceil(threadZero->maxSpans * threadZero->getQualityParams().QFactor_factor)));
 
 #ifdef RUN_GUI
 	sprintf(topology,"%s",argv[1]);
@@ -132,7 +132,7 @@ Thread::Thread(int ci, int argc, const char* argv[], bool isLPS, int rc)
 		randomSeed = atoi(argv[3]);
 
 		order_init = false;
-		workstationOrder = new unsigned short int[getNumberOfWorkstations()];
+		workstationOrder = new unsigned int[getNumberOfWorkstations()];
 	}
 
 	return;
@@ -157,20 +157,20 @@ Thread::~Thread()
 		delete logger;
 		delete rm;
 
-		for(unsigned short int a = 0; a < NUMBER_OF_ROUTING_ALGORITHMS; ++a)
+		for(unsigned int a = 0; a < NUMBER_OF_ROUTING_ALGORITHMS; ++a)
 			delete RoutingAlgorithmNames[a];
 
-		for(unsigned short int w = 0; w < NUMBER_OF_WAVELENGTH_ALGORITHMS; ++w)
+		for(unsigned int w = 0; w < NUMBER_OF_WAVELENGTH_ALGORITHMS; ++w)
 			delete WavelengthAlgorithmNames[w];
 
-		for(unsigned short int p = 0; p < NUMBER_OF_PROBE_STYLES; ++p)
+		for(unsigned int p = 0; p < NUMBER_OF_PROBE_STYLES; ++p)
 			delete ProbeStyleNames[p];
 	}
 
-	for(unsigned short int r = 0; r < routers.size(); ++r)
+	for(unsigned int r = 0; r < routers.size(); ++r)
 		delete routers[r];
 
-	for(unsigned short int w = 0; w < workstations.size(); ++w)
+	for(unsigned int w = 0; w < workstations.size(); ++w)
 		delete workstations[w];
 
 	routers.clear();
@@ -189,7 +189,7 @@ Thread::~Thread()
 //					events in it.
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::initPriorityQueue(unsigned short int w)
+void Thread::initPriorityQueue(unsigned int w)
 {
 	Event* activate = new Event;
 	activate->e_type = ACTIVATE_WORKSTATIONS;
@@ -468,13 +468,13 @@ void Thread::activate_workstations()
 		
 		bool* init = new bool[getNumberOfWorkstations()];
 
-		for(unsigned short int w = 0; w <getNumberOfWorkstations(); ++w)
+		for(unsigned int w = 0; w <getNumberOfWorkstations(); ++w)
 		{
 			init[w] = false;
 			workstationOrder[w] = 0;
 		}
 
-		unsigned short int numberFound = 0;
+		unsigned int numberFound = 0;
 
 		while(numberFound < getNumberOfWorkstations())
 		{
@@ -498,7 +498,7 @@ void Thread::activate_workstations()
 	sprintf(buffer,"Activate %d workstations.",getCurrentActiveWorkstations());
 	threadZero->recordEvent(buffer,false,controllerIndex);
 
-	for(unsigned short int w = 0; w < getCurrentActiveWorkstations(); ++w)
+	for(unsigned int w = 0; w < getCurrentActiveWorkstations(); ++w)
 	{
 		getWorkstationAt(workstationOrder[w])->setActive(true);
 #ifdef RUN_GUI
@@ -511,14 +511,14 @@ void Thread::activate_workstations()
 
 	if(CurrentRoutingAlgorithm == PABR || CurrentRoutingAlgorithm == LORA)
 	{
-		for(unsigned short int r = 0; r < getNumberOfRouters(); ++r)
+		for(unsigned int r = 0; r < getNumberOfRouters(); ++r)
 		{
 			getRouterAt(r)->resetUsage();
 		}
 	}
 	else if(CurrentRoutingAlgorithm == Q_MEASUREMENT || CurrentRoutingAlgorithm == ADAPTIVE_QoS)
 	{
-		for(unsigned short int r = 0; r < getNumberOfRouters(); ++r)
+		for(unsigned int r = 0; r < getNumberOfRouters(); ++r)
 		{
 			getRouterAt(r)->resetQMDegredation();
 		}
@@ -690,15 +690,15 @@ void Thread::deactivate_workstations()
 
 	threadZero->getLogger()->UnlockResultsMutex();
 
-	for(unsigned short int r1 = 0; r1 < getNumberOfRouters(); ++r1)
+	for(unsigned int r1 = 0; r1 < getNumberOfRouters(); ++r1)
 	{
-		for(unsigned short int r2 = 0; r2 < getNumberOfRouters(); ++r2)
+		for(unsigned int r2 = 0; r2 < getNumberOfRouters(); ++r2)
 		{
 			Edge* edge = getRouterAt(r1)->getEdgeByDestination(r2);
 
 			if(edge != 0)
 			{
-				for(unsigned short int k = 0; k < threadZero->getNumberOfWavelengths(); ++k)
+				for(unsigned int k = 0; k < threadZero->getNumberOfWavelengths(); ++k)
 				{
 					if(edge->getStatus(k) != EDGE_FREE)
 					{
@@ -712,7 +712,7 @@ void Thread::deactivate_workstations()
 
 	threadZero->recordEvent("Deactivate workstations.",false,controllerIndex);
 
-	for(unsigned short int w = 0; w < getNumberOfWorkstations(); ++w)
+	for(unsigned int w = 0; w < getNumberOfWorkstations(); ++w)
 	{
 		if(getWorkstationAt(w)->getActive() == true)
 		{
@@ -812,9 +812,9 @@ void Thread::connection_request(ConnectionRequestEvent* cre)
 		++stats.ProbeSentCount;
 	}
 
-	unsigned short int probesToSend = 0;
-	unsigned short int probeStart = 0;
-	unsigned short int probesSkipped = 0;
+	unsigned int probesToSend = 0;
+	unsigned int probeStart = 0;
+	unsigned int probesSkipped = 0;
 
 	if(CurrentProbeStyle == SINGLE)
 		probesToSend = 1;
@@ -1033,8 +1033,8 @@ void Thread::destroy_connection_probe(DestroyConnectionProbeEvent* dcpe)
 	}
 	else
 	{
-		unsigned short int srcIndex = edge->getSourceIndex();
-		unsigned short int destIndex = edge->getDestinationIndex();
+		unsigned int srcIndex = edge->getSourceIndex();
+		unsigned int destIndex = edge->getDestinationIndex();
 
 		char buffer[100];
 		sprintf(buffer,"ERROR: Something is wrong, an edge from %d to %d on wave %d should be marked as used is actually free already.",srcIndex,destIndex,dcpe->wavelength);
@@ -1050,7 +1050,7 @@ void Thread::destroy_connection_probe(DestroyConnectionProbeEvent* dcpe)
 
 		line.append("SETUP CONNECTION: Routers[" + std::to_string(dcpe->connectionLength) + "]:");
 
-		for(unsigned short int r = 0; r < dcpe->connectionLength; ++r)
+		for(unsigned int r = 0; r < dcpe->connectionLength; ++r)
 		{
 			line.append(std::to_string(dcpe->connectionPath[r]->getSourceIndex()));
 
@@ -1137,7 +1137,7 @@ void Thread::create_connection_confirmation(CreateConnectionConfirmationEvent* c
 		else
 			cne->max_sequence = 1;
 
-		for(unsigned short int p = 0; p < ccce->connectionLength; ++p)
+		for(unsigned int p = 0; p < ccce->connectionLength; ++p)
 			cne->connectionPath[p] = ccce->connectionPath[p];
 
 		cne->finalFailure = true;
@@ -1258,7 +1258,7 @@ void Thread::create_connection_confirmation(CreateConnectionConfirmationEvent* c
 
 			stats.totalHopCount += ccce->connectionLength;
 
-			for(unsigned short int p = 0; p < ccce->connectionLength; ++p)
+			for(unsigned int p = 0; p < ccce->connectionLength; ++p)
 			{
 				stats.totalSpanCount += ccce->connectionPath[p]->getNumberOfSpans();
 			}
@@ -1285,9 +1285,9 @@ void Thread::create_connection_confirmation(CreateConnectionConfirmationEvent* c
 		}
 		else if(CurrentProbeStyle == SERIAL && ccce->sequence < ccce->max_sequence - 1)
 		{
-			unsigned short int probesToSend = 0;
-			unsigned short int probeStart = 0;
-			unsigned short int probesSkipped = ccce->sequence + 1;
+			unsigned int probesToSend = 0;
+			unsigned int probeStart = 0;
+			unsigned int probesSkipped = ccce->sequence + 1;
 
 			ConnectionRequestEvent *cre = new ConnectionRequestEvent;
 
@@ -1860,9 +1860,9 @@ void Thread::setTopologyParameters(const char * f)
 		}
 		else if(strcmp(param,"Edge") == 0)
 		{
-			unsigned short int from = atoi(strtok(nullptr,","));
-			unsigned short int to = atoi(strtok(nullptr,","));
-			unsigned short int spans = atoi(strtok(nullptr,","));
+			unsigned int from = atoi(strtok(nullptr,","));
+			unsigned int to = atoi(strtok(nullptr,","));
+			unsigned int spans = atoi(strtok(nullptr,","));
 
 			Edge* e1 = new Edge(from,to,spans);
 			Edge* e2 = new Edge(to,from,spans);
@@ -1961,7 +1961,7 @@ void Thread::setWorkstationParameters(const char * f)
 		}
 
 		//If workstations are not specified, then just uniformly distribute them amongst the routers.
-		for(unsigned short int n = static_cast<unsigned short int>(workstations.size()); n < numberOfWorkstations; ++n)
+		for(unsigned int n = static_cast<unsigned int>(workstations.size()); n < numberOfWorkstations; ++n)
 		{
 			Workstation* w = new Workstation();
 
@@ -1989,7 +1989,7 @@ void Thread::setWorkstationParameters(const char * f)
 //					specified by the command line argument
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::setAlgorithmParameters(const char * f, unsigned short int iterationCount)
+void Thread::setAlgorithmParameters(const char * f, unsigned int iterationCount)
 {
 	RoutingAlgorithmNames[SHORTEST_PATH] = new std::string("SP");
 	RoutingAlgorithmNames[PABR] = new std::string("PABR");
@@ -2041,7 +2041,7 @@ void Thread::setAlgorithmParameters(const char * f, unsigned short int iteration
 			CurrentProbeStyle = NUMBER_OF_PROBE_STYLES;
 			CurrentQualityAware = true;
 
-			for(unsigned short int r = 0; r < NUMBER_OF_ROUTING_ALGORITHMS; ++r)
+			for(unsigned int r = 0; r < NUMBER_OF_ROUTING_ALGORITHMS; ++r)
 			{
 				if(strcmp(ra,RoutingAlgorithmNames[r]->c_str()) == 0)
 				{
@@ -2050,7 +2050,7 @@ void Thread::setAlgorithmParameters(const char * f, unsigned short int iteration
 				}
 			}
 
-			for(unsigned short int w = 0; w < NUMBER_OF_WAVELENGTH_ALGORITHMS; ++w)
+			for(unsigned int w = 0; w < NUMBER_OF_WAVELENGTH_ALGORITHMS; ++w)
 			{
 				if(strcmp(wa,WavelengthAlgorithmNames[w]->c_str()) == 0)
 				{
@@ -2059,7 +2059,7 @@ void Thread::setAlgorithmParameters(const char * f, unsigned short int iteration
 				}
 			}
 
-			for(unsigned short int p = 0; p < NUMBER_OF_PROBE_STYLES; ++p)
+			for(unsigned int p = 0; p < NUMBER_OF_PROBE_STYLES; ++p)
 			{
 				if(strcmp(ps,ProbeStyleNames[p]->c_str()) == 0)
 				{
@@ -2086,10 +2086,10 @@ void Thread::setAlgorithmParameters(const char * f, unsigned short int iteration
 			}
 			else
 			{
-				unsigned short int iterationWorkstationDelta = static_cast<unsigned short int>(float(1.0) / float(iterationCount) *
+				unsigned int iterationWorkstationDelta = static_cast<unsigned int>(float(1.0) / float(iterationCount) *
 					float(threadZero->getNumberOfWorkstations()));
 
-				for(unsigned short int i = 0; i < iterationCount; ++i)
+				for(unsigned int i = 0; i < iterationCount; ++i)
 				{
 					AlgorithmToRun* ap = new AlgorithmToRun;
 
@@ -2127,7 +2127,7 @@ void Thread::update_link_usage()
 		return;
 	}
 
-	for(unsigned short int r = 0; r < getNumberOfRouters(); ++r)
+	for(unsigned int r = 0; r < getNumberOfRouters(); ++r)
 	{
 		getRouterAt(r)->updateUsage();
 	}
@@ -2153,7 +2153,7 @@ void Thread::update_link_usage()
 //					the current routing algorithm.
 //
 ///////////////////////////////////////////////////////////////////
-kShortestPathReturn* Thread::getKShortestPaths(ConnectionRequestEvent *cre, unsigned short int probesToSend)
+kShortestPathReturn* Thread::getKShortestPaths(ConnectionRequestEvent *cre, unsigned int probesToSend)
 {
 	kShortestPathReturn* kPath;
 
@@ -2247,7 +2247,7 @@ kShortestPathReturn* Thread::getKShortestPaths(ConnectionRequestEvent *cre, unsi
 //					kPaths and the Routing/Wavelength Algorithms
 //
 ///////////////////////////////////////////////////////////////////
-CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cre, kShortestPathReturn *kPath, unsigned short int &probesToSend, unsigned short int &probeStart, unsigned short int &probesSkipped)
+CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cre, kShortestPathReturn *kPath, unsigned int &probesToSend, unsigned int &probeStart, unsigned int &probesSkipped)
 {
 	CreateConnectionProbeEvent** probesList = 0;
 
@@ -2260,7 +2260,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 
 		if(CurrentRoutingAlgorithm == IMPAIRMENT_AWARE)
 		{
-			for(unsigned short int w = probesSkipped; w < threadZero->getNumberOfWavelengths(); ++w)
+			for(unsigned int w = probesSkipped; w < threadZero->getNumberOfWavelengths(); ++w)
 			{
 				if(kPath->pathcost[w] != std::numeric_limits<float>::infinity())
 				{
@@ -2278,7 +2278,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 			if(CurrentProbeStyle == SINGLE)
 				max_probes = 1;
 
-			for(unsigned short int w = probesSkipped; w < max_probes; ++w)
+			for(unsigned int w = probesSkipped; w < max_probes; ++w)
 			{
 				if(kPath->pathcost[w] != std::numeric_limits<float>::infinity())
 				{
@@ -2319,7 +2319,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 
 					float minCost = std::numeric_limits<float>::infinity();
 
-					for(unsigned short int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+					for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
 					{
 						if(kPath->pathcost[w] < minCost)
 						{
@@ -2398,7 +2398,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 //					input parameters.
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath, CreateConnectionProbeEvent** probesList, unsigned short int probesToSend, unsigned short int probeStart, unsigned short int probesSkipped)
+void Thread::sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath, CreateConnectionProbeEvent** probesList, unsigned int probesToSend, unsigned int probeStart, unsigned int probesSkipped)
 {
 	if(probesToSend == 0)
 	{
@@ -2422,7 +2422,7 @@ void Thread::sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath,
 	{
 		unsigned int newProbesSkipped = 0;
 
-		for(unsigned short int p = probeStart; p < probeStart + newProbesSkipped + probesToSend; ++p)
+		for(unsigned int p = probeStart; p < probeStart + newProbesSkipped + probesToSend; ++p)
 		{
 			if(CurrentRoutingAlgorithm == IMPAIRMENT_AWARE || CurrentRoutingAlgorithm == DYNAMIC_PROGRAMMING)
 			{
@@ -2512,7 +2512,7 @@ void Thread::sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath,
 				probe->wavelength = 0;
 			}
 
-			for(unsigned short int r = 0; r < probe->connectionLength; ++r)
+			for(unsigned int r = 0; r < probe->connectionLength; ++r)
 			{
 				probe->connectionPath[r] = getRouterAt(kPath->pathinfo[p * (threadZero->getNumberOfRouters() - 1) + r])->
 					getEdgeByDestination(kPath->pathinfo[p * (threadZero->getNumberOfRouters() - 1) + r + 1]);
@@ -2565,7 +2565,7 @@ void Thread::update_gui()
 		return;
 	}
 
-	for(unsigned short int r = 0; r < getNumberOfRouters(); ++r)
+	for(unsigned int r = 0; r < getNumberOfRouters(); ++r)
 	{
 		getRouterAt(r)->updateGUI();
 	}
@@ -2589,7 +2589,7 @@ void Thread::update_gui()
 //					link.
 //
 ///////////////////////////////////////////////////////////////////
-double Thread::calculateDelay(unsigned short int spans)
+double Thread::calculateDelay(unsigned int spans)
 {
 	if(CurrentRoutingAlgorithm == IMPAIRMENT_AWARE || CurrentRoutingAlgorithm == DYNAMIC_PROGRAMMING)
 	{
@@ -2686,7 +2686,7 @@ bool Thread::moreProbes(CreateConnectionProbeEvent* probe)
 //					two difference routers.
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::setMinDuration(unsigned short int spans)
+void Thread::setMinDuration(unsigned int spans)
 {
 	//Routing algorithm should be a non centralized algorithm to ensure
 	//the delay is not zero.
@@ -2707,7 +2707,7 @@ void Thread::setMinDuration(unsigned short int spans)
 //					within a specified factor of the max min
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::setQFactorMin(unsigned short int spans)
+void Thread::setQFactorMin(unsigned int spans)
 {
 	qualityParams.TH_Q = static_cast<float>(qualityParams.QFactor_factor * 10.0 * 
 		log10(qualityParams.channel_power / sqrt(qualityParams.ASE_perEDFA[qualityParams.halfwavelength] * float(spans))));
@@ -2759,14 +2759,14 @@ int Thread::otherResponse(CreateConnectionProbeEvent* probe)
 //					or dropped.
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::updateQMDegredation(Edge **connectionPath, unsigned short int connectionLength, unsigned int wavelength)
+void Thread::updateQMDegredation(Edge **connectionPath, unsigned int connectionLength, unsigned int wavelength)
 {
 	time_t start;
 	time_t end;
 
 	time(&start);
 
-	for(unsigned short int p = 0; p < connectionLength; ++p)
+	for(unsigned int p = 0; p < connectionLength; ++p)
 	{
 		connectionPath[p]->updateQMDegredation(controllerIndex, wavelength);
 	}
@@ -2782,9 +2782,9 @@ void Thread::updateQMDegredation(Edge **connectionPath, unsigned short int conne
 //					or dropped.
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::updateQFactorStats(Edge **connectionPath, unsigned short int connectionLength, unsigned int wavelength)
+void Thread::updateQFactorStats(Edge **connectionPath, unsigned int connectionLength, unsigned int wavelength)
 {
-	for(unsigned short int p = 0; p < connectionLength ; ++p)
+	for(unsigned int p = 0; p < connectionLength ; ++p)
 	{
 		connectionPath[p]->updateQFactorStats(controllerIndex, wavelength);
 	}
@@ -2894,7 +2894,7 @@ void Thread::saveThread(char* dir)
 	myFile << getCurrentActiveWorkstations() << "|\n";
 	myFile.close();
 
-	for(unsigned short int r = 0; r < routers.size(); ++r)
+	for(unsigned int r = 0; r < routers.size(); ++r)
 		routers[r]->saveData(allName);
 }
 #endif

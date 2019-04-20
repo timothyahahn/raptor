@@ -68,7 +68,7 @@ Edge::Edge()
 //					destination, and number of spans.
 //
 ///////////////////////////////////////////////////////////////////
-Edge::Edge(unsigned short int src, unsigned short int dest, unsigned short int spans)
+Edge::Edge(unsigned int src, unsigned int dest, unsigned int spans)
 {
 	sourceIndex = src;
 	destinationIndex = dest;
@@ -85,7 +85,7 @@ Edge::Edge(unsigned short int src, unsigned short int dest, unsigned short int s
 
 	resetEdgeStats();
 
-	for(unsigned short int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+	for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
 	{
 		status[w] = EDGE_FREE;
 		activeSession[w] = -1;
@@ -333,7 +333,7 @@ void Edge::scaleEdgesTo(int spns, int px)
 	doubR2X = (float)topoRouters[destinationIndex]->getXPixel();
 	doubR2Y = (float)topoRouters[destinationIndex]->getYPixel();
 	dist = sqrt( ( doubR2X - doubR1X )*( doubR2X - doubR1X ) + (doubR2Y - doubR1Y)*(doubR2Y - doubR1Y) );//distance formula
-	unsigned short int newspans = (unsigned short int)ceil(dist * (float)spns / (float)px);
+	unsigned int newspans = (unsigned int)ceil(dist * (float)spns / (float)px);
 	numberOfSpans = newspans;
 }
 #endif
@@ -353,7 +353,7 @@ void Edge::updateUsage()
 	}
 	else
 	{
-		for(unsigned short int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+		for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
 		{
 			if(status[w] == EDGE_USED)
 				++newUsage;
@@ -369,7 +369,7 @@ void Edge::updateUsage()
 // Description:		Updates the usage of the edges
 //
 ///////////////////////////////////////////////////////////////////
-void Edge::updateQMDegredation(unsigned short int ci, unsigned int wavelength)
+void Edge::updateQMDegredation(unsigned int ci, unsigned int wavelength)
 {	
 	ResourceManager* rm = threadZero->getResourceManager();
 
@@ -384,7 +384,7 @@ void Edge::updateQMDegredation(unsigned short int ci, unsigned int wavelength)
 	{
 		EstablishedConnection* ec = static_cast<EstablishedConnection*>(*iter);
 
-		for(unsigned short int p = 0; p < ec->connectionLength; ++p)
+		for(unsigned int p = 0; p < ec->connectionLength; ++p)
 		{
 			if(ec->connectionPath[p] == this &&
 				abs(ec->wavelength - int(wavelength)) <= threadZero->getQualityParams().nonlinear_halfwin)
@@ -432,10 +432,10 @@ void Edge::updateQMDegredation(unsigned short int ci, unsigned int wavelength)
 		}
 	}
 
-	unsigned short int activeLightpaths = 0;
+	unsigned int activeLightpaths = 0;
 	double cumulativeDegradation = 0.0;
 
-	for(unsigned short int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+	for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
 	{
 		if(degredation[w] != 0.0)
 		{
@@ -458,7 +458,7 @@ void Edge::updateQMDegredation(unsigned short int ci, unsigned int wavelength)
 // Description:		Updates the Q Factor stats
 //
 ///////////////////////////////////////////////////////////////////
-void Edge::updateQFactorStats(unsigned short int ci, unsigned int wavelength)
+void Edge::updateQFactorStats(unsigned int ci, unsigned int wavelength)
 {
 	ResourceManager* rm = threadZero->getResourceManager();
 
@@ -661,13 +661,13 @@ void Edge::updateGUI()
 {
 	if(threadZero->getQualityParams().q_factor_stats == true)
 	{
-		actualUsage = unsigned short int(establishedConnections.size());
+		actualUsage = unsigned int(establishedConnections.size());
 	}
 	else
 	{
 		actualUsage = 0.0;
 
-		for(unsigned short int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+		for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
 		{
 			if(status[w] == EDGE_USED)
 				++actualUsage;
@@ -695,7 +695,7 @@ void Edge::calculateAverageUsage()
 {
 	float total = 0;
 
-	for(unsigned short int u = threadZero->getUsageHistStartTime(); u < (threadZero->getUsageHistStartTime() + threadZero->getNumUsagesToDisplay()); ++u )
+	for(unsigned int u = threadZero->getUsageHistStartTime(); u < (threadZero->getUsageHistStartTime() + threadZero->getNumUsagesToDisplay()); ++u )
 	{
 		total += usageList[u];
 	}
@@ -858,7 +858,7 @@ void Edge::paintUsageHistory(int x1,int y1, int x2,int y2,int t)
 		textprintf_right_ex(graph,font,x2-5,y1-10,bla,pink,"From %d to %d", sourceIndex, destinationIndex);
 		
 		//don't use all calls to threadZero in future
-		for(unsigned short int u = threadZero->getUsageHistStartTime(); u < (threadZero->getUsageHistStartTime() + threadZero->getNumUsagesToDisplay()); u++)
+		for(unsigned int u = threadZero->getUsageHistStartTime(); u < (threadZero->getUsageHistStartTime() + threadZero->getNumUsagesToDisplay()); u++)
 		{
 			//(for color) not really necessary
 			use = usageList[u];
@@ -917,7 +917,7 @@ void Edge::saveData(char* file)
 	myFile << max_actual_usage <<"|\n";
 	myFile.close();
 
-	for(unsigned short int u = 0; u < usageList.size(); ++u)
+	for(unsigned int u = 0; u < usageList.size(); ++u)
 		usageList.erase(usageList.begin());
 	usageList.clear();
 	max_actual_usage = 0;

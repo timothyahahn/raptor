@@ -26,8 +26,8 @@ const double HUNDRED_HOURS = 10.0 * TEN_HOURS;
 const double SPEED_OF_LIGHT = double(299792458);
 
 struct FormattedTime {
-	unsigned short int hours;
-	unsigned short int minutes;
+	unsigned int hours;
+	unsigned int minutes;
 	float seconds;
 };
 

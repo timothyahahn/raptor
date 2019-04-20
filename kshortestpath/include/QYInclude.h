@@ -31,24 +31,24 @@
 #define _QYINCLUDE_H_
 
 struct kShortestPathEdges {
-	unsigned short int src_node;
-	unsigned short int dest_node;
+	unsigned int src_node;
+	unsigned int dest_node;
 	float edge_cost;
 };
 
 struct kShortestPathParms {
-	unsigned short int src_node;
-	unsigned short int dest_node;
-	unsigned short int k_paths;
-	unsigned short int total_nodes;
-	unsigned short int total_edges;
+	unsigned int src_node;
+	unsigned int dest_node;
+	unsigned int k_paths;
+	unsigned int total_nodes;
+	unsigned int total_edges;
 	kShortestPathEdges *edge_list;	
 };
 
 struct kShortestPathReturn {
-	unsigned short int *pathinfo;
+	unsigned int *pathinfo;
 	float *pathcost;
-	unsigned short int *pathlen;
+	unsigned int *pathlen;
 };
 
 #endif

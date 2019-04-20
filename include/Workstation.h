@@ -27,9 +27,9 @@ class Workstation
 		Workstation();
 		~Workstation();
 
-		inline unsigned short int getParentRouterIndex()
+		inline unsigned int getParentRouterIndex()
 			{ return parentRouterIndex; };
-		inline void setParentRouterIndex(unsigned short int p)
+		inline void setParentRouterIndex(unsigned int p)
 			{ parentRouterIndex = p; };
 
 		inline void setActive(bool a)
@@ -38,7 +38,7 @@ class Workstation
 			{ return active; };
 
 	private:
-		unsigned short int parentRouterIndex;
+		unsigned int parentRouterIndex;
 
 		bool active;
 };

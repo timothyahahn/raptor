@@ -30,7 +30,7 @@
 ///////////////////////////////////////////////////////////////////
 void paint_link_usage(int p)
 {
-	for(unsigned short int r = 0; r < threadZero->getNumberOfRouters(); ++r)
+	for(unsigned int r = 0; r < threadZero->getNumberOfRouters(); ++r)
 	{
 		threadZero->getRouterAt(r)->paintUsage(p);
 	}
@@ -58,7 +58,7 @@ void paint_router_nums()
 	clear_to_color(routersbmp,makecol(255,0,255));
 	clear_to_color(mainbuf,makecol(0,0,0));
 	
-	for(unsigned short int r = 0; r < threadZero->getNumberOfRouters(); ++r)
+	for(unsigned int r = 0; r < threadZero->getNumberOfRouters(); ++r)
 	{
 		threadZero->getRouterAt(r)->paintNumDests(paintNum);
 	}
@@ -90,7 +90,7 @@ void paint_router_nums()
 void paint_topo_edges(int p)
 {
 	clear_to_color(edgesbmp,makecol(255,0,255));
-	for(unsigned short int r = 0; r < topoRouters.size(); ++r)
+	for(unsigned int r = 0; r < topoRouters.size(); ++r)
 	{
 		topoRouters[r]->paintUsage(p);
 	}
@@ -113,7 +113,7 @@ void topoRefresh()
 	clear_to_color(routersbmp,makecol(255,0,255));
 	clear_to_color(mainbuf,makecol(0,0,0));
 	
-	for(unsigned short int r = 0; r < topoRouters.size(); ++r)
+	for(unsigned int r = 0; r < topoRouters.size(); ++r)
 	{
 		topoRouters[r]->paintNumDests(-1 * numTopoWorkstations);
 	}
@@ -144,12 +144,12 @@ void topoRefresh()
 ///////////////////////////////////////////////////////////////////
 void refreshedges()
 {
-	for(unsigned short int s = 0; s < threadZero->getNumberOfRouters(); ++s)
+	for(unsigned int s = 0; s < threadZero->getNumberOfRouters(); ++s)
 	{
 		threadZero->getRouterAt(s)->refreshedgebmps(true);
 	}
 	clear_to_color(edgespans,makecol(255,0,255));
-	for(unsigned short int r = 0; r < threadZero->getNumberOfRouters(); ++r)
+	for(unsigned int r = 0; r < threadZero->getNumberOfRouters(); ++r)
 	{
 		threadZero->getRouterAt(r)->paintEdgeSpans();
 	}
@@ -197,7 +197,7 @@ void explore_history()
 	clear_to_color(graph,makecol(255,0,255));
 	explore_time = 1;
 
-	for(unsigned short int r = 0; r < threadZero->getNumberOfRouters(); ++r)
+	for(unsigned int r = 0; r < threadZero->getNumberOfRouters(); ++r)
 	{
 		threadZero->getRouterAt(r)->setXYPixels();
 		threadZero->getRouterAt(r)->moveXYPixels(0,topbuttons->h);//initially translate below top button bar
@@ -660,7 +660,7 @@ void topo_move()
 	while(mouse_b & 1)
 	{
 		clear_to_color(edgesbmp,makecol(255,0,255));
-		for(unsigned short int r = 0; r < threadZero->getNumberOfRouters(); ++r)//TODO: much of this is also in explore_history. Don't copy/paste code.
+		for(unsigned int r = 0; r < threadZero->getNumberOfRouters(); ++r)//TODO: much of this is also in explore_history. Don't copy/paste code.
 		{
 			threadZero->getRouterAt(r)->moveXYPixels(diffx,diffy);//initially translate below top button bar
 		}
@@ -694,7 +694,7 @@ void topo_zoomin()
 			clear_to_color(edgesbmp,makecol(255,0,255));
 			realTopoWidthPx += (0.25 * realTopoWidthPx);
 			realTopoHeightPx += (0.25 * realTopoHeightPx);
-			for(unsigned short int r = 0; r < threadZero->getNumberOfRouters(); ++r)//TODO: much of this is also in explore_history. Don't copy/paste code.
+			for(unsigned int r = 0; r < threadZero->getNumberOfRouters(); ++r)//TODO: much of this is also in explore_history. Don't copy/paste code.
 			{
 				threadZero->getRouterAt(r)->setXYPixels();
 				threadZero->getRouterAt(r)->moveXYPixels(0,topbuttons->h);//initially translate below top button bar
@@ -724,7 +724,7 @@ void topo_zoomout()
 			realTopoWidthPx = topoX2-topoX1;
 		if(realTopoHeightPx < (topoY2 - topoY1))
 			realTopoHeightPx = topoY2 - topoY1;
-		for(unsigned short int r = 0; r < threadZero->getNumberOfRouters(); ++r)//TODO: much of this is also in explore_history. Don't copy/paste code.
+		for(unsigned int r = 0; r < threadZero->getNumberOfRouters(); ++r)//TODO: much of this is also in explore_history. Don't copy/paste code.
 		{
 			threadZero->getRouterAt(r)->setXYPixels();
 			threadZero->getRouterAt(r)->moveXYPixels(0,topbuttons->h);//initially translate below top button bar
@@ -1052,7 +1052,7 @@ bool userDisplayEdge()//return true if it should go to explore edge next
 	mx = mouse_x;
 	my = mouse_y;
 	mb = (mouse_b & 1);
-	for(unsigned short int r = 0; r < threadZero->getNumberOfRouters(); ++r)
+	for(unsigned int r = 0; r < threadZero->getNumberOfRouters(); ++r)
 	{
 		dmx = mx;
 		dmy = my;
@@ -1079,7 +1079,7 @@ bool userDisplayEdge()//return true if it should go to explore edge next
 		my = mouse_y;
 	}
 	if(mb && source > -1){//if we've clicked again and we've already selected one router.
-		for(unsigned short int r2 = 0; r2 < threadZero->getNumberOfRouters(); ++r2)
+		for(unsigned int r2 = 0; r2 < threadZero->getNumberOfRouters(); ++r2)
 		{
 			dmx = mx;
 			dmy = my;
@@ -1520,7 +1520,7 @@ void buildtopoplacerouter()
 	int mosy = mouse_y;
 	bool freespot = true;
 	//go through all routers. If clicked outside the radius of all routers, add new router at this location.
-	for(unsigned short int r = 0; r < topoRouters.size(); ++r)
+	for(unsigned int r = 0; r < topoRouters.size(); ++r)
 	{
 		rx = topoRouters[r]->getXPixel(); //set coordinates of routers
 		ry = topoRouters[r]->getYPixel();
@@ -1556,12 +1556,12 @@ void buildtopoplacerouter()
 ///////////////////////////////////////////////////////////////////
 void buildtopoplaceedge()
 {
-	short int from = -1;
-	short int to = -1;
-	short int spans = 0;
+	int from = -1;
+	int to = -1;
+	int spans = 0;
 	int mosx = mouse_x;
 	int mosy = mouse_y;
-	for(unsigned short int r = 0; r < topoRouters.size(); ++r)
+	for(unsigned int r = 0; r < topoRouters.size(); ++r)
 	{
 		rx = topoRouters[r]->getXPixel(); //set coordinates of routers
 		ry = topoRouters[r]->getYPixel();
@@ -1581,7 +1581,7 @@ void buildtopoplaceedge()
 
 	if(mosy < graphY1 && mosy > topbuttons->h)
 	{
-		for(unsigned short int r = 0; r < topoRouters.size(); ++r)
+		for(unsigned int r = 0; r < topoRouters.size(); ++r)
 		{
 			rx = topoRouters[r]->getXPixel(); //set coordinates of routers
 			ry = topoRouters[r]->getYPixel();
@@ -1627,7 +1627,7 @@ void buildtopomoverouter()
 	int mosy = mouse_y;
 	int diffx = 0;
 	int diffy = 0;
-	for(unsigned short int r = 0; r < topoRouters.size(); ++r)
+	for(unsigned int r = 0; r < topoRouters.size(); ++r)
 	{
 		rx = topoRouters[r]->getXPixel(); //set coordinates of routers
 		ry = topoRouters[r]->getYPixel();
@@ -1642,7 +1642,7 @@ void buildtopomoverouter()
 		clear_to_color(edgesbmp,makecol(255,0,255));
 		topoRouters[chosen]->moveXYPixels(diffx,diffy);	//remember, because we only change the pixels, we must recalculate
 			//x,yPercents before saving this topology
-		for(unsigned short int adj = 0; adj < topoRouters.size(); adj++)
+		for(unsigned int adj = 0; adj < topoRouters.size(); adj++)
 		{
 			topoRouters[adj]->refreshedgebmps(false);
 		}
@@ -1671,7 +1671,7 @@ void buildtopoeditrouter()
 	int mosy = mouse_y;
 	int diffx = 0;
 	int diffy = 0;
-	for(unsigned short int r = 0; r < topoRouters.size(); ++r)
+	for(unsigned int r = 0; r < topoRouters.size(); ++r)
 	{
 		rx = topoRouters[r]->getXPixel(); //set coordinates of routers
 		ry = topoRouters[r]->getYPixel();
@@ -1747,12 +1747,12 @@ void buildtopoeditrouter()
 ///////////////////////////////////////////////////////////////////
 void buildtopoeditedge()
 {
-	short int from = -1;//this is copied too. Again, TODO: we should replace with a return index function
-	short int to = -1;
-	short int spans = 0;
+	int from = -1;//this is copied too. Again, TODO: we should replace with a return index function
+	int to = -1;
+	int spans = 0;
 	int mosx = mouse_x;
 	int mosy = mouse_y;
-	for(unsigned short int r = 0; r < topoRouters.size(); ++r)
+	for(unsigned int r = 0; r < topoRouters.size(); ++r)
 	{
 		rx = topoRouters[r]->getXPixel(); //set coordinates of routers
 		ry = topoRouters[r]->getYPixel();
@@ -1772,7 +1772,7 @@ void buildtopoeditedge()
 
 	if(mosy < graphY1 && mosy > topbuttons->h)
 	{
-		for(unsigned short int r = 0; r < topoRouters.size(); ++r)
+		for(unsigned int r = 0; r < topoRouters.size(); ++r)
 		{
 			rx = topoRouters[r]->getXPixel(); //set coordinates of routers
 			ry = topoRouters[r]->getYPixel();

@@ -36,7 +36,7 @@ class MessageLogger
 		MessageLogger(const char*, const char*, const char*, const char*,int runCount);
 		~MessageLogger();
 
-		void recordEvent(const std::string &e, bool print, unsigned short int ci);
+		void recordEvent(const std::string &e, bool print, unsigned int ci);
 
 		inline void LockResultsMutex()
 			{ pthread_mutex_lock(&ResultsMutex); };

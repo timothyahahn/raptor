@@ -70,7 +70,7 @@ Usage: ./raptor <Topology> <Wavelengths> <Random Seed> <Thread Count> <Iteration
 
 Topology: NSF, Mesh, Mesh6x6, Mesh8x8, Mesh10x10
 Wavelengths: 21, 41, 81, 161, 321, 641, 1281
-Random Seed: <any valid unsigned short int>
+Random Seed: <any valid unsigned int>
 Thread Count: <maximum number of threads to run, 1 to n>
 Iteration Count: <number of iterations, 1 to n>
 Probe Count: <number of probes, 1 to n>

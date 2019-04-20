@@ -69,7 +69,7 @@ Router::Router()
 ///////////////////////////////////////////////////////////////////
 Router::~Router()
 {
-	for(unsigned short int a = 0; a < edgeList.size(); ++a)
+	for(unsigned int a = 0; a < edgeList.size(); ++a)
 		delete edgeList[a];
 
 	edgeList.clear();
@@ -113,9 +113,9 @@ void Router::addEdge(Edge* e)
 //					specific router.
 //
 ///////////////////////////////////////////////////////////////////
-Edge* Router::getEdgeByDestination(unsigned short int r)
+Edge* Router::getEdgeByDestination(unsigned int r)
 {
-	for(unsigned short int e = 0; e < edgeList.size(); ++e)
+	for(unsigned int e = 0; e < edgeList.size(); ++e)
 	{
 		if(edgeList[e]->getDestinationIndex() == r)
 			return edgeList[e];
@@ -132,7 +132,7 @@ Edge* Router::getEdgeByDestination(unsigned short int r)
 ///////////////////////////////////////////////////////////////////
 void Router::updateUsage()
 {
-	for(unsigned short int e = 0; e < edgeList.size(); ++e)
+	for(unsigned int e = 0; e < edgeList.size(); ++e)
 	{
 		edgeList[e]->updateUsage();
 	}
@@ -235,7 +235,7 @@ Edge* Router::chooseEdge(float p)
 ///////////////////////////////////////////////////////////////////
 void Router::refreshedgebmps(bool useThread)
 {
-	for(unsigned short int e = 0; e < edgeList.size(); ++e)
+	for(unsigned int e = 0; e < edgeList.size(); ++e)
 	{
 		edgeList[e]->refreshbmps(useThread);
 	}
@@ -243,7 +243,7 @@ void Router::refreshedgebmps(bool useThread)
 
 void Router::scaleEdgesTo(int spns, int px)
 {
-	for(unsigned short int e = 0; e < edgeList.size(); ++e)
+	for(unsigned int e = 0; e < edgeList.size(); ++e)
 	{
 		edgeList[e]->scaleEdgesTo(spns,px);
 	}
@@ -257,7 +257,7 @@ void Router::scaleEdgesTo(int spns, int px)
 ///////////////////////////////////////////////////////////////////
 void Router::updateGUI()
 {
-	for(unsigned short int e = 0; e < edgeList.size(); ++e)
+	for(unsigned int e = 0; e < edgeList.size(); ++e)
 	{
 		edgeList[e]->updateGUI();
 	}
@@ -352,7 +352,7 @@ unsigned int Router::generateDestination(double p)
 ///////////////////////////////////////////////////////////////////
 void Router::resetUsage()
 {
-	for(unsigned short int e = 0; e < edgeList.size(); ++e)
+	for(unsigned int e = 0; e < edgeList.size(); ++e)
 	{
 		edgeList[e]->resetAlgorithmUsage();
 	}
@@ -378,7 +378,7 @@ void Router::resetFailures()
 ///////////////////////////////////////////////////////////////////
 void Router::resetQMDegredation()
 {
-	for(unsigned short int e = 0; e < edgeList.size(); ++e)
+	for(unsigned int e = 0; e < edgeList.size(); ++e)
 	{
 		edgeList[e]->resetQMDegredation();
 	}
@@ -393,7 +393,7 @@ void Router::resetQMDegredation()
 ///////////////////////////////////////////////////////////////////
 void Router::paintUsage(int p)
 {
-	for(unsigned short int e = 0; e < edgeList.size(); ++e)
+	for(unsigned int e = 0; e < edgeList.size(); ++e)
 	{
 		edgeList[e]->paintUsage(p);
 	}
@@ -407,7 +407,7 @@ void Router::paintUsage(int p)
 ///////////////////////////////////////////////////////////////////
 void Router::paintEdgeSpans()
 {
-	for(unsigned short int e = 0; e < edgeList.size(); ++e)
+	for(unsigned int e = 0; e < edgeList.size(); ++e)
 	{
 		if(edgeList[e]->getSourceIndex() > edgeList[e]->getDestinationIndex())
 			edgeList[e]->paintSpans();

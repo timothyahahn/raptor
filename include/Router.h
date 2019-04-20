@@ -54,9 +54,9 @@ class Router
 		Router();
 		~Router();
 
-		inline void setIndex(unsigned short int i)
+		inline void setIndex(unsigned int i)
 			{ routerIndex = i; };
-		inline unsigned short int getIndex()
+		inline unsigned int getIndex()
 			{ return routerIndex; };
 
 		void generateProbabilities();
@@ -71,7 +71,7 @@ class Router
 		inline void addTopoEdge(Edge* e)
 		{	edgeList.push_back(e);	};
 		void scaleEdgesTo(int spns, int px);
-		inline Edge* getTopoEdgeByDest(unsigned short int e)
+		inline Edge* getTopoEdgeByDest(unsigned int e)
 		{	for(int x = 0; x < edgeList.size(); x++)
 			{	
 				if(edgeList[x]->getDestinationIndex() == e)
@@ -83,13 +83,13 @@ class Router
 
 		void addEdge(Edge* e);
 
-		inline int isAdjacentTo(unsigned short int r)
+		inline int isAdjacentTo(unsigned int r)
 			{ return adjacencyList[r]; };
 
-		inline Edge* getEdgeByIndex(unsigned short int e)
+		inline Edge* getEdgeByIndex(unsigned int e)
 			{ return edgeList[e]; };
 
-		Edge* getEdgeByDestination(unsigned short int r);
+		Edge* getEdgeByDestination(unsigned int r);
 
 		void updateUsage();
 		void resetUsage();
@@ -195,7 +195,7 @@ class Router
 		DP_node* dp_node;
 
 	private:
-		unsigned short int routerIndex;
+		unsigned int routerIndex;
 
 		unsigned int qualityFailures;
 		unsigned int waveFailures;

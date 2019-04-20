@@ -72,7 +72,7 @@ char folder[50];
 //pointer to the class due to a circular reference.
 Thread* threadZero;
 Thread** threads;
-unsigned short int threadCount;
+unsigned int threadCount;
 
 vector<AlgorithmToRun*> algParams;
 
@@ -91,7 +91,7 @@ int main( int argc, const char* argv[] )
 
 		std::cerr << "Topology: NSF, Mesh, Mesh6x6, Mesh8x8, Mesh10x10" << std::endl;
 		std::cerr << "Wavelengths: 21, 41, 81, 161, 321, 641, 1281" << std::endl;
-		std::cerr << "Random Seed: <any valid unsigned short int>" << std::endl;
+		std::cerr << "Random Seed: <any valid unsigned int>" << std::endl;
 		std::cerr << "Thread Count: <maximum number of threads to run, 1 to n>" << std::endl;
 		std::cerr << "Iteration Count: <number of iterations, 1 to n>" << std::endl;
 		std::cerr << "Probe Count: <number of probes, 1 to n>" << std::endl;
@@ -178,7 +178,7 @@ void runSimulation(int argc, const char* argv[])
 
 		threads = new Thread*[threadCount];
 
-		unsigned short int iterationCount = atoi(argv[5]);
+		unsigned int iterationCount = atoi(argv[5]);
 
 #ifdef RUN_GUI
 	rectfill(screen, 0, 0, SCREEN_W, 40, color);
@@ -196,9 +196,9 @@ void runSimulation(int argc, const char* argv[])
 		pthread_mutex_init(&ScheduleMutex,nullptr);
 
 		if(threadCount > algParams.size())
-			threadCount = static_cast<unsigned short int>(algParams.size());
+			threadCount = static_cast<unsigned int>(algParams.size());
 
-		for(unsigned short int t = 1; t < threadCount; ++t)
+		for(unsigned int t = 1; t < threadCount; ++t)
 		{
 			Thread* thread = new Thread(t,argc,argv,false,runCount);
 			pThreads.push_back(new pthread_t);
@@ -210,14 +210,14 @@ void runSimulation(int argc, const char* argv[])
 		buffer << "Created " << threadCount << " threads " << std::endl;
 		threadZero->recordEvent(buffer.str(),true,0);
 
-		for(unsigned short int t = 1; t < threadCount; ++t)
+		for(unsigned int t = 1; t < threadCount; ++t)
 		{
-			pthread_create(pThreads[t-1],nullptr,runThread,new unsigned short int(t));
+			pthread_create(pThreads[t-1],nullptr,runThread,new unsigned int(t));
 		}
 
-		threadZeroReturn = static_cast<int*>(runThread(new unsigned short int(0)));
+		threadZeroReturn = static_cast<int*>(runThread(new unsigned int(0)));
 
-		for(unsigned short int t = 1; t < threadCount; ++t)
+		for(unsigned int t = 1; t < threadCount; ++t)
 		{
 			pthread_join(*pThreads[t-1],nullptr);
 
@@ -226,7 +226,7 @@ void runSimulation(int argc, const char* argv[])
 #endif
 		}
 
-		for(unsigned short int t = 0; t < threadCount; ++t)
+		for(unsigned int t = 0; t < threadCount; ++t)
 		{
 			delete threads[t];
 
@@ -256,7 +256,7 @@ void runSimulation(int argc, const char* argv[])
 
 void *runThread(void* n)
 {
-	unsigned short int* t_id = static_cast<unsigned short int *>(n);
+	unsigned int* t_id = static_cast<unsigned int *>(n);
 
 	int *retVal = new int;
 
