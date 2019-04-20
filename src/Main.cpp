@@ -117,16 +117,16 @@ int main( int argc, const char* argv[] )
 	edgesbmp = create_bitmap(SCRNWID,SCRNHEI);
 	edgespans = create_bitmap(SCRNWID,SCRNHEI);
 	popup = create_bitmap(SCRNWID,SCRNHEI);
-	graphbackground = load_bitmap("bitmaps/graphbackground.bmp",NULL);
-	topobackground = load_bitmap("bitmaps/topobackground2.bmp",NULL);
-	progbarbmp = load_bitmap("bitmaps/progressbar.bmp",NULL);
-	routerinfo = load_bitmap("bitmaps/routerinfo.bmp",NULL);
-	editrouterinfo = load_bitmap("bitmaps/editrouterinfo.bmp",NULL);
-	editedgeinfo = load_bitmap("bitmaps/editedgeinfo.bmp",NULL);
-	detailinfo = load_bitmap("bitmaps/configurationinfo.bmp",NULL);
-	colorkey = load_bitmap("bitmaps/colorkey.bmp",NULL);
-	pointer = load_bitmap("bitmaps/pointer2.bmp",NULL);
-	topomenu = load_bitmap("bitmaps/topomenu.bmp",NULL);
+	graphbackground = load_bitmap("bitmaps/graphbackground.bmp",nullptr);
+	topobackground = load_bitmap("bitmaps/topobackground2.bmp",nullptr);
+	progbarbmp = load_bitmap("bitmaps/progressbar.bmp",nullptr);
+	routerinfo = load_bitmap("bitmaps/routerinfo.bmp",nullptr);
+	editrouterinfo = load_bitmap("bitmaps/editrouterinfo.bmp",nullptr);
+	editedgeinfo = load_bitmap("bitmaps/editedgeinfo.bmp",nullptr);
+	detailinfo = load_bitmap("bitmaps/configurationinfo.bmp",nullptr);
+	colorkey = load_bitmap("bitmaps/colorkey.bmp",nullptr);
+	pointer = load_bitmap("bitmaps/pointer2.bmp",nullptr);
+	topomenu = load_bitmap("bitmaps/topomenu.bmp",nullptr);
 
 	flash();
 
@@ -144,7 +144,7 @@ int main( int argc, const char* argv[] )
 	//flash();
 	switcher(argc, argv);
 
-	set_mouse_sprite(NULL);
+	set_mouse_sprite(nullptr);
 	destroy_bitmap(buffer);
 	destroy_bitmap(graph);
 	destroy_bitmap(pointer);
@@ -193,7 +193,7 @@ void runSimulation(int argc, const char* argv[])
 		rectfill(screen, 0, 0, SCREEN_W, 40, color);
 #endif
 
-		pthread_mutex_init(&ScheduleMutex,NULL);
+		pthread_mutex_init(&ScheduleMutex,nullptr);
 
 		if(threadCount > algParams.size())
 			threadCount = static_cast<unsigned short int>(algParams.size());
@@ -212,14 +212,14 @@ void runSimulation(int argc, const char* argv[])
 
 		for(unsigned short int t = 1; t < threadCount; ++t)
 		{
-			pthread_create(pThreads[t-1],NULL,runThread,new unsigned short int(t));
+			pthread_create(pThreads[t-1],nullptr,runThread,new unsigned short int(t));
 		}
 
 		threadZeroReturn = static_cast<int*>(runThread(new unsigned short int(0)));
 
 		for(unsigned short int t = 1; t < threadCount; ++t)
 		{
-			pthread_join(*pThreads[t-1],NULL);
+			pthread_join(*pThreads[t-1],nullptr);
 
 #ifdef RUN_GUI
 		textprintf_ex(screen,font,20,500,makecol(0,255,0),makecol(0,0,0),"Thread %5d",t-1);

@@ -68,7 +68,7 @@ void paint_router_nums()
 	{	masked_blit(edgespans, mainbuf,topoX1,topoY1,topoX1,topoY1,topoX2-topoX1,topoY2-topoY1);	}
 	masked_blit(routersbmp,mainbuf,topoX1,topoY1,topoX1,topoY1,topoX2-topoX1,topoY2-topoY1);
 	masked_blit(topbuttons,mainbuf,0,0,0,0,SCRNWID,SCRNHEI);
-	if(edge == NULL)
+	if(edge == nullptr)
 	{
 		stretch_blit(graphbackground,mainbuf,0,0,graphbackground->w,graphbackground->h,graphX1,graphY1,graphX2-graphX1,graphY2-graphY1);
 	}
@@ -123,7 +123,7 @@ void topoRefresh()
 	{	masked_blit(edgespans, mainbuf,topoX1,topoY1,topoX1,topoY1,topoX2-topoX1,topoY2-topoY1);	}*/
 	masked_blit(edgesbmp, mainbuf, topoX1,topoY1,topoX1,topoY1,topoX2-topoX1,topoY2-topoY1);
 	masked_blit(routersbmp,mainbuf,topoX1,topoY1,topoX1,topoY1,topoX2-topoX1,topoY2-topoY1);
-	if(edge == NULL)
+	if(edge == nullptr)
 	{
 		stretch_blit(graphbackground,mainbuf,0,0,graphbackground->w,graphbackground->h,graphX1,graphY1,graphX2-graphX1,graphY2-graphY1);
 	}
@@ -319,7 +319,7 @@ void explore_history()
 					{	threadZero->setUsageHistStartTime(threadZero->getUsageHistStartTime()+1);	}//Replace the call to threadZero with something quicker
 				}
 				paint_link_usage(explore_time);
-				if(edge != NULL)
+				if(edge != nullptr)
 				{	edge->paintUsageHistory(graphX1,graphY1,graphX2,graphY2,-1);
 					edge->paintUsageHistory(graphX1,graphY1,graphX2,graphY2,explore_time);	}
 			}
@@ -336,7 +336,7 @@ void explore_history()
 		{
 			my = mouse_y;
 			mx = mouse_x;
-			if(my > (SCRNHEI - 150) && mx > 40 && mx < SCRNWID - 10 && edge != NULL)
+			if(my > (SCRNHEI - 150) && mx > 40 && mx < SCRNWID - 10 && edge != nullptr)
 			{	explore_time = threadZero->getUsageHistStartTime() + (mx - 40) * usageWindow / (SCRNWID - 50);	
 				paint_link_usage(explore_time);
 				while((mr || (mb && graphmove)) && mx > 40 && mx < SCRNWID - 10)
@@ -403,7 +403,7 @@ void explore_history()
 		else if(key[KEY_R])
 		{
 			threadZero->setPaintRealTime();
-			if(edge != NULL)
+			if(edge != nullptr)
 			{	edge->paintUsageHistory(graphX1,graphY1,graphX2,graphY2,-1);
 				edge->paintUsageHistory(graphX1,graphY1,graphX2,graphY2,explore_time);	}
 			while(key[KEY_R])
@@ -757,14 +757,14 @@ void graphleft()
 		if(explore_time < threadZero->getUsageHistStartTime())
 		{	if(explore_time > 0)
 			{	threadZero->setUsageHistStartTime(explore_time);
-				if(edge != NULL)
+				if(edge != nullptr)
 				{	edge->paintUsageHistory(graphX1,graphY1,graphX2,graphY2,-1);	}
 			}
 			else
 			{	explore_time = threadZero->getUsageHistStartTime();	}
 		}//Replace the call to threadZero with something quicker
 		paint_link_usage(explore_time);
-		if(edge != NULL)
+		if(edge != nullptr)
 		{	edge->paintUsageHistory(graphX1,graphY1,graphX2,graphY2,explore_time);	}
 	}
 	blit(graphbutton[0],graphbuttons,0,0,overx,0,graphbuttons->w,graphbuttons->h);
@@ -791,14 +791,14 @@ void graphright()
 		{	if(explore_time < nums)
 			{	startTime = threadZero->getUsageHistStartTime();
 				threadZero->setUsageHistStartTime(startTime + 1);
-				if(edge != NULL)
+				if(edge != nullptr)
 				{	edge->paintUsageHistory(graphX1,graphY1,graphX2,graphY2,-1);	}
 			}
 			else
 			{	explore_time = threadZero->getUsageHistStartTime() + usageWindow -1;	}
 		}
 		paint_link_usage(explore_time);
-		if(edge != NULL)
+		if(edge != nullptr)
 		{	edge->paintUsageHistory(graphX1,graphY1,graphX2,graphY2,explore_time);	}
 	}
 	blit(graphbutton[1],graphbuttons,0,0,overx,0,graphbuttons->w,graphbuttons->h);
@@ -862,7 +862,7 @@ void graphzoomin()
 			threadZero->setUsageHistStartTime(startTime);
 			usageWindow -= ceil(shrinkConstant * usageWindow);
 			threadZero->setNumUsagesToDisplay(usageWindow);
-			if(edge != NULL)
+			if(edge != nullptr)
 			{	edge->paintUsageHistory(graphX1,graphY1,graphX2,graphY2,-1);
 				edge->paintUsageHistory(graphX1,graphY1,graphX2,graphY2,explore_time);	
 			}
@@ -911,7 +911,7 @@ void graphzoomout()//turns itself on/off. turns point/move off
 		{	startTime = nums - usageWindow; }
 		threadZero->setUsageHistStartTime(startTime);
 		threadZero->setNumUsagesToDisplay(usageWindow);
-		if(edge != NULL)
+		if(edge != nullptr)
 		{	edge->paintUsageHistory(graphX1,graphY1,graphX2,graphY2,-1);
 			edge->paintUsageHistory(graphX1,graphY1,graphX2,graphY2,explore_time);	}
 	}
@@ -1004,7 +1004,7 @@ void graphzoomwindow()
 		}
 
 		paint_link_usage(choseA);
-		if(edge != NULL)
+		if(edge != nullptr)
 		{	edge->paintUsageHistory(graphX1,graphY1,graphX2,graphY2,-1);
 			edge->paintUsageHistory(graphX1,graphY1,graphX2,graphY2,explore_time);	}
 	}
@@ -1141,7 +1141,7 @@ void close_button_handler()
 ///////////////////////////////////////////////////////////////////
 void flash()
 {
-	flashscreen = load_bitmap("bitmaps/flashscreen.bmp",NULL); //flashscreen for ALL-GUI
+	flashscreen = load_bitmap("bitmaps/flashscreen.bmp",nullptr); //flashscreen for ALL-GUI
 	set_gfx_mode(GFX_AUTODETECT_WINDOWED,flashscreen->w + 100,flashscreen->h + 100,0,0);
 	blit(flashscreen, screen, 0,0,ceil((double)SCREEN_W/2 - (double)flashscreen->w / 2.0),ceil((double)SCREEN_H/2 - (double)flashscreen->h / 2.0),flashscreen->w,flashscreen->h);///this makes screen black too
 	rest(1000);
@@ -1150,50 +1150,50 @@ void flash()
 	clear_to_color(edgesbmp,makecol(255,0,255));
 
 	//probably move this somewhere more sensible later.
-	edgeOriginals[0] = load_bitmap("bitmaps/edge0001.bmp",NULL);
-	edgeOriginals[1] = load_bitmap("bitmaps/edge0005.bmp",NULL);
-	edgeOriginals[2] = load_bitmap("bitmaps/edge0010.bmp",NULL);
-	edgeOriginals[3] = load_bitmap("bitmaps/edge0050.bmp",NULL);
-	edgeOriginals[4] = load_bitmap("bitmaps/edge0100.bmp",NULL);
-	edgeOriginals[5] = load_bitmap("bitmaps/edge0200.bmp",NULL);
-	edgeOriginals[6] = load_bitmap("bitmaps/edge0300.bmp",NULL);
-	edgeOriginals[7] = load_bitmap("bitmaps/edge0400.bmp",NULL);
-	edgeOriginals[8] = load_bitmap("bitmaps/edge0500.bmp",NULL);
-	edgeOriginals[9] = load_bitmap("bitmaps/edge0600.bmp",NULL);
-	edgeOriginals[10] = load_bitmap("bitmaps/edge0700.bmp",NULL);
-	edgeOriginals[11] = load_bitmap("bitmaps/edge0800.bmp",NULL);
-	edgeOriginals[12] = load_bitmap("bitmaps/edge0900.bmp",NULL);
-	edgeOriginals[13] = load_bitmap("bitmaps/edge1000.bmp",NULL);
+	edgeOriginals[0] = load_bitmap("bitmaps/edge0001.bmp",nullptr);
+	edgeOriginals[1] = load_bitmap("bitmaps/edge0005.bmp",nullptr);
+	edgeOriginals[2] = load_bitmap("bitmaps/edge0010.bmp",nullptr);
+	edgeOriginals[3] = load_bitmap("bitmaps/edge0050.bmp",nullptr);
+	edgeOriginals[4] = load_bitmap("bitmaps/edge0100.bmp",nullptr);
+	edgeOriginals[5] = load_bitmap("bitmaps/edge0200.bmp",nullptr);
+	edgeOriginals[6] = load_bitmap("bitmaps/edge0300.bmp",nullptr);
+	edgeOriginals[7] = load_bitmap("bitmaps/edge0400.bmp",nullptr);
+	edgeOriginals[8] = load_bitmap("bitmaps/edge0500.bmp",nullptr);
+	edgeOriginals[9] = load_bitmap("bitmaps/edge0600.bmp",nullptr);
+	edgeOriginals[10] = load_bitmap("bitmaps/edge0700.bmp",nullptr);
+	edgeOriginals[11] = load_bitmap("bitmaps/edge0800.bmp",nullptr);
+	edgeOriginals[12] = load_bitmap("bitmaps/edge0900.bmp",nullptr);
+	edgeOriginals[13] = load_bitmap("bitmaps/edge1000.bmp",nullptr);
 
-	arrowOriginals[0] = load_bitmap("bitmaps/arrow0001.bmp",NULL);
-	arrowOriginals[1] = load_bitmap("bitmaps/arrow0005.bmp",NULL);
-	arrowOriginals[2] = load_bitmap("bitmaps/arrow0010.bmp",NULL);
-	arrowOriginals[3] = load_bitmap("bitmaps/arrow0050.bmp",NULL);
-	arrowOriginals[4] = load_bitmap("bitmaps/arrow0100.bmp",NULL);
-	arrowOriginals[5] = load_bitmap("bitmaps/arrow0200.bmp",NULL);
-	arrowOriginals[6] = load_bitmap("bitmaps/arrow0300.bmp",NULL);
-	arrowOriginals[7] = load_bitmap("bitmaps/arrow0400.bmp",NULL);
-	arrowOriginals[8] = load_bitmap("bitmaps/arrow0500.bmp",NULL);
-	arrowOriginals[9] = load_bitmap("bitmaps/arrow0600.bmp",NULL);
-	arrowOriginals[10] = load_bitmap("bitmaps/arrow0700.bmp",NULL);
-	arrowOriginals[11] = load_bitmap("bitmaps/arrow0800.bmp",NULL);
-	arrowOriginals[12] = load_bitmap("bitmaps/arrow0900.bmp",NULL);
-	arrowOriginals[13] = load_bitmap("bitmaps/arrow1000.bmp",NULL);
+	arrowOriginals[0] = load_bitmap("bitmaps/arrow0001.bmp",nullptr);
+	arrowOriginals[1] = load_bitmap("bitmaps/arrow0005.bmp",nullptr);
+	arrowOriginals[2] = load_bitmap("bitmaps/arrow0010.bmp",nullptr);
+	arrowOriginals[3] = load_bitmap("bitmaps/arrow0050.bmp",nullptr);
+	arrowOriginals[4] = load_bitmap("bitmaps/arrow0100.bmp",nullptr);
+	arrowOriginals[5] = load_bitmap("bitmaps/arrow0200.bmp",nullptr);
+	arrowOriginals[6] = load_bitmap("bitmaps/arrow0300.bmp",nullptr);
+	arrowOriginals[7] = load_bitmap("bitmaps/arrow0400.bmp",nullptr);
+	arrowOriginals[8] = load_bitmap("bitmaps/arrow0500.bmp",nullptr);
+	arrowOriginals[9] = load_bitmap("bitmaps/arrow0600.bmp",nullptr);
+	arrowOriginals[10] = load_bitmap("bitmaps/arrow0700.bmp",nullptr);
+	arrowOriginals[11] = load_bitmap("bitmaps/arrow0800.bmp",nullptr);
+	arrowOriginals[12] = load_bitmap("bitmaps/arrow0900.bmp",nullptr);
+	arrowOriginals[13] = load_bitmap("bitmaps/arrow1000.bmp",nullptr);
 
-	tailOriginals[0] = load_bitmap("bitmaps/tail0001.bmp",NULL);
-	tailOriginals[1] = load_bitmap("bitmaps/tail0005.bmp",NULL);
-	tailOriginals[2] = load_bitmap("bitmaps/tail0010.bmp",NULL);
-	tailOriginals[3] = load_bitmap("bitmaps/tail0050.bmp",NULL);
-	tailOriginals[4] = load_bitmap("bitmaps/tail0100.bmp",NULL);
-	tailOriginals[5] = load_bitmap("bitmaps/tail0200.bmp",NULL);
-	tailOriginals[6] = load_bitmap("bitmaps/tail0300.bmp",NULL);
-	tailOriginals[7] = load_bitmap("bitmaps/tail0400.bmp",NULL);
-	tailOriginals[8] = load_bitmap("bitmaps/tail0500.bmp",NULL);
-	tailOriginals[9] = load_bitmap("bitmaps/tail0600.bmp",NULL);
-	tailOriginals[10] = load_bitmap("bitmaps/tail0700.bmp",NULL);
-	tailOriginals[11] = load_bitmap("bitmaps/tail0800.bmp",NULL);
-	tailOriginals[12] = load_bitmap("bitmaps/tail0900.bmp",NULL);
-	tailOriginals[13] = load_bitmap("bitmaps/tail1000.bmp",NULL);
+	tailOriginals[0] = load_bitmap("bitmaps/tail0001.bmp",nullptr);
+	tailOriginals[1] = load_bitmap("bitmaps/tail0005.bmp",nullptr);
+	tailOriginals[2] = load_bitmap("bitmaps/tail0010.bmp",nullptr);
+	tailOriginals[3] = load_bitmap("bitmaps/tail0050.bmp",nullptr);
+	tailOriginals[4] = load_bitmap("bitmaps/tail0100.bmp",nullptr);
+	tailOriginals[5] = load_bitmap("bitmaps/tail0200.bmp",nullptr);
+	tailOriginals[6] = load_bitmap("bitmaps/tail0300.bmp",nullptr);
+	tailOriginals[7] = load_bitmap("bitmaps/tail0400.bmp",nullptr);
+	tailOriginals[8] = load_bitmap("bitmaps/tail0500.bmp",nullptr);
+	tailOriginals[9] = load_bitmap("bitmaps/tail0600.bmp",nullptr);
+	tailOriginals[10] = load_bitmap("bitmaps/tail0700.bmp",nullptr);
+	tailOriginals[11] = load_bitmap("bitmaps/tail0800.bmp",nullptr);
+	tailOriginals[12] = load_bitmap("bitmaps/tail0900.bmp",nullptr);
+	tailOriginals[13] = load_bitmap("bitmaps/tail1000.bmp",nullptr);
 
 	initialize_topbuttons();
 	initialize_graphbuttons();	
@@ -1221,68 +1221,68 @@ void flash()
 void initialize_topbuttons()
 {
 	int xplace = 0;
-	topbutton[0] = load_bitmap("bitmaps/buttonlogo.bmp",NULL);
+	topbutton[0] = load_bitmap("bitmaps/buttonlogo.bmp",nullptr);
 	blit(topbutton[0], topbuttons, 0,0,xplace,0,topbutton[0]->w,topbutton[0]->h);
 	xplace += topbutton[0]->w;
 
-	topbutton[1] = load_bitmap("bitmaps/buttonspans.bmp",NULL);
+	topbutton[1] = load_bitmap("bitmaps/buttonspans.bmp",nullptr);
 	blit(topbutton[1], topbuttons, 0,0,xplace,0,topbutton[1]->w,topbutton[1]->h);
 	xplace += topbutton[1]->w;
 
-	topbutton[2] = load_bitmap("bitmaps/buttonmax.bmp",NULL);
+	topbutton[2] = load_bitmap("bitmaps/buttonmax.bmp",nullptr);
 	blit(topbutton[2], topbuttons, 0,0,xplace,0,topbutton[2]->w,topbutton[2]->h);
 	xplace += topbutton[2]->w;
 
-	topbutton[3] = load_bitmap("bitmaps/buttonavg.bmp",NULL);
+	topbutton[3] = load_bitmap("bitmaps/buttonavg.bmp",nullptr);
 	blit(topbutton[3], topbuttons, 0,0,xplace,0,topbutton[3]->w,topbutton[3]->h);
 	xplace += topbutton[3]->w;
 
-	topbutton[4] = load_bitmap("bitmaps/buttonindexes.bmp",NULL);
+	topbutton[4] = load_bitmap("bitmaps/buttonindexes.bmp",nullptr);
 	blit(topbutton[4], topbuttons, 0,0,xplace,0,topbutton[4]->w,topbutton[4]->h);
 	xplace += topbutton[4]->w;
 
-	topbutton[5] = load_bitmap("bitmaps/buttonwks.bmp",NULL);
+	topbutton[5] = load_bitmap("bitmaps/buttonwks.bmp",nullptr);
 	blit(topbutton[5], topbuttons, 0,0,xplace,0,topbutton[5]->w,topbutton[5]->h);
 	xplace += topbutton[5]->w;
 
-	topbutton[6] = load_bitmap("bitmaps/buttonfailsrc.bmp",NULL);
+	topbutton[6] = load_bitmap("bitmaps/buttonfailsrc.bmp",nullptr);
 	blit(topbutton[6], topbuttons, 0,0,xplace,0,topbutton[6]->w,topbutton[6]->h);
 	xplace += topbutton[6]->w;
 
-	topbutton[7] = load_bitmap("bitmaps/buttonfaildest.bmp",NULL);
+	topbutton[7] = load_bitmap("bitmaps/buttonfaildest.bmp",nullptr);
 	blit(topbutton[7], topbuttons, 0,0,xplace,0,topbutton[7]->w,topbutton[7]->h);
 	xplace += topbutton[7]->w;
 
-	topbutton[8] = load_bitmap("bitmaps/buttonkey.bmp",NULL);
+	topbutton[8] = load_bitmap("bitmaps/buttonkey.bmp",nullptr);
 	blit(topbutton[8], topbuttons, 0,0,xplace,0,topbutton[8]->w,topbutton[8]->h);
 	xplace += topbutton[8]->w;
 
-	topbutton[9] = load_bitmap("bitmaps/buttontopstretch.bmp",NULL);
+	topbutton[9] = load_bitmap("bitmaps/buttontopstretch.bmp",nullptr);
 	stretch_blit(topbutton[9], topbuttons, 0,0,topbutton[9]->w,topbutton[9]->h,xplace,0,SCRNWID-xplace,topbutton[9]->h);
 
-	topbuttonpress[0] = load_bitmap("bitmaps/buttonlogopress.bmp",NULL);
-	topbuttonpress[1] = load_bitmap("bitmaps/buttonspanspress.bmp",NULL);
-	topbuttonpress[2] = load_bitmap("bitmaps/buttonmaxpress.bmp",NULL);
-	topbuttonpress[3] = load_bitmap("bitmaps/buttonavgpress.bmp",NULL);
-	topbuttonpress[4] = load_bitmap("bitmaps/buttonindexespress.bmp",NULL);
-	topbuttonpress[5] = load_bitmap("bitmaps/buttonwkspress.bmp",NULL);
-	topbuttonpress[6] = load_bitmap("bitmaps/buttonfailsrcpress.bmp",NULL);
-	topbuttonpress[7] = load_bitmap("bitmaps/buttonfaildestpress.bmp",NULL);
-	topbuttonpress[8] = load_bitmap("bitmaps/buttonkeypress.bmp",NULL);
+	topbuttonpress[0] = load_bitmap("bitmaps/buttonlogopress.bmp",nullptr);
+	topbuttonpress[1] = load_bitmap("bitmaps/buttonspanspress.bmp",nullptr);
+	topbuttonpress[2] = load_bitmap("bitmaps/buttonmaxpress.bmp",nullptr);
+	topbuttonpress[3] = load_bitmap("bitmaps/buttonavgpress.bmp",nullptr);
+	topbuttonpress[4] = load_bitmap("bitmaps/buttonindexespress.bmp",nullptr);
+	topbuttonpress[5] = load_bitmap("bitmaps/buttonwkspress.bmp",nullptr);
+	topbuttonpress[6] = load_bitmap("bitmaps/buttonfailsrcpress.bmp",nullptr);
+	topbuttonpress[7] = load_bitmap("bitmaps/buttonfaildestpress.bmp",nullptr);
+	topbuttonpress[8] = load_bitmap("bitmaps/buttonkeypress.bmp",nullptr);
 
-	menubutton[0] = load_bitmap("bitmaps/menurun.bmp",NULL);
-	menubuttonover[0] = load_bitmap("bitmaps/menurunover.bmp",NULL);
-	menubutton[1] = load_bitmap("bitmaps/menuload.bmp",NULL);
-	menubuttonover[1] = load_bitmap("bitmaps/menuloadover.bmp",NULL);
-	menubutton[2] = load_bitmap("bitmaps/menubuild.bmp",NULL);
-	menubuttonover[2] = load_bitmap("bitmaps/menubuildover.bmp",NULL);
-	menubutton[3] = load_bitmap("bitmaps/menuedit.bmp",NULL);
-	menubuttonover[3] = load_bitmap("bitmaps/menueditover.bmp",NULL);
-	menubutton[4] = load_bitmap("bitmaps/menuexit.bmp",NULL);
-	menubuttonover[4] = load_bitmap("bitmaps/menuexitover.bmp",NULL);
+	menubutton[0] = load_bitmap("bitmaps/menurun.bmp",nullptr);
+	menubuttonover[0] = load_bitmap("bitmaps/menurunover.bmp",nullptr);
+	menubutton[1] = load_bitmap("bitmaps/menuload.bmp",nullptr);
+	menubuttonover[1] = load_bitmap("bitmaps/menuloadover.bmp",nullptr);
+	menubutton[2] = load_bitmap("bitmaps/menubuild.bmp",nullptr);
+	menubuttonover[2] = load_bitmap("bitmaps/menubuildover.bmp",nullptr);
+	menubutton[3] = load_bitmap("bitmaps/menuedit.bmp",nullptr);
+	menubuttonover[3] = load_bitmap("bitmaps/menueditover.bmp",nullptr);
+	menubutton[4] = load_bitmap("bitmaps/menuexit.bmp",nullptr);
+	menubuttonover[4] = load_bitmap("bitmaps/menuexitover.bmp",nullptr);
 
-	topomenuover[0] = load_bitmap("bitmaps/topobuildnewpress.bmp",NULL);
-	topomenuover[1] = load_bitmap("bitmaps/topoeditexistingpress.bmp",NULL);
+	topomenuover[0] = load_bitmap("bitmaps/topobuildnewpress.bmp",nullptr);
+	topomenuover[1] = load_bitmap("bitmaps/topoeditexistingpress.bmp",nullptr);
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -1294,36 +1294,36 @@ void initialize_topbuttons()
 void initialize_topobuttons()
 {
 	int xplace = 0;
-	topobutton[0] = load_bitmap("bitmaps/buttonlogo.bmp",NULL);
+	topobutton[0] = load_bitmap("bitmaps/buttonlogo.bmp",nullptr);
 	blit(topobutton[0], topbuttons, 0,0,xplace,0,topobutton[0]->w,topobutton[0]->h);
 	xplace += topobutton[0]->w;
 	
-	topobutton[1] = load_bitmap("bitmaps/buttonplacerouter.bmp",NULL);
-	topobuttonover[0] = load_bitmap("bitmaps/buttonplacerouterover.bmp",NULL);
+	topobutton[1] = load_bitmap("bitmaps/buttonplacerouter.bmp",nullptr);
+	topobuttonover[0] = load_bitmap("bitmaps/buttonplacerouterover.bmp",nullptr);
 	blit(topobutton[1], topbuttons, 0,0,xplace,0,topobutton[1]->w,topobutton[1]->h);
 	xplace += topobutton[1]->w;
 
-	topobutton[2] = load_bitmap("bitmaps/buttonplaceedge.bmp",NULL);
-	topobuttonover[1] = load_bitmap("bitmaps/buttonplaceedgeover.bmp",NULL);
+	topobutton[2] = load_bitmap("bitmaps/buttonplaceedge.bmp",nullptr);
+	topobuttonover[1] = load_bitmap("bitmaps/buttonplaceedgeover.bmp",nullptr);
 	blit(topobutton[2], topbuttons, 0,0,xplace,0,topobutton[2]->w,topobutton[2]->h);
 	xplace += topobutton[2]->w;
 
-	topobutton[3] = load_bitmap("bitmaps/buttonmoverouter.bmp",NULL);
-	topobuttonover[2] = load_bitmap("bitmaps/buttonmoverouterover.bmp",NULL);
+	topobutton[3] = load_bitmap("bitmaps/buttonmoverouter.bmp",nullptr);
+	topobuttonover[2] = load_bitmap("bitmaps/buttonmoverouterover.bmp",nullptr);
 	blit(topobutton[3], topbuttons, 0,0,xplace,0,topobutton[3]->w,topobutton[3]->h);
 	xplace += topobutton[3]->w;
 
-	topobutton[4] = load_bitmap("bitmaps/buttoneditrouter.bmp",NULL);
-	topobuttonover[3] = load_bitmap("bitmaps/buttoneditrouterover.bmp",NULL);
+	topobutton[4] = load_bitmap("bitmaps/buttoneditrouter.bmp",nullptr);
+	topobuttonover[3] = load_bitmap("bitmaps/buttoneditrouterover.bmp",nullptr);
 	blit(topobutton[4], topbuttons, 0,0,xplace,0,topobutton[4]->w,topobutton[4]->h);
 	xplace += topobutton[4]->w;
 
-	topobutton[5] = load_bitmap("bitmaps/buttoneditedge.bmp",NULL);
-	topobuttonover[4] = load_bitmap("bitmaps/buttoneditedgeover.bmp",NULL);
+	topobutton[5] = load_bitmap("bitmaps/buttoneditedge.bmp",nullptr);
+	topobuttonover[4] = load_bitmap("bitmaps/buttoneditedgeover.bmp",nullptr);
 	blit(topobutton[5], topbuttons, 0,0,xplace,0,topobutton[5]->w,topobutton[5]->h);
 	xplace += topobutton[5]->w;
 
-	topobutton[6] = load_bitmap("bitmaps/buttontopstretch.bmp",NULL);
+	topobutton[6] = load_bitmap("bitmaps/buttontopstretch.bmp",nullptr);
 	stretch_blit(topobutton[6], topbuttons, 0,0,topobutton[6]->w,topobutton[6]->h,xplace,0,SCRNWID-xplace,topobutton[6]->h);
 }
 
@@ -1336,37 +1336,37 @@ void initialize_topobuttons()
 void initialize_graphbuttons()
 {
 	int xplace = 0;
-	graphbutton[0] = load_bitmap("bitmaps/buttonleft.bmp",NULL);
+	graphbutton[0] = load_bitmap("bitmaps/buttonleft.bmp",nullptr);
 	blit(graphbutton[0], graphbuttons, 0,0,xplace,0,graphbutton[0]->w,graphbutton[0]->h);
 	xplace += graphbutton[0]->w;
-	graphbutton[1] = load_bitmap("bitmaps/buttonright.bmp",NULL);
+	graphbutton[1] = load_bitmap("bitmaps/buttonright.bmp",nullptr);
 	blit(graphbutton[1], graphbuttons, 0,0,xplace,0,graphbutton[1]->w,graphbutton[1]->h);
 	xplace += graphbutton[1]->w;
-	graphbutton[2] = load_bitmap("bitmaps/buttonpointer.bmp",NULL);
+	graphbutton[2] = load_bitmap("bitmaps/buttonpointer.bmp",nullptr);
 	blit(graphbutton[2], graphbuttons, 0,0,xplace,0,graphbutton[2]->w,graphbutton[2]->h);
 	xplace += graphbutton[2]->w;
-	graphbutton[3] = load_bitmap("bitmaps/buttonzoomin.bmp",NULL);
+	graphbutton[3] = load_bitmap("bitmaps/buttonzoomin.bmp",nullptr);
 	blit(graphbutton[3], graphbuttons, 0,0,xplace,0,graphbutton[3]->w,graphbutton[3]->h);
 	xplace += graphbutton[3]->w;
-	graphbutton[4] = load_bitmap("bitmaps/buttonzoomout.bmp",NULL);
+	graphbutton[4] = load_bitmap("bitmaps/buttonzoomout.bmp",nullptr);
 	blit(graphbutton[4], graphbuttons, 0,0,xplace,0,graphbutton[4]->w,graphbutton[4]->h);
 	xplace += graphbutton[4]->w;
-	graphbutton[5] = load_bitmap("bitmaps/buttonzoomw.bmp",NULL);
+	graphbutton[5] = load_bitmap("bitmaps/buttonzoomw.bmp",nullptr);
 	blit(graphbutton[5], graphbuttons, 0,0,xplace,0,graphbutton[5]->w,graphbutton[5]->h);
 	xplace += graphbutton[5]->w;
-	graphbutton[6] = load_bitmap("bitmaps/buttonmove.bmp",NULL);
+	graphbutton[6] = load_bitmap("bitmaps/buttonmove.bmp",nullptr);
 	blit(graphbutton[6], graphbuttons, 0,0,xplace,0,graphbutton[6]->w,graphbutton[6]->h);
 	xplace += graphbutton[6]->w;
-	graphbutton[7] = load_bitmap("bitmaps/buttonstretch.bmp",NULL);
+	graphbutton[7] = load_bitmap("bitmaps/buttonstretch.bmp",nullptr);
 	stretch_blit(graphbutton[7], graphbuttons, 0,0,graphbutton[7]->w,graphbutton[7]->h,xplace,0,SCRNWID-xplace,graphbutton[7]->h);
 
-	graphbuttonpress[0] = load_bitmap("bitmaps/buttonleftpress.bmp",NULL);
-	graphbuttonpress[1] = load_bitmap("bitmaps/buttonrightpress.bmp",NULL);
-	graphbuttonpress[2] = load_bitmap("bitmaps/buttonpointerpress.bmp",NULL);
-	graphbuttonpress[3] = load_bitmap("bitmaps/buttonzoominpress.bmp",NULL);
-	graphbuttonpress[4] = load_bitmap("bitmaps/buttonzoomoutpress.bmp",NULL);
-	graphbuttonpress[5] = load_bitmap("bitmaps/buttonzoomwpress.bmp",NULL);
-	graphbuttonpress[6] = load_bitmap("bitmaps/buttonmovepress.bmp",NULL);
+	graphbuttonpress[0] = load_bitmap("bitmaps/buttonleftpress.bmp",nullptr);
+	graphbuttonpress[1] = load_bitmap("bitmaps/buttonrightpress.bmp",nullptr);
+	graphbuttonpress[2] = load_bitmap("bitmaps/buttonpointerpress.bmp",nullptr);
+	graphbuttonpress[3] = load_bitmap("bitmaps/buttonzoominpress.bmp",nullptr);
+	graphbuttonpress[4] = load_bitmap("bitmaps/buttonzoomoutpress.bmp",nullptr);
+	graphbuttonpress[5] = load_bitmap("bitmaps/buttonzoomwpress.bmp",nullptr);
+	graphbuttonpress[6] = load_bitmap("bitmaps/buttonmovepress.bmp",nullptr);
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -2066,7 +2066,7 @@ void userLoadPrevSim(int argc, const char* argv[])
 						sprintf(buffer,"%s/%s.thd",directory1,directory.c_str());
 					}
 					fileCheck = fopen( buffer, "r" );
-					if ( fileCheck == NULL)
+					if ( fileCheck == nullptr)
 					{
 						textprintf_ex(screen,font,100,result*spcng + printHdSt,black,green,"Directory Not Found");
 						directories.erase(directories.begin()+ result);

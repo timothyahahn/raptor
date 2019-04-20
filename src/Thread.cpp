@@ -1482,7 +1482,7 @@ float Thread::getKthParameterFloat(char* f)
 			if(t == runCount)
 				retVal = atof(token);
 
-			token = strtok(NULL,",");
+			token = strtok(nullptr,",");
 
 			if(t > maxRunCount)
 				maxRunCount = t;
@@ -1518,7 +1518,7 @@ int Thread::getKthParameterInt(char* f)
 				retVal = atoi(f);
 
 			++t;
-			token = strtok(NULL,",");
+			token = strtok(nullptr,",");
 
 			if(t > maxRunCount)
 				maxRunCount = t;
@@ -1552,7 +1552,7 @@ void Thread::setQualityParameters(const char* f)
 		char *value;
 		
 		param = strtok(buffer,"=");
-		value = strtok(NULL,"\t");
+		value = strtok(nullptr,"\t");
 
 		if(strcmp(param,"arrival_interval") == 0)
 		{
@@ -1851,8 +1851,8 @@ void Thread::setTopologyParameters(const char * f)
 			r->setIndex(numberOfRouters);
 
 #ifdef RUN_GUI
-			r->setXPercent(atoi(strtok(NULL,",")));
-			r->setYPercent(atoi(strtok(NULL,",")));
+			r->setXPercent(atoi(strtok(nullptr,",")));
+			r->setYPercent(atoi(strtok(nullptr,",")));
 #endif
 			addRouter(r);
 
@@ -1860,9 +1860,9 @@ void Thread::setTopologyParameters(const char * f)
 		}
 		else if(strcmp(param,"Edge") == 0)
 		{
-			unsigned short int from = atoi(strtok(NULL,","));
-			unsigned short int to = atoi(strtok(NULL,","));
-			unsigned short int spans = atoi(strtok(NULL,","));
+			unsigned short int from = atoi(strtok(nullptr,","));
+			unsigned short int to = atoi(strtok(nullptr,","));
+			unsigned short int spans = atoi(strtok(nullptr,","));
 
 			Edge* e1 = new Edge(from,to,spans);
 			Edge* e2 = new Edge(to,from,spans);
@@ -1927,7 +1927,7 @@ void Thread::setWorkstationParameters(const char * f)
 		char *traffic;
 
 		param = strtok(buffer,"=");
-		parent = strtok(NULL," ,\t");
+		parent = strtok(nullptr," ,\t");
 
 		if(strcmp(param,"NumberOfWorkstations") == 0)
 			numberOfWorkstations = atoi(parent);
@@ -1943,8 +1943,8 @@ void Thread::setWorkstationParameters(const char * f)
 			Workstation* w = new Workstation();
 
 			param = strtok(buffer,"=");
-			parent = strtok(NULL," ,\t");
-			traffic = strtok(NULL," ,\t");
+			parent = strtok(nullptr," ,\t");
+			traffic = strtok(nullptr," ,\t");
 
 			if(strcmp(param,"Workstation") == 0)
 			{
@@ -2026,10 +2026,10 @@ void Thread::setAlgorithmParameters(const char * f, unsigned short int iteration
 	while(inFile.getline(buffer,199))
 	{
 		char *ra = strtok(buffer,",") + strlen("RA=") * sizeof(char);
-		char *wa = strtok(NULL,",") + strlen("WA=") * sizeof(char);
-		char *ps = strtok(NULL,",") + strlen("PS=") * sizeof(char);
-		char *qa = strtok(NULL,",") + strlen("QA=") * sizeof(char);
-		char *run = strtok(NULL,",") + strlen("RUN=") * sizeof(char);
+		char *wa = strtok(nullptr,",") + strlen("WA=") * sizeof(char);
+		char *ps = strtok(nullptr,",") + strlen("PS=") * sizeof(char);
+		char *qa = strtok(nullptr,",") + strlen("QA=") * sizeof(char);
+		char *run = strtok(nullptr,",") + strlen("RUN=") * sizeof(char);
 
 		int i_qa = std::stoi(qa);
 		int i_run = std::stoi(run);

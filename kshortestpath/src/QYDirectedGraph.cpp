@@ -95,7 +95,7 @@ CQYDirectedGraph& CQYDirectedGraph::operator=( const CQYDirectedGraph& rGraph )
 
 CQYDirectedGraph::~CQYDirectedGraph()
 {
-	if (m_pDirectedEdges != NULL)
+	if (m_pDirectedEdges != nullptr)
 	{
 		delete m_pDirectedEdges;
 	}

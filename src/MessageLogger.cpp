@@ -35,9 +35,9 @@ extern Thread** threads;
 ///////////////////////////////////////////////////////////////////
 MessageLogger::MessageLogger(const char* topo, const char* lambda, const char* seed, const char* k,int runCount)
 {
-	pthread_mutex_init(&LogMutex,NULL);
-	pthread_mutex_init(&PrintMutex,NULL);
-	pthread_mutex_init(&ResultsMutex,NULL);
+	pthread_mutex_init(&LogMutex,nullptr);
+	pthread_mutex_init(&PrintMutex,nullptr);
+	pthread_mutex_init(&ResultsMutex,nullptr);
 
 	std::ostringstream buffer;
 	buffer << "output/EventLog-" << topo << "-" << lambda << "-" << seed << "-" << k << "-" << runCount << std::endl;

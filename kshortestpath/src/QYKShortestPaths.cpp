@@ -38,8 +38,8 @@
 CQYKShortestPaths::CQYKShortestPaths( const CQYDirectedGraph& rGraph, int nSource, int nTerminal, int nTopk )
 	: m_rGraph(rGraph), m_nSourceNodeId(nSource), m_nTargetNodeId(nTerminal), m_nTopK(nTopk)
 {
-	m_pIntermediateGraph = NULL;
-	m_pShortestPath4IntermediateGraph = NULL;
+	m_pIntermediateGraph = nullptr;
+	m_pShortestPath4IntermediateGraph = nullptr;
 }
 
 CQYKShortestPaths::~CQYKShortestPaths()
@@ -54,7 +54,7 @@ CQYKShortestPaths::~CQYKShortestPaths()
 		delete *pos;
 	}
 	//
-	if (m_pShortestPath4IntermediateGraph != NULL)
+	if (m_pShortestPath4IntermediateGraph != nullptr)
 	{
 		delete m_pShortestPath4IntermediateGraph;
 	}
@@ -173,7 +173,7 @@ void CQYKShortestPaths::_DetermineCost2Target(std::vector<int> vertices_list, in
 
 	// second: run the shortest paths algorithm, but with the target as m_nSource.
 	// run the shortest paths algorithm to get the cost of each nodes in the rest of the graph
-	if (m_pShortestPath4IntermediateGraph != NULL)
+	if (m_pShortestPath4IntermediateGraph != nullptr)
 	{
 		delete m_pShortestPath4IntermediateGraph;
 	}
