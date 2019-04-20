@@ -23,8 +23,6 @@
 #define HAVE_STRUCT_TIMESPEC
 #include "pthread.h"
 
-#include "RaptorTime.h"
-
 #include <cstdio>
 #include <fstream>
 #include <iostream>

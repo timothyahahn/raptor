@@ -403,6 +403,10 @@ class Thread
 		int maxRunCount;
 
 		const char* topology;
+
+		static const double TEN_HOURS;
+
+		static const double SPEED_OF_LIGHT;
 };
 
 #endif

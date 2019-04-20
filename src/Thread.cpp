@@ -40,6 +40,10 @@ extern unsigned int threadCount;
 
 extern vector<AlgorithmToRun*> algParams;
 
+const double Thread::TEN_HOURS = 10.0 * 60.0 * 60.0;
+
+const double Thread::SPEED_OF_LIGHT = double(299792458);
+
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	Thread
