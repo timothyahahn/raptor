@@ -90,7 +90,7 @@ class Edge
 		inline float getQMDegredation()
 			{ return QMDegredation; };
 
-		inline float getPheremone()
+		inline double getPheremone()
 			{ return pheremone; };
 		 void resetPheremone(unsigned int ci, unsigned int spans);
 
@@ -151,7 +151,7 @@ private:
 #endif
 		EdgeStats *stats;
 
-		float pheremone;
+		double pheremone;
 };
 
 #endif

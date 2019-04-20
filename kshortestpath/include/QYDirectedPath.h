@@ -37,12 +37,17 @@
 #include <fstream>
 #include <algorithm>
 
-class CQYDirectedPath  
-{		
+
+class CQYDirectedPath
+{
 public:
-	CQYDirectedPath(){};
+	CQYDirectedPath()
+	: m_nId(0), m_nLength(0), m_dCost(0), m_nSourceNodeId(0), m_nTerminalNodeId(0)
+	{
+	}
+
 	CQYDirectedPath(int pId, double pCost, const std::vector<int>& pVertexList)
-		:m_nId(pId), m_dCost(pCost)
+		:m_nId(pId), m_nLength(0), m_dCost(pCost), m_nSourceNodeId(0), m_nTerminalNodeId(0)
 	{
 		m_vVertexList.assign(pVertexList.begin(), pVertexList.end());
 	}
@@ -85,8 +90,6 @@ private: // members
 	// intermediate variables
 	int m_nSourceNodeId;
 	int m_nTerminalNodeId;
-
-		
 
 public:
 	//// Comparator for paths: the smaller path has less cost.
