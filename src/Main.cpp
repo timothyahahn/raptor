@@ -206,9 +206,9 @@ void runSimulation(int argc, const char* argv[])
 			thread->initResourceManager();
 		}
 
-		char buffer[25];
-		sprintf(buffer,"Created %d threads.\n",threadCount);
-		threadZero->recordEvent(buffer,true,0);
+		std::ostringstream buffer;
+		buffer << "Created " << threadCount << " threads " << std::endl;
+		threadZero->recordEvent(buffer.str(),true,0);
 
 		for(unsigned short int t = 1; t < threadCount; ++t)
 		{

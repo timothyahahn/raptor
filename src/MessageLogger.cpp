@@ -39,10 +39,10 @@ MessageLogger::MessageLogger(const char* topo, const char* lambda, const char* s
 	pthread_mutex_init(&PrintMutex,NULL);
 	pthread_mutex_init(&ResultsMutex,NULL);
 
-	char buffer[100];
-	sprintf(buffer,"output/EventLog-%s-%s-%s-%s-R%d.txt",topo,lambda,seed,k,runCount);
+	std::ostringstream buffer;
+	buffer << "output/EventLog-" << topo << "-" << lambda << "-" << seed << "-" << k << "-" << runCount << std::endl;
 
-	eventLogger.open(buffer);
+	eventLogger.open(buffer.str());
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -77,17 +77,17 @@ void MessageLogger::recordEvent(const std::string &e, bool print, unsigned short
 
 	pthread_mutex_lock(&LogMutex);
 
-	struct tm *current;
+	struct tm current;
 	time_t now;
 
 	time(&now);
-	current = localtime(&now);
+	localtime_s(&current,&now);
 
 	std::ostringstream message;
 
 	char buff[25];
 
-	strftime(buff, sizeof(buff), "%H:%M:%S", current);
+	strftime(buff, sizeof(buff), "%H:%M:%S", &current);
 
 	message << buff << " [] " << e << std::endl;
 
