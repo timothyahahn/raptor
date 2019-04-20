@@ -692,6 +692,8 @@ void Thread::deactivate_workstations()
 	sprintf(buffer,"***********************************************\n");
 	threadZero->recordEvent(buffer,true,controllerIndex);
 
+	threadZero->flushLog(true);
+
 	threadZero->getLogger()->UnlockResultsMutex();
 
 	for(unsigned int r1 = 0; r1 < getNumberOfRouters(); ++r1)

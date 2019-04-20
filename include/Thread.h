@@ -110,6 +110,16 @@ class Thread
 				exit(ERROR_RECORD_EVENT);
 		};
 
+		inline  void flushLog(bool print)
+		{
+			if (isLoadPrevious == true)
+				return;
+			else if (controllerIndex == 0)
+				logger->flushLog(print);
+			else
+				exit(ERROR_NO_FLUSH);
+		}
+
 		inline unsigned int getNumberOfRouters()
 			{ return numberOfRouters; };
 		inline unsigned int getNumberOfWorkstations()

@@ -104,10 +104,28 @@ void MessageLogger::recordEvent(const std::string &e, bool print, unsigned int c
 	{
 		pthread_mutex_lock(&PrintMutex);
 
-		cout << message.str();
+		std::cout << message.str();
 
 		pthread_mutex_unlock(&PrintMutex);
 	}
 
 	delete current;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// Function Name:	flushLog
+// Description:		Flushes the log
+//
+///////////////////////////////////////////////////////////////////
+void MessageLogger::flushLog(bool print)
+{
+	if (print == true)
+	{
+		pthread_mutex_lock(&PrintMutex);
+
+		std::cout << std::flush;
+
+		pthread_mutex_unlock(&PrintMutex);
+	}
 }

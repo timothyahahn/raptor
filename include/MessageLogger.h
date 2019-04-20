@@ -36,6 +36,8 @@ class MessageLogger
 
 		void recordEvent(const std::string &e, bool print, unsigned int ci);
 
+		void flushLog(bool print);
+
 		inline void LockResultsMutex()
 			{ pthread_mutex_lock(&ResultsMutex); };
 
