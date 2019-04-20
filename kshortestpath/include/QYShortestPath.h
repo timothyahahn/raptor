@@ -13,6 +13,8 @@
 //  Revision History:
 //
 //  11/23/2006   Yan   Initial Version
+//  04/19/2019   Hahn  Modern OS/Compiler Changes
+
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Copyright Notice:

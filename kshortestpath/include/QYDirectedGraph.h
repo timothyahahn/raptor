@@ -13,6 +13,7 @@
 //
 //  11/21/2006   Yan   Initial Version
 //  01/11/2007   Yan   Modified Version: correct the way to calculate the number of edges in the graph. 
+//  04/19/2019   Hahn  Modern OS/Compiler Changes
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Copyright Notice:

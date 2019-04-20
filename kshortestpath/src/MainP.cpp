@@ -1,3 +1,31 @@
+// ____________________________________________________________________________
+//
+//  General Information:
+//
+//  File Name:      QYDirectedGraph.cpp
+//  Author:         Timothy Hahn
+//  Project:        KShortestPath
+//
+//  Description:    Implementation of class(es) CQYDirectedGraph
+//
+//  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//  Revision History:
+//
+//  04/19/2019   Hahn  Modern OS/Compiler Changes
+//
+//  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//  Copyright Notice:
+//
+//  Copyright (c) 2006 Your Company Inc.
+//
+//  Warning: This computer program is protected by copyright law and 
+//  international treaties.  Unauthorized reproduction or distribution
+//  of this program, or any portion of it, may result in severe civil and
+//  criminal penalties, and will be prosecuted to the maximum extent 
+//  possible under the law.
+//
+// ____________________________________________________________________________
+
 #include "QYShortestPath.h"
 #include "QYKShortestPaths.h"
 #include "QYInclude.h"
