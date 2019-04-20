@@ -48,7 +48,7 @@ extern BITMAP *routersbmp;//take this out later.
 
 extern Thread* threadZero;
 extern Thread** threads;
-extern vector<Router*> topoRouters;
+extern std::vector<Router*> topoRouters;
 
 ///////////////////////////////////////////////////////////////////
 //

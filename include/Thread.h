@@ -33,10 +33,6 @@
 #include <string>
 #include <vector>
 
-using std::less;
-using std::priority_queue;
-using std::vector;
-
 #include "AlgorithmParameters.h"
 #include "EstablishedConnections.h"
 #include "ErrorCodes.h"
@@ -49,18 +45,6 @@ using std::vector;
 #include "Workstation.h"
 
 #include "boost/random.hpp"
-
-using std::ifstream;
-using std::cout;
-using std::endl;
-using std::ofstream;
-using std::left;
-using std::priority_queue;
-using std::string;
-using std::vector;
-
-const int COMPLETED_ALL_SIMULATIONS = 2;
-const int MORE_SIMULATIONS = 1;
 
 class Thread
 {
@@ -100,7 +84,7 @@ class Thread
 		inline QualityParameters getQualityParams()
 			{ return qualityParams; };
 
-		inline void recordEvent(const string &s, bool print, unsigned int ci)
+		inline void recordEvent(const std::string& s, bool print, unsigned int ci)
 		{
 			if(isLoadPrevious == true)
 				return;
@@ -159,11 +143,11 @@ class Thread
 		void setMinDuration(unsigned int spans);
 		void setQFactorMin(unsigned int spans);
 
-		inline const string* getRoutingAlgorithmName(unsigned int a)
+		inline const std::string* getRoutingAlgorithmName(unsigned int a)
 			{ return RoutingAlgorithmNames[a]; };
-		inline const string* getWavelengthAlgorithmName(unsigned int w)
+		inline const std::string* getWavelengthAlgorithmName(unsigned int w)
 			{ return WavelengthAlgorithmNames[w]; };
-		inline const string* getProbeStyleName(unsigned int p)
+		inline const std::string* getProbeStyleName(unsigned int p)
 			{ return ProbeStyleNames[p]; };
 
 #ifdef RUN_GUI
@@ -271,9 +255,12 @@ class Thread
 		inline MessageLogger* getLogger()
 			{ return logger; };
 
+		static const int MORE_SIMULATIONS;
+		static const int COMPLETED_ALL_SIMULATIONS;
+
 	private:
-		vector<Router*> routers;
-		vector<Workstation*> workstations;
+		std::vector<Router*> routers;
+		std::vector<Workstation*> workstations;
 
 		void setTopologyParameters(const char* f);
 		void setWorkstationParameters(const char* f);
@@ -286,9 +273,9 @@ class Thread
 
 		ResourceManager* rm;
 
-		const string* RoutingAlgorithmNames[NUMBER_OF_ROUTING_ALGORITHMS];
-		const string* WavelengthAlgorithmNames[NUMBER_OF_WAVELENGTH_ALGORITHMS];
-		const string* ProbeStyleNames[NUMBER_OF_PROBE_STYLES];
+		const std::string* RoutingAlgorithmNames[NUMBER_OF_ROUTING_ALGORITHMS];
+		const std::string* WavelengthAlgorithmNames[NUMBER_OF_WAVELENGTH_ALGORITHMS];
+		const std::string* ProbeStyleNames[NUMBER_OF_PROBE_STYLES];
 
 		void setAlgorithmParameters(const char* f, unsigned int iterationCount);
 
@@ -415,7 +402,6 @@ class Thread
 		const char* topology;
 
 		static const double TEN_HOURS;
-
 		static const double SPEED_OF_LIGHT;
 };
 

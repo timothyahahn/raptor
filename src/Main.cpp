@@ -70,11 +70,11 @@ char folder[50];
 //Hate to make a global instance of the threads, but the other classes
 //need access to the threads information. They can't just include a 
 //pointer to the class due to a circular reference.
-Thread* threadZero;
-Thread** threads;
-unsigned int threadCount;
+Thread* threadZero = nullptr;
+Thread** threads = nullptr;
+unsigned int threadCount = 0;
 
-vector<AlgorithmToRun*> algParams;
+std::vector<AlgorithmToRun*> algParams;
 
 void *runThread(void* n);
 void runSimulation(int argc, const char* argv[]);
@@ -168,11 +168,11 @@ void runSimulation(int argc, const char* argv[])
 	int* threadZeroReturn = 0;
 	int runCount = 0;
 
-	while(threadZeroReturn == 0 || *threadZeroReturn == MORE_SIMULATIONS)
+	while(threadZeroReturn == 0 || *threadZeroReturn == Thread::MORE_SIMULATIONS)
 	{
 		delete threadZeroReturn;
 
-		vector<pthread_t*> pThreads;
+		std::vector<pthread_t*> pThreads;
 
 		threadCount = atoi(argv[4]);
 

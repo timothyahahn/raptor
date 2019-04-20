@@ -35,8 +35,6 @@ extern int realTopoHeightPx;
 
 #include <vector>
 
-using std::vector;
-
 struct DP_node
 {
 	Edge** paths;
@@ -223,7 +221,7 @@ class Router
 		bool isSelected;
 #endif
 
-		vector<Edge*> edgeList;
+		std::vector<Edge*> edgeList;
 
 		double* destinationProbs;
 		double* acoProbs;

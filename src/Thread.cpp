@@ -38,10 +38,12 @@ extern Thread* threadZero;
 extern Thread** threads;
 extern unsigned int threadCount;
 
-extern vector<AlgorithmToRun*> algParams;
+extern std::vector<AlgorithmToRun*> algParams;
+
+const int Thread::MORE_SIMULATIONS = 1;
+const int Thread::COMPLETED_ALL_SIMULATIONS = 2;
 
 const double Thread::TEN_HOURS = 10.0 * 60.0 * 60.0;
-
 const double Thread::SPEED_OF_LIGHT = double(299792458);
 
 ///////////////////////////////////////////////////////////////////
@@ -54,7 +56,7 @@ const double Thread::SPEED_OF_LIGHT = double(299792458);
 ///////////////////////////////////////////////////////////////////
 Thread::Thread()
 {
-	threadZero->recordEvent(string("Unable to initialize the controller without command line arguments.\n"),true,controllerIndex);
+	threadZero->recordEvent(std::string("Unable to initialize the controller without command line arguments.\n"),true,controllerIndex);
 	exit(ERROR_THREAD_INIT);
 }
 
@@ -1252,8 +1254,8 @@ void Thread::create_connection_confirmation(CreateConnectionConfirmationEvent* c
 
 				if(threadZero->getQualityParams().q_factor_stats == true)
 				{
-					ec->QFactors = new vector<double>;
-					ec->QTimes = new vector<double>;
+					ec->QFactors = new std::vector<double>;
+					ec->QTimes = new std::vector<double>;
 				}
 
 				for(unsigned int p = 0; p < ec->connectionLength; ++p)
@@ -1550,7 +1552,7 @@ void Thread::setQualityParameters(const char* f)
 	sprintf(buffer,"Reading Quality Parameters from %s file.",f);
 	threadZero->recordEvent(buffer,true,0);
 
-	ifstream inFile(f);
+	std::ifstream inFile(f);
 
 	while(inFile.getline(buffer,199))
 	{
@@ -1839,7 +1841,7 @@ void Thread::setTopologyParameters(const char * f)
 	strcpy(topoFile,f);
 #endif
 
-	ifstream inFile(f);
+	std::ifstream inFile(f);
 
 	char *param;
 		
@@ -1914,7 +1916,7 @@ void Thread::setWorkstationParameters(const char * f)
 
 	try
 	{
-		ifstream inFile(f);
+		std::ifstream inFile(f);
 
 		if(!inFile.is_open())
 		{
@@ -2027,7 +2029,7 @@ void Thread::setAlgorithmParameters(const char * f, unsigned int iterationCount)
 	sprintf(buffer,"Reading Algorithm Parameters from %s file.",f);
 	threadZero->recordEvent(buffer,false,0);
 
-	ifstream inFile(f);
+	std::ifstream inFile(f);
 
 	while(inFile.getline(buffer,199))
 	{

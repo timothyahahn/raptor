@@ -32,8 +32,8 @@ struct EstablishedConnection
 	double initQFactor;
 	double belowQFactor;
 	double averageQFactor;
-	vector<double> *QFactors;
-	vector<double> *QTimes;
+	std::vector<double> *QFactors;
+	std::vector<double> *QTimes;
 };
 
 #endif

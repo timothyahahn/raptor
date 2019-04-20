@@ -33,12 +33,6 @@
 
 #include "QYInclude.h"
 
-using std::less;
-using std::queue;
-using std::pair;
-using std::priority_queue;
-using std::vector;
-
 struct DP_item
 {
 	Edge** path;
@@ -76,7 +70,7 @@ class ResourceManager
 		void print_connection_info(CreateConnectionProbeEvent* ccpe, double Q_factor, double ase, double fwm, double xpm, unsigned int ci);
 
 		double* sys_fs;
-		vector<int>* fwm_combinations;
+		std::vector<int>* fwm_combinations;
 
 		unsigned int* span_distance;
 
@@ -88,8 +82,8 @@ class ResourceManager
 		double path_xpm_noise(int lambda, Edge **Path, unsigned int pathLen, unsigned int ci);
 		
 		int build_FWM_fs(double *inter_fs,int *inter_indecies, int lambda);
-		int wave_combines(double fc, double *fs,int fs_num, vector<int> &fs_coms);
-		bool can_find(int fi,int fj,int fk,vector<int> &fs_coms,int com_num);
+		int wave_combines(double fc, double *fs,int fs_num, std::vector<int> &fs_coms);
+		bool can_find(int fi,int fj,int fk,std::vector<int> &fs_coms,int com_num);
 		int degeneracy(int fi,int fj,int fk);
 
 		double* sys_link_xpm_database;
@@ -112,11 +106,11 @@ class ResourceManager
 		int least_quality_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
 		int most_quality_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
 
-		void precompute_fwm_fs(vector<int> &fwm_nums);
+		void precompute_fwm_fs(std::vector<int> &fwm_nums);
 		void precompute_fwm_combinations();
 
-		vector <double*>* fwm_fs;
-		vector <int*>* inter_indecies;
+		std::vector <double*>* fwm_fs;
+		std::vector <int*>* inter_indecies;
 
 		kShortestPathReturn** SP_paths;
 

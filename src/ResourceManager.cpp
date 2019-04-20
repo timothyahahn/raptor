@@ -1095,7 +1095,7 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(unsigned int src, unsign
 		threads[ci]->getRouterAt(r1)->dp_node = node;
 	}
 
-	queue<DP_item*> Q;
+	std::queue<DP_item*> Q;
 
 	for(unsigned int e = 0; e < threads[ci]->getRouterAt(src)->getNumberOfEdges(); ++e)
 	{
@@ -1739,7 +1739,7 @@ int ResourceManager::build_FWM_fs(double *inter_fs,int *inter_indecies, int lamb
 //				Incicies are relative to fs.
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::wave_combines(double fc, double *fs,int fs_num, vector<int> &fs_coms)
+int ResourceManager::wave_combines(double fc, double *fs,int fs_num,std::vector<int> &fs_coms)
 {
 	int num = 0;
 
@@ -1816,7 +1816,7 @@ int ResourceManager::wave_combines(double fc, double *fs,int fs_num, vector<int>
 // Description: Decide whether a combination exists in the database.
 //
 ///////////////////////////////////////////////////////////////////
-bool ResourceManager::can_find(int fi,int fj,int fk,vector<int> &fs_coms,int com_num)
+bool ResourceManager::can_find(int fi,int fj,int fk,std::vector<int> &fs_coms,int com_num)
 {
 	for (int i=0;i<com_num;i++) 
 		if (fi == fs_coms[i * 4 + 0] && fj == fs_coms[i * 4 + 1] && fk == fs_coms[i * 4 + 2])
@@ -2327,10 +2327,10 @@ int ResourceManager::quality_most_used(CreateConnectionProbeEvent* ccpe, unsigne
 //					repeatedly computed as the simulation is running.
 //
 ///////////////////////////////////////////////////////////////////
-void ResourceManager::precompute_fwm_fs(vector<int> &fwm_nums)
+void ResourceManager::precompute_fwm_fs(std::vector<int> &fwm_nums)
 {
-	fwm_fs = new vector<double*>[threadZero->getNumberOfWavelengths()];
-	inter_indecies = new vector<int*>[threadZero->getNumberOfWavelengths()];
+	fwm_fs = new std::vector<double*>[threadZero->getNumberOfWavelengths()];
+	inter_indecies = new std::vector<int*>[threadZero->getNumberOfWavelengths()];
 
 	for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
 	{
@@ -2351,11 +2351,11 @@ void ResourceManager::precompute_fwm_fs(vector<int> &fwm_nums)
 ///////////////////////////////////////////////////////////////////
 void ResourceManager::precompute_fwm_combinations()
 {
-	vector<int> fwm_nums;
+	std::vector<int> fwm_nums;
 
 	precompute_fwm_fs(fwm_nums);
 
-	fwm_combinations = new vector<int>[threadZero->getNumberOfWavelengths()];
+	fwm_combinations = new std::vector<int>[threadZero->getNumberOfWavelengths()];
 
 	for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
 	{
@@ -2567,7 +2567,7 @@ void ResourceManager::generateWaveOrdering()
 
 	for(unsigned int w = 1; w < threadZero->getNumberOfWavelengths() - 1; ++w)
 	{
-		pair<int, int> *p1 = new pair<int, int>;
+		std::pair<int, int> *p1 = new std::pair<int, int>;
 
 		p1->first = w;
 		p1->second = 0;
