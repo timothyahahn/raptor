@@ -30,6 +30,7 @@
 
 #include <cmath>
 #include <cstdlib>
+#include <iomanip>
 
 #include "boost/random.hpp"
 
@@ -731,7 +732,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(unsigned int src, unsig
 			ants[a].pathlen = 0;
 			ants[a].path = new Edge*[threadZero->getNumberOfRouters() - 1];
 
-			while(ants[a].location != threads[ci]->getRouterAt(dest) && ants[a].pathlen + 1 < threadZero->getNumberOfRouters() - 1)
+			while(ants[a].location != threads[ci]->getRouterAt(dest) && ants[a].pathlen + 1 < (int)threadZero->getNumberOfRouters() - 1)
 			{
 				Edge *new_edge = ants[a].location->chooseEdge((*(threads[ci]->generateZeroToOne))());
 
@@ -739,7 +740,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(unsigned int src, unsig
 				ants[a].path[ants[a].pathlen] = new_edge;
 				++ants[a].pathlen;
 
-				for(unsigned int p = 0; p < ants[a].pathlen - 1; ++p)
+				for(int p = 0; p < ants[a].pathlen - 1; ++p)
 				{
 					if(ants[a].path[ants[a].pathlen - 1]->getDestinationIndex() == ants[a].path[p]->getSourceIndex())
 					{
@@ -760,7 +761,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(unsigned int src, unsig
 
 			unsigned int spans = 0;
 
-			for(unsigned int e = 0; e < ants[a].pathlen; ++e)
+			for(int e = 0; e < ants[a].pathlen; ++e)
 			{
 				for(unsigned int w2 = 0; w2 < threadZero->getNumberOfWavelengths(); ++w2)
 				{
@@ -805,7 +806,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(unsigned int src, unsig
 				{
 					uniqueK = false;
 
-					for(unsigned int r = 0; r < ants[a].pathlen; ++r)
+					for(int r = 0; r < ants[a].pathlen; ++r)
 					{
 						if(ants[a].path[r]->getSourceIndex() !=
 							kSP_return->pathinfo[k0 * (threadZero->getNumberOfRouters() - 1) + r])
@@ -855,7 +856,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(unsigned int src, unsig
 					}
 
 					//Insert where appropriate
-					for(unsigned int n = 0; n < ants[a].pathlen; ++n)
+					for(int n = 0; n < ants[a].pathlen; ++n)
 					{
 						kSP_return->pathinfo[k1 * (threadZero->getNumberOfRouters() - 1) + n] = 
 							ants[a].path[n]->getSourceIndex();
@@ -886,11 +887,11 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(unsigned int src, unsig
 				{
 					unsigned int spans = 0;
 
-					for(unsigned int n1 = 0; n1 < ants[a2].pathlen; ++n1)
+					for(int n1 = 0; n1 < ants[a2].pathlen; ++n1)
 					{
 						spans += ants[a2].path[n1]->getNumberOfSpans();
 					}
-					for(unsigned int n2 = 0; n2 < ants[a2].pathlen; ++n2)
+					for(int n2 = 0; n2 < ants[a2].pathlen; ++n2)
 					{
 						ants[a2].path[n2]->addPheremone(spans,ci);
 					}				
@@ -2331,7 +2332,7 @@ void ResourceManager::precompute_fwm_fs(vector<int> &fwm_nums)
 	fwm_fs = new vector<double*>[threadZero->getNumberOfWavelengths()];
 	inter_indecies = new vector<int*>[threadZero->getNumberOfWavelengths()];
 
-	for(int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+	for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
 	{
 		fwm_fs->push_back(new double[threadZero->getNumberOfWavelengths()]);
 		inter_indecies->push_back(new int[threadZero->getNumberOfWavelengths()]);
@@ -2356,7 +2357,7 @@ void ResourceManager::precompute_fwm_combinations()
 
 	fwm_combinations = new vector<int>[threadZero->getNumberOfWavelengths()];
 
-	for(int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+	for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
 	{
 		wave_combines(sys_fs[w],(*fwm_fs)[w],fwm_nums[w],fwm_combinations[w]);
 	}
@@ -2477,10 +2478,12 @@ void ResourceManager::print_connection_info(CreateConnectionProbeEvent* ccpe, do
 
 	if(ccpe->wavelength >= 0)
 	{
-		char buffer[100];
-		sprintf(buffer, "Q-factor = %1.4f, XPM-noise = %e, FWM-noise = %e, ASE-noise = %e\n",
-			Q_factor, xpm, fwm, ase);
-		line.append(buffer);
+		std::ostringstream buffer;
+
+		buffer << "Q-factor = " << std::setprecision(4) << Q_factor << ", XPM-noise = " << std::setprecision(4) << xpm << 
+			", FWM-noise = " << std::setprecision(4) << fwm << ", ASE-noise = " << std::setprecision(4) << ase << std::endl;
+
+		line.append(buffer.str());
 	}
 	else
 	{
@@ -2562,7 +2565,7 @@ void ResourceManager::generateWaveOrdering()
 
 	std::list< std::pair<int,int>* > wavesList;
 
-	for(int w = 1; w < threadZero->getNumberOfWavelengths() - 1; ++w)
+	for(unsigned int w = 1; w < threadZero->getNumberOfWavelengths() - 1; ++w)
 	{
 		pair<int, int> *p1 = new pair<int, int>;
 
