@@ -23,3 +23,10 @@ kshortestpath/kshortestpath.vcxproj.filters
 raptor.sln
 raptor.vcxproj
 raptor.vcxproj.filters
+Debug/
+Release/
+kshortestpath/Debug
+kshortestpath/Release
+kshortestpath/kshortestpath.dir/
+raptor.dir/
+x64/
