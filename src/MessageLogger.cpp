@@ -108,8 +108,6 @@ void MessageLogger::recordEvent(const std::string &e, bool print, unsigned int c
 
 		pthread_mutex_unlock(&PrintMutex);
 	}
-
-	delete current;
 }
 
 ///////////////////////////////////////////////////////////////////
