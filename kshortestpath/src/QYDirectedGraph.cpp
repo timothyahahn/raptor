@@ -42,12 +42,16 @@ const double CQYDirectedGraph::DISCONNECT = (std::numeric_limits<double>::max)()
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-
-CQYDirectedGraph::CQYDirectedGraph( kShortestPathParms params )
+CQYDirectedGraph::CQYDirectedGraph():
+	m_nNumberOfVertices(0), m_nNumberOfEdges(0), m_dMaxWeight(0.0), m_dMinWeight(DISCONNECT),
+	m_pDirectedEdges(new CQYConfigCenter::IntPair_Double_Map())
 {
-	// Initiate the members of the class
-	_Init();
+}
 
+CQYDirectedGraph::CQYDirectedGraph( kShortestPathParms params ) :
+	m_nNumberOfVertices(0), m_nNumberOfEdges(0), m_dMaxWeight(0.0), m_dMinWeight(DISCONNECT),
+	m_pDirectedEdges(new CQYConfigCenter::IntPair_Double_Map())
+{
 	m_nNumberOfVertices = params.total_nodes;
 		
 	for(unsigned int a = 0; a < params.total_edges; ++a)

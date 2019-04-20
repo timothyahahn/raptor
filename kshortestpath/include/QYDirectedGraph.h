@@ -55,7 +55,7 @@ public:
 	const static double DISCONNECT;
 	const static int DEADEND;
 	//
-	CQYDirectedGraph(){_Init();}
+	CQYDirectedGraph();
 	CQYDirectedGraph(const std::string& input_file_name);
 	CQYDirectedGraph(kShortestPathParms params);
 	virtual ~CQYDirectedGraph();
