@@ -39,7 +39,7 @@
 class CQYKShortestPaths  
 {
 public:
-	CQYKShortestPaths(const CQYDirectedGraph& rGraph, int nSource, int nTerminal, int nTopk);
+	CQYKShortestPaths(const CQYDirectedGraph& rGraph, size_t nSource, size_t nTerminal, size_t nTopk);
 	virtual ~CQYKShortestPaths();
 
 	std::vector<CQYDirectedPath*> GetTopKShortestPaths();
@@ -49,17 +49,17 @@ private: // methods
 	void _Init();
 	void _SearchTopKShortestPaths();
 
-	void _DetermineCost2Target(std::vector<int> vertices_list, int deviated_node_id);
-	void _RestoreEdges4CostAjustment(std::vector<int> vertices_list, int start_node_id, int end_node_id, bool is_deviated_node = false);
-	void _UpdateWeight4CostUntilNode(int node_id);
+	void _DetermineCost2Target(std::vector<size_t> vertices_list, size_t deviated_node_id);
+	void _RestoreEdges4CostAjustment(std::vector<size_t> vertices_list, size_t start_node_id, size_t end_node_id, bool is_deviated_node = false);
+	void _UpdateWeight4CostUntilNode(size_t node_id);
 	void _ReverseEdgesInGraph(CQYDirectedGraph& g);
-	bool _EdgeHasBeenUsed(int start_node_id, int end_node_id);
+	bool _EdgeHasBeenUsed(size_t start_node_id, size_t end_node_id);
 
 private: // members
 		
-	int m_nTopK;
-	int m_nSourceNodeId;
-	int m_nTargetNodeId;
+	size_t m_nTopK;
+	size_t m_nSourceNodeId;
+	size_t m_nTargetNodeId;
 		
 	const CQYDirectedGraph& m_rGraph;
 	CQYDirectedGraph* m_pIntermediateGraph;
@@ -72,7 +72,7 @@ private: // members
 	std::set<CQYDirectedPath*, CQYDirectedPath::Comparator> m_candidatePathsSet;  
 
 	// index for node where the path derives from others
-	std::map<int, int> m_pathDeviatedNodeMap;
+	std::map<size_t,size_t> m_pathDeviatedNodeMap;
 }; 
 
 #endif //_QYKSHORTESTPATHS_H_

@@ -36,7 +36,7 @@
 #include <iostream>
 #include "QYDirectedGraph.h"
 
-const int CQYDirectedGraph::DEADEND = -1;
+const size_t CQYDirectedGraph::DEADEND = -1;
 const double CQYDirectedGraph::DISCONNECT = (std::numeric_limits<double>::max)();
 
 //////////////////////////////////////////////////////////////////////
@@ -44,23 +44,23 @@ const double CQYDirectedGraph::DISCONNECT = (std::numeric_limits<double>::max)()
 //////////////////////////////////////////////////////////////////////
 CQYDirectedGraph::CQYDirectedGraph():
 	m_nNumberOfVertices(0), m_nNumberOfEdges(0), m_dMaxWeight(0.0), m_dMinWeight(DISCONNECT),
-	m_pDirectedEdges(new CQYConfigCenter::IntPair_Double_Map())
+	m_pDirectedEdges(new CQYConfigCenter::SizeT_Pair_Double_Map())
 {
 }
 
 CQYDirectedGraph::CQYDirectedGraph( kShortestPathParms params ) :
 	m_nNumberOfVertices(0), m_nNumberOfEdges(0), m_dMaxWeight(0.0), m_dMinWeight(DISCONNECT),
-	m_pDirectedEdges(new CQYConfigCenter::IntPair_Double_Map())
+	m_pDirectedEdges(new CQYConfigCenter::SizeT_Pair_Double_Map())
 {
 	m_nNumberOfVertices = params.total_nodes;
 		
-	for(unsigned int a = 0; a < params.total_edges; ++a)
+	for(size_t a = 0; a < params.total_edges; ++a)
 	{
-		int i = params.edge_list[a].src_node;
-		int j = params.edge_list[a].dest_node;
+		size_t i = params.edge_list[a].src_node;
+		size_t j = params.edge_list[a].dest_node;
 		double w = params.edge_list[a].edge_cost;
 
-		m_pDirectedEdges->insert(std::pair<std::pair<int, int>, double>(std::pair<int, int>(i,j), w));
+		m_pDirectedEdges->insert(std::pair<std::pair<size_t, size_t>, double>(std::pair<size_t, size_t>(i,j), w));
 			
 		++m_nNumberOfEdges;
 			
@@ -78,7 +78,9 @@ CQYDirectedGraph::CQYDirectedGraph( kShortestPathParms params ) :
 	m_nNumberOfEdges = m_pDirectedEdges->size();
 }
 
-CQYDirectedGraph::CQYDirectedGraph( const CQYDirectedGraph& rGraph )
+CQYDirectedGraph::CQYDirectedGraph( const CQYDirectedGraph& rGraph ) :
+	m_nNumberOfVertices(0), m_nNumberOfEdges(0), m_dMaxWeight(0.0), m_dMinWeight(DISCONNECT),
+	m_pDirectedEdges(new CQYConfigCenter::SizeT_Pair_Double_Map())
 {
 	*this = rGraph;	
 }
@@ -88,7 +90,7 @@ CQYDirectedGraph& CQYDirectedGraph::operator=( const CQYDirectedGraph& rGraph )
 	m_nNumberOfVertices = rGraph.m_nNumberOfVertices;
 	m_nNumberOfEdges = rGraph.m_nNumberOfEdges;
 
-	m_pDirectedEdges = new CQYConfigCenter::IntPair_Double_Map(*(rGraph.m_pDirectedEdges));
+	m_pDirectedEdges = new CQYConfigCenter::SizeT_Pair_Double_Map(*(rGraph.m_pDirectedEdges));
 		
 	return *this;
 }
@@ -106,19 +108,19 @@ void CQYDirectedGraph::_Init()
 	m_nNumberOfEdges = 0;
 	m_dMaxWeight = 0;
 	m_dMinWeight = DISCONNECT;
-	m_pDirectedEdges = new CQYConfigCenter::IntPair_Double_Map();
+	m_pDirectedEdges = new CQYConfigCenter::SizeT_Pair_Double_Map();
 }
 
-void CQYDirectedGraph::RemoveEdge( int i, int j )
+void CQYDirectedGraph::RemoveEdge( size_t i, size_t j )
 {
-	CQYConfigCenter::IntPair_Double_Map_Iterator pos = m_pDirectedEdges->find(std::pair<int, int>(i,j));
+	CQYConfigCenter::SizeT_Pair_Double_Map_Iterator pos = m_pDirectedEdges->find(CQYConfigCenter::SizeT_Pair(i,j));
 	if (pos != m_pDirectedEdges->end())
 	{
 		m_pDirectedEdges->erase(pos);
 	}
 }
 
-void CQYDirectedGraph::AddEdge( int i, int j, double weight )
+void CQYDirectedGraph::AddEdge( size_t i, size_t j, double weight )
 {
-	(*m_pDirectedEdges)[std::pair<int, int>(i,j)] = weight;	
+	(*m_pDirectedEdges)[CQYConfigCenter::SizeT_Pair(i,j)] = weight;
 }

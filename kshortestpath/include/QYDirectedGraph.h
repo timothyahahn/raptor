@@ -53,7 +53,7 @@ class CQYDirectedGraph
 {
 public:
 	const static double DISCONNECT;
-	const static int DEADEND;
+	const static size_t DEADEND;
 	//
 	CQYDirectedGraph();
 	CQYDirectedGraph(const std::string& input_file_name);
@@ -63,15 +63,15 @@ public:
 	CQYDirectedGraph(const CQYDirectedGraph& rGraph);
 	CQYDirectedGraph& operator=(const CQYDirectedGraph& rGraph);
 		
-	void RemoveEdge(int i, int j);
-	void AddEdge(int i, int j, double weight);
+	void RemoveEdge(size_t i, size_t j);
+	void AddEdge(size_t i, size_t j, double weight);
 
 	// Getter and setter
-	int GetNumberOfVertices() const { return m_nNumberOfVertices; }
-	void SetNumberOfVertices(int val) { m_nNumberOfVertices = val; }
+	size_t GetNumberOfVertices() const { return m_nNumberOfVertices; }
+	void SetNumberOfVertices(size_t val) { m_nNumberOfVertices = val; }
 		
-	int GetNumberOfEdges() const { return m_nNumberOfEdges; }
-	void SetNumberOfEdges(int val) { m_nNumberOfEdges = val; }
+	size_t GetNumberOfEdges() const { return m_nNumberOfEdges; }
+	void SetNumberOfEdges(size_t val) { m_nNumberOfEdges = val; }
 		
 	double GetMaxWeight() const { return m_dMaxWeight; }
 	void SetMaxWeight(double val) { m_dMaxWeight = val; }
@@ -79,14 +79,14 @@ public:
 	double GetMinWeight() const { return m_dMinWeight; }
 	void SetMinWeight(double val) { m_dMinWeight = val; }
 		
-	double GetWeight(int i, int j) const { return m_pDirectedEdges->count(std::pair<int, int>(i,j)) ? (*m_pDirectedEdges)[std::pair<int, int>(i,j)] : DISCONNECT; }
-	void SetWeight(int i, int j, double val) { (*m_pDirectedEdges)[std::pair<int, int>(i,j)] = val; }
+	double GetWeight(size_t i, size_t j) const { return m_pDirectedEdges->count(CQYConfigCenter::SizeT_Pair(i,j)) ? (*m_pDirectedEdges)[CQYConfigCenter::SizeT_Pair(i,j)] : DISCONNECT; }
+	void SetWeight(size_t i, size_t j, double val) { (*m_pDirectedEdges)[CQYConfigCenter::SizeT_Pair(i,j)] = val; }
 		
 private:
-	CQYConfigCenter::IntPair_Double_Map* m_pDirectedEdges;	
-		
-	int m_nNumberOfVertices;
-	int m_nNumberOfEdges;
+	CQYConfigCenter::SizeT_Pair_Double_Map* m_pDirectedEdges;
+
+	size_t m_nNumberOfVertices;
+	size_t m_nNumberOfEdges;
 		
 	double m_dMaxWeight;
 	double m_dMinWeight;

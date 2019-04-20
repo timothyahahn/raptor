@@ -47,7 +47,7 @@
 
 class CQYShortestPath  
 {
-	typedef CQYConfigCenter::Int_Pair Edge_Type;
+	typedef CQYConfigCenter::SizeT_Pair Edge_Type;
 	typedef boost::adjacency_list < boost::listS, boost::vecS, boost::directedS, boost::no_property, boost::property < boost::edge_weight_t, double > > Boost_Graph_Type;
 	typedef boost::graph_traits < Boost_Graph_Type >::edge_descriptor Edge_Descriptor;
 	typedef boost::graph_traits < Boost_Graph_Type >::vertex_descriptor Vertex_Descriptor;
@@ -56,28 +56,28 @@ public:
 	CQYShortestPath(const CQYDirectedGraph& rGraph);
 	virtual ~CQYShortestPath();
 
-	CQYDirectedPath* GetShortestPath(int nSourceNodeId, int nTargetNodeId);
-	void ConstructPathTree(int nSourceNodeId);
+	CQYDirectedPath* GetShortestPath(size_t nSourceNodeId, size_t nTargetNodeId);
+	void ConstructPathTree(size_t nSourceNodeId);
 
-	double GetDistance(int i) { return m_distanceMap.count(i)? m_distanceMap[i] : CQYDirectedGraph::DISCONNECT; }
-	void SetDistance(int i, double new_value){ m_distanceMap[i] = new_value; }
+	double GetDistance(size_t i) { return m_distanceMap.count(i)? m_distanceMap[i] : CQYDirectedGraph::DISCONNECT; }
+	void SetDistance(size_t i, double new_value){ m_distanceMap[i] = new_value; }
 
-	int GetNextNodeId(int i) { return m_distanceMap.count(i)? m_nextNodeMap[i] : CQYDirectedGraph::DEADEND;}
-	void SetNextNodeId(int i, int val) { m_nextNodeMap[i] = val; }
+	size_t GetNextNodeId(size_t i) { return m_distanceMap.count(i)? m_nextNodeMap[i] : CQYDirectedGraph::DEADEND;}
+	void SetNextNodeId(size_t i, size_t val) { m_nextNodeMap[i] = val; }
 
 private: // methods
 	void _Init();
 	void _DijkstraShortestPathsAlg();
-	CQYDirectedPath* _GetShortestPath(int nTargetNodeId);
+	CQYDirectedPath* _GetShortestPath(size_t nTargetNodeId);
 
 private: // members
-	std::vector<CQYConfigCenter::Int_Pair> m_vEdges;
+	std::vector<CQYConfigCenter::SizeT_Pair> m_vEdges;
 	std::vector<double> m_vWeights;
 
-	std::map<int, double> m_distanceMap;
-	std::map<int, int> m_nextNodeMap;
+	std::map<size_t, double> m_distanceMap;
+	std::map<size_t, size_t> m_nextNodeMap;
 		
-	int m_nSourceNodeId;
+	size_t m_nSourceNodeId;
 	const CQYDirectedGraph& m_rGraph;
 };
 

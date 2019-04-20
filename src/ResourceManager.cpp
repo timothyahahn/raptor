@@ -137,9 +137,9 @@ kShortestPathReturn* ResourceManager::calculate_SP_path(unsigned int src, unsign
 
 	kShortestPathReturn *kSP_return = new kShortestPathReturn();
 
-	kSP_return->pathinfo = new unsigned int[kSP_params.k_paths * (kSP_params.total_nodes - 1)];
+	kSP_return->pathinfo = new size_t[kSP_params.k_paths * (kSP_params.total_nodes - 1)];
 	kSP_return->pathcost = new double[kSP_params.k_paths];
-	kSP_return->pathlen = new unsigned int[kSP_params.k_paths];
+	kSP_return->pathlen = new size_t[kSP_params.k_paths];
 
 	calc_k_shortest_paths(kSP_params, kSP_return);
 
@@ -183,9 +183,9 @@ unsigned int ResourceManager::calculate_span_distance(unsigned int src, unsigned
 
 	kShortestPathReturn *kSP_return = new kShortestPathReturn();
 
-	kSP_return->pathinfo = new unsigned int[1 * (kSP_params.total_nodes - 1)];
+	kSP_return->pathinfo = new size_t[1 * (kSP_params.total_nodes - 1)];
 	kSP_return->pathcost = new double[1];
-	kSP_return->pathlen = new unsigned int[1];
+	kSP_return->pathlen = new size_t[1];
 
 	calc_k_shortest_paths(kSP_params, kSP_return);
 
@@ -247,9 +247,9 @@ kShortestPathReturn* ResourceManager::calculate_LORA_path(unsigned int src, unsi
 
 	kShortestPathReturn *kSP_return = new kShortestPathReturn();
 
-	kSP_return->pathinfo = new unsigned int[kSP_params.k_paths * (kSP_params.total_nodes - 1)];
+	kSP_return->pathinfo = new size_t[kSP_params.k_paths * (kSP_params.total_nodes - 1)];
 	kSP_return->pathcost = new double[kSP_params.k_paths];
-	kSP_return->pathlen = new unsigned int[kSP_params.k_paths];
+	kSP_return->pathlen = new size_t[kSP_params.k_paths];
 
 	calc_k_shortest_paths(kSP_params, kSP_return);
 
@@ -311,15 +311,15 @@ kShortestPathReturn* ResourceManager::calculate_IA_path(unsigned int src, unsign
 
 	kShortestPathReturn *kSP_temp = new kShortestPathReturn;
 
-	kSP_temp->pathinfo = new unsigned int[kSP_params[0].total_nodes - 1];
+	kSP_temp->pathinfo = new size_t[kSP_params[0].total_nodes - 1];
 	kSP_temp->pathcost = new double[1];
-	kSP_temp->pathlen = new unsigned int[1];
+	kSP_temp->pathlen = new size_t[1];
 
 	kShortestPathReturn *kSP_return = new kShortestPathReturn;
 
-	kSP_return->pathinfo = new unsigned int[(kSP_params[0].total_nodes - 1) * threadZero->getNumberOfWavelengths()];
+	kSP_return->pathinfo = new size_t[(kSP_params[0].total_nodes - 1) * threadZero->getNumberOfWavelengths()];
 	kSP_return->pathcost = new double[threadZero->getNumberOfWavelengths()];
-	kSP_return->pathlen = new unsigned int[threadZero->getNumberOfWavelengths()];
+	kSP_return->pathlen = new size_t[threadZero->getNumberOfWavelengths()];
 
 	for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
 	{
@@ -420,9 +420,9 @@ kShortestPathReturn* ResourceManager::calculate_PAR_path(unsigned int src_index,
 		{
 			kShortestPathReturn *kSP_return = new kShortestPathReturn();
 
-			kSP_return->pathinfo = new unsigned int[k * (threadZero->getNumberOfRouters() - 1)];
+			kSP_return->pathinfo = new size_t[k * (threadZero->getNumberOfRouters() - 1)];
 			kSP_return->pathcost = new double[k];
-			kSP_return->pathlen = new unsigned int[k];
+			kSP_return->pathlen = new size_t[k];
 	
 			unsigned int kIndex = 0;
 
@@ -461,9 +461,9 @@ kShortestPathReturn* ResourceManager::calculate_PAR_path(unsigned int src_index,
 		{
 			kShortestPathReturn *kSP_return = new kShortestPathReturn();
 
-			kSP_return->pathinfo = new unsigned int[k * (threadZero->getNumberOfRouters() - 1)];
+			kSP_return->pathinfo = new size_t[k * (threadZero->getNumberOfRouters() - 1)];
 			kSP_return->pathcost = new double[k];
-			kSP_return->pathlen = new unsigned int[k];
+			kSP_return->pathlen = new size_t[k];
 	
 			unsigned int kIndex = 0;
 				
@@ -574,9 +574,9 @@ kShortestPathReturn* ResourceManager::calculate_QM_path(unsigned int src, unsign
 
 	kShortestPathReturn *kSP_return = new kShortestPathReturn();
 
-	kSP_return->pathinfo = new unsigned int[kSP_params.k_paths * (kSP_params.total_nodes - 1)];
+	kSP_return->pathinfo = new size_t[kSP_params.k_paths * (kSP_params.total_nodes - 1)];
 	kSP_return->pathcost = new double[kSP_params.k_paths];
-	kSP_return->pathlen = new unsigned int[kSP_params.k_paths];
+	kSP_return->pathlen = new size_t[kSP_params.k_paths];
 
 	calc_k_shortest_paths(kSP_params, kSP_return);
 
@@ -630,9 +630,9 @@ kShortestPathReturn* ResourceManager::calculate_AQoS_path(unsigned int src, unsi
 	//Copy the paths into the kpaths structure, ordered via the number of available wavelengths
 	kShortestPathReturn *kSP_return = new kShortestPathReturn();
 
-	kSP_return->pathinfo = new unsigned int[k * (threadZero->getNumberOfRouters() - 1)];
+	kSP_return->pathinfo = new size_t[k * (threadZero->getNumberOfRouters() - 1)];
 	kSP_return->pathcost = new double[k];
-	kSP_return->pathlen = new unsigned int[k];
+	kSP_return->pathlen = new size_t[k];
 
 	for(unsigned int a = 0; a < k; ++a)
 	{
@@ -702,8 +702,8 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(unsigned int src, unsig
 	kShortestPathReturn* kSP_return = new kShortestPathReturn();
 
 	kSP_return->pathcost = new double[k];
-	kSP_return->pathlen = new unsigned int[k];
-	kSP_return->pathinfo = new unsigned int[k * threadZero->getNumberOfRouters() - 1];
+	kSP_return->pathlen = new size_t[k];
+	kSP_return->pathinfo = new size_t[k * threadZero->getNumberOfRouters() - 1];
 
 	for(unsigned int k1 = 0; k1 < k; ++k1)
 	{
@@ -953,8 +953,8 @@ kShortestPathReturn* ResourceManager::calculate_MM_ACO_path(unsigned int src, un
 	kShortestPathReturn** mmACO_iters = new kShortestPathReturn*[threadZero->getQualityParams().MM_ACO_N_reset + 1];
 
 	kSP_return->pathcost = new double[k];
-	kSP_return->pathlen = new unsigned int[k];
-	kSP_return->pathinfo = new unsigned int[k * threadZero->getNumberOfRouters() - 1];
+	kSP_return->pathlen = new size_t[k];
+	kSP_return->pathinfo = new size_t[k * threadZero->getNumberOfRouters() - 1];
 
 	for(unsigned int k1 = 0; k1 < k; ++k1)
 	{
@@ -1342,8 +1342,8 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(unsigned int src, unsign
 	kShortestPathReturn* kSP_return = new kShortestPathReturn();
 
 	kSP_return->pathcost = new double[k];
-	kSP_return->pathlen = new unsigned int[k];
-	kSP_return->pathinfo = new unsigned int[k * threadZero->getNumberOfRouters() - 1];
+	kSP_return->pathlen = new size_t[k];
+	kSP_return->pathinfo = new size_t[k * threadZero->getNumberOfRouters() - 1];
 
 	DP_node* final_dp_node  = threads[ci]->getRouterAt(dest)->dp_node;
 

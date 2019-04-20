@@ -48,12 +48,12 @@ CQYShortestPath::~CQYShortestPath()	{}
 /************************************************************************/
 void CQYShortestPath::_Init()
 {
-	int vertices_count = m_rGraph.GetNumberOfVertices();
+	size_t vertices_count = m_rGraph.GetNumberOfVertices();
 
 	// First: edges with weights
-	for (int i=0; i!=vertices_count; ++i)
+	for (size_t i=0; i!=vertices_count; ++i)
 	{
-		for (int j=0; j!=vertices_count; ++j)
+		for (size_t j=0; j!=vertices_count; ++j)
 		{
 			if (m_rGraph.GetWeight(i,j) != CQYDirectedGraph::DISCONNECT)
 			{
@@ -68,9 +68,9 @@ void CQYShortestPath::_Init()
 /* Analysis of m_vResult4Vertices and m_vResult4Distance to generate the
 /* shortest path.
 /************************************************************************/
-CQYDirectedPath* CQYShortestPath::_GetShortestPath( int nTargetNodeId )
+CQYDirectedPath* CQYShortestPath::_GetShortestPath( size_t nTargetNodeId )
 {
-	std::vector<int> vertex_list;
+	std::vector<size_t> vertex_list;
 
 	// Check the input
 	if (nTargetNodeId >= m_rGraph.GetNumberOfVertices() || nTargetNodeId < 0)
@@ -84,8 +84,8 @@ CQYDirectedPath* CQYShortestPath::_GetShortestPath( int nTargetNodeId )
 	}
 
 	// Determine the shortest path from the source to the terminal.
-	int cur_vertex = nTargetNodeId;
-	std::list<int> tmp_list;
+	size_t cur_vertex = nTargetNodeId;
+	std::list<size_t> tmp_list;
 	tmp_list.push_front(nTargetNodeId);
 	do
 	{
@@ -109,7 +109,7 @@ CQYDirectedPath* CQYShortestPath::_GetShortestPath( int nTargetNodeId )
 /************************************************************************/
 /* Calculate the shortest path from a source to a target.
 /************************************************************************/
-CQYDirectedPath* CQYShortestPath::GetShortestPath( int nSourceNodeId, int nTargetNodeId )
+CQYDirectedPath* CQYShortestPath::GetShortestPath( size_t nSourceNodeId, size_t nTargetNodeId )
 {
 	if (m_nSourceNodeId != nSourceNodeId)
 	{
@@ -123,7 +123,7 @@ CQYDirectedPath* CQYShortestPath::GetShortestPath( int nSourceNodeId, int nTarge
 /************************************************************************/
 /* Based on the input - the source of the path, create a steiner tree. (???)
 /************************************************************************/
-void CQYShortestPath::ConstructPathTree( int nSourceNodeId )
+void CQYShortestPath::ConstructPathTree( size_t nSourceNodeId )
 {
 	m_nSourceNodeId = nSourceNodeId;
 	_DijkstraShortestPathsAlg();
@@ -134,8 +134,8 @@ void CQYShortestPath::ConstructPathTree( int nSourceNodeId )
 /************************************************************************/
 void CQYShortestPath::_DijkstraShortestPathsAlg()
 {
-	int edges_count = m_rGraph.GetNumberOfEdges();
-	int vertices_count = m_rGraph.GetNumberOfVertices();
+	size_t edges_count = m_rGraph.GetNumberOfEdges();
+	size_t vertices_count = m_rGraph.GetNumberOfVertices();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Initiate the boost graph
@@ -144,7 +144,7 @@ void CQYShortestPath::_DijkstraShortestPathsAlg()
 	Boost_Graph_Type g(vertices_count);
 	boost::property_map<Boost_Graph_Type, boost::edge_weight_t>::type weightmap = get(boost::edge_weight, g);
 	//
-	for (std::size_t j = 0; j < static_cast<unsigned int>(edges_count); ++j)
+	for (std::size_t j = 0; j < static_cast<size_t>(edges_count); ++j)
 	{
 		Edge_Descriptor e; bool inserted;
 		tie(e, inserted) = add_edge(m_vEdges[j].first, m_vEdges[j].second, g);
@@ -165,7 +165,7 @@ void CQYShortestPath::_DijkstraShortestPathsAlg()
 
 	//////////////////////////////////////////////////////////////////////////
 	// Set the results
-	for (unsigned int i = 0; i < vResult4Vertices.size(); ++i)
+	for (size_t i = 0; i < vResult4Vertices.size(); ++i)
 	{
 		m_distanceMap[i] = vResult4Distance[i];
 		m_nextNodeMap[i] = vResult4Vertices[i];

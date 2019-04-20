@@ -46,7 +46,7 @@ public:
 	{
 	}
 
-	CQYDirectedPath(int pId, double pCost, const std::vector<int>& pVertexList)
+	CQYDirectedPath(size_t pId, double pCost, const std::vector<size_t>& pVertexList)
 		:m_nId(pId), m_nLength(0), m_dCost(pCost), m_nSourceNodeId(0), m_nTerminalNodeId(0)
 	{
 		m_vVertexList.assign(pVertexList.begin(), pVertexList.end());
@@ -55,41 +55,41 @@ public:
 	virtual ~CQYDirectedPath(){};
 		
 	// Getter and Setter
-	int GetId() const { return m_nId; }
-	void SetId(int val) { m_nId = val; }
+	size_t GetId() const { return m_nId; }
+	void SetId(size_t val) { m_nId = val; }
 		
 	double GetCost() const { return m_dCost; }
 	void SetCost(double val) { m_dCost = val; }
 		
-	int GetLength() const { return m_vVertexList.size(); }
+	size_t GetLength() const { return m_vVertexList.size(); }
 		
-	std::vector<int> GetVertexList() const { return m_vVertexList; }
-	void SetVertexList(std::vector<int> val) { m_vVertexList = val; }
+	std::vector<size_t> GetVertexList() const { return m_vVertexList; }
+	void SetVertexList(std::vector<size_t> val) { m_vVertexList = val; }
 		
-	int GetSourceNodeId() const { return m_nSourceNodeId; }
-	void SetSourceNodeId(int val) { m_nSourceNodeId = val; }
+	size_t GetSourceNodeId() const { return m_nSourceNodeId; }
+	void SetSourceNodeId(size_t val) { m_nSourceNodeId = val; }
 		
-	int GetTerminalNodeId() const { return m_nTerminalNodeId; }
-	void SetTerminalNodeId(int val) { m_nTerminalNodeId = val; }
+	size_t GetTerminalNodeId() const { return m_nTerminalNodeId; }
+	void SetTerminalNodeId(size_t val) { m_nTerminalNodeId = val; }
 		
 	// display the content
 	void PrintOut(std::ostream& out_stream) const
 	{
 		out_stream << "Cost: " << m_dCost << " Length: " << m_vVertexList.size() << std::endl;
-		std::copy(m_vVertexList.rbegin(), m_vVertexList.rend(), std::ostream_iterator<int>(out_stream, " "));
+		std::copy(m_vVertexList.rbegin(), m_vVertexList.rend(), std::ostream_iterator<size_t>(out_stream, " "));
 		out_stream << std::endl <<  "*********************************************" << std::endl;	
 	}
 
 
 private: // members
-	int m_nId;
-	int m_nLength;
+	size_t m_nId;
+	size_t m_nLength;
 	double m_dCost;  
-	std::vector<int> m_vVertexList; 
+	std::vector<size_t> m_vVertexList;
 		
 	// intermediate variables
-	int m_nSourceNodeId;
-	int m_nTerminalNodeId;
+	size_t m_nSourceNodeId;
+	size_t m_nTerminalNodeId;
 
 public:
 	//// Comparator for paths: the smaller path has less cost.
