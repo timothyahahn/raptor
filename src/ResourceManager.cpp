@@ -36,8 +36,6 @@
 extern Thread* threadZero;
 extern Thread** threads;
 
-int minInt(int a, int b);
-
 extern "C" void calc_k_shortest_paths(const kShortestPathParms &params, kShortestPathReturn* retVal);
 
 ///////////////////////////////////////////////////////////////////
@@ -2579,7 +2577,7 @@ void ResourceManager::generateWaveOrdering()
 		//Calculate the min of the upper and lower bounds
 		for(std::list< std::pair<int,int>* >::iterator iter1 = wavesList.begin(); iter1 != wavesList.end(); ++iter1)
 		{
-			(*iter1)->second = minInt(getLowerBound((*iter1)->first,static_cast<int>(threadZero->getNumberOfWavelengths()-wavesList.size())),
+			(*iter1)->second = std::min(getLowerBound((*iter1)->first,static_cast<int>(threadZero->getNumberOfWavelengths()-wavesList.size())),
 				getUpperBound((*iter1)->first,static_cast<int>(threadZero->getNumberOfWavelengths()-wavesList.size())));
 		}
 
@@ -2646,18 +2644,4 @@ int ResourceManager::getUpperBound(int w, int n)
 	}
 
 	return retval;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// Function Name:	minInt
-// Description:		Returns the minimum of two integers
-//
-///////////////////////////////////////////////////////////////////
-int minInt(int a, int b)
-{
-	if(a < b)
-		return a;
-	else
-		return b;
 }
