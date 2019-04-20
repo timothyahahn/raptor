@@ -32,17 +32,12 @@
 
 #include <map>
 
-
-namespace asu_emit_qyan
+class CQYConfigCenter  
 {
-	class CQYConfigCenter  
-	{
-	public:
-		typedef std::pair<int, int> Int_Pair;
-		typedef std::map<Int_Pair, double> IntPair_Double_Map;
-		typedef std::map<Int_Pair, double>::iterator IntPair_Double_Map_Iterator;
-	};
-	
-}
+public:
+	typedef std::pair<int, int> Int_Pair;
+	typedef std::map<Int_Pair, double> IntPair_Double_Map;
+	typedef std::map<Int_Pair, double>::iterator IntPair_Double_Map_Iterator;
+};
 
 #endif //_QYCONFIGCENTER_H_

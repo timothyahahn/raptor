@@ -35,48 +35,43 @@
 
 #include "QYShortestPath.h"
 
-namespace asu_emit_qyan
+class CQYKShortestPaths  
 {
-	using namespace std;
+public:
+	CQYKShortestPaths(const CQYDirectedGraph& rGraph, int nSource, int nTerminal, int nTopk);
+	virtual ~CQYKShortestPaths();
 
-	class CQYKShortestPaths  
-	{
-	public:
-		CQYKShortestPaths(const CQYDirectedGraph& rGraph, int nSource, int nTerminal, int nTopk);
-		virtual ~CQYKShortestPaths();
+	std::vector<CQYDirectedPath*> GetTopKShortestPaths();
 
-		vector<CQYDirectedPath*> GetTopKShortestPaths();
+private: // methods
 
-	private: // methods
+	void _Init();
+	void _SearchTopKShortestPaths();
 
-		void _Init();
-		void _SearchTopKShortestPaths();
+	void _DetermineCost2Target(std::vector<int> vertices_list, int deviated_node_id);
+	void _RestoreEdges4CostAjustment(std::vector<int> vertices_list, int start_node_id, int end_node_id, bool is_deviated_node = false);
+	void _UpdateWeight4CostUntilNode(int node_id);
+	void _ReverseEdgesInGraph(CQYDirectedGraph& g);
+	bool _EdgeHasBeenUsed(int start_node_id, int end_node_id);
 
-		void _DetermineCost2Target(vector<int> vertices_list, int deviated_node_id);
-		void _RestoreEdges4CostAjustment(vector<int> vertices_list, int start_node_id, int end_node_id, bool is_deviated_node = false);
-		void _UpdateWeight4CostUntilNode(int node_id);
-		void _ReverseEdgesInGraph(CQYDirectedGraph& g);
-		bool _EdgeHasBeenUsed(int start_node_id, int end_node_id);
-
-	private: // members
+private: // members
 		
-		int m_nTopK;
-		int m_nSourceNodeId;
-		int m_nTargetNodeId;
+	int m_nTopK;
+	int m_nSourceNodeId;
+	int m_nTargetNodeId;
 		
-		const CQYDirectedGraph& m_rGraph;
-		CQYDirectedGraph* m_pIntermediateGraph;
-		CQYShortestPath* m_pShortestPath4IntermediateGraph;
+	const CQYDirectedGraph& m_rGraph;
+	CQYDirectedGraph* m_pIntermediateGraph;
+	CQYShortestPath* m_pShortestPath4IntermediateGraph;
 
-		// variable to store the top shortest paths
-		vector<CQYDirectedPath*> m_vTopShortestPaths;
+	// variable to store the top shortest paths
+	std::vector<CQYDirectedPath*> m_vTopShortestPaths;
 
-		// a queue of candidates
-		set<CQYDirectedPath*, CQYDirectedPath::Comparator> m_candidatePathsSet;  
+	// a queue of candidates
+	std::set<CQYDirectedPath*, CQYDirectedPath::Comparator> m_candidatePathsSet;  
 
-		// index for node where the path derives from others
-		map<int, int> m_pathDeviatedNodeMap;
-	}; 
-}
+	// index for node where the path derives from others
+	std::map<int, int> m_pathDeviatedNodeMap;
+}; 
 
 #endif //_QYKSHORTESTPATHS_H_

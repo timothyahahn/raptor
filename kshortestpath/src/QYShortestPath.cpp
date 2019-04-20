@@ -25,153 +25,148 @@
 //  possible under the law.
 //
 // ____________________________________________________________________________
-#pragma warning(disable: 4786)
+
 #include <iostream>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
+
 #include "QYShortestPath.h"
 
-namespace asu_emit_qyan
+/* Default Constructor
+/************************************************************************/
+CQYShortestPath::CQYShortestPath( const CQYDirectedGraph& rGraph ) : m_rGraph(rGraph)
 {
-    using namespace std;
+	m_nSourceNodeId = -1; // the source node id is 0 by default.
+	_Init();
+}
 
-	/* Default Constructor
-	/************************************************************************/
-	CQYShortestPath::CQYShortestPath( const CQYDirectedGraph& rGraph ) : m_rGraph(rGraph)
+CQYShortestPath::~CQYShortestPath()	{}
+
+
+/************************************************************************/
+/* Initiate members
+/************************************************************************/
+void CQYShortestPath::_Init()
+{
+	int vertices_count = m_rGraph.GetNumberOfVertices();
+
+	// First: edges with weights
+	for (int i=0; i!=vertices_count; ++i)
 	{
-		m_nSourceNodeId = -1; // the source node id is 0 by default.
-		_Init();
-	}
-
-	CQYShortestPath::~CQYShortestPath()	{}
-
-
-	/************************************************************************/
-	/* Initiate members
-	/************************************************************************/
-	void CQYShortestPath::_Init()
-	{
-		int vertices_count = m_rGraph.GetNumberOfVertices();
-
-		// First: edges with weights
-		for (int i=0; i!=vertices_count; ++i)
+		for (int j=0; j!=vertices_count; ++j)
 		{
-			for (int j=0; j!=vertices_count; ++j)
+			if (m_rGraph.GetWeight(i,j) != CQYDirectedGraph::DISCONNECT)
 			{
-				if (m_rGraph.GetWeight(i,j) != CQYDirectedGraph::DISCONNECT)
-				{
-					m_vEdges.push_back(Edge_Type(i,j));
-					m_vWeights.push_back(m_rGraph.GetWeight(i,j));
-				}
+				m_vEdges.push_back(Edge_Type(i,j));
+				m_vWeights.push_back(m_rGraph.GetWeight(i,j));
 			}
 		}
 	}
+}
 
-	/************************************************************************/
-	/* Analysis of m_vResult4Vertices and m_vResult4Distance to generate the
-	/* shortest path.
-	/************************************************************************/
-	CQYDirectedPath* CQYShortestPath::_GetShortestPath( int nTargetNodeId )
+/************************************************************************/
+/* Analysis of m_vResult4Vertices and m_vResult4Distance to generate the
+/* shortest path.
+/************************************************************************/
+CQYDirectedPath* CQYShortestPath::_GetShortestPath( int nTargetNodeId )
+{
+	std::vector<int> vertex_list;
+
+	// Check the input
+	if (nTargetNodeId >= m_rGraph.GetNumberOfVertices() || nTargetNodeId < 0)
 	{
-		vector<int> vertex_list;
-
-		// Check the input
-		if (nTargetNodeId >= m_rGraph.GetNumberOfVertices() || nTargetNodeId < 0)
-		{
-			return new CQYDirectedPath(-1, CQYDirectedGraph::DISCONNECT, vertex_list);
-		}
-
-		if (m_distanceMap[nTargetNodeId] == CQYDirectedGraph::DISCONNECT)
-		{
-			return new CQYDirectedPath(-2, CQYDirectedGraph::DISCONNECT, vertex_list);
-		}
-
-		// Determine the shortest path from the source to the terminal.
-		int cur_vertex = nTargetNodeId;
-		list<int> tmp_list;
-		tmp_list.push_front(nTargetNodeId);
-		do
-		{
-			if (m_nextNodeMap[cur_vertex] == m_nSourceNodeId)
-			{
-				if(cur_vertex != m_nSourceNodeId) tmp_list.push_front(m_nSourceNodeId);
-				break;
-			}else
-			{
-				cur_vertex = m_nextNodeMap[cur_vertex];
-				tmp_list.push_front(cur_vertex);
-			}
-		} while(1);
-		//
-		copy(tmp_list.begin(), tmp_list.end(), back_inserter(vertex_list));
-
-		//
-		return new CQYDirectedPath(0, m_distanceMap[nTargetNodeId], vertex_list);
+		return new CQYDirectedPath(-1, CQYDirectedGraph::DISCONNECT, vertex_list);
 	}
 
-	/************************************************************************/
-	/* Calculate the shortest path from a source to a target.
-	/************************************************************************/
-	CQYDirectedPath* CQYShortestPath::GetShortestPath( int nSourceNodeId, int nTargetNodeId )
+	if (m_distanceMap[nTargetNodeId] == CQYDirectedGraph::DISCONNECT)
 	{
-		if (m_nSourceNodeId != nSourceNodeId)
-		{
-			m_nSourceNodeId = nSourceNodeId;
-			_DijkstraShortestPathsAlg();
-		}
-
-		return _GetShortestPath(nTargetNodeId);
+		return new CQYDirectedPath(-2, CQYDirectedGraph::DISCONNECT, vertex_list);
 	}
 
-	/************************************************************************/
-	/* Based on the input - the source of the path, create a steiner tree. (???)
-	/************************************************************************/
-	void CQYShortestPath::ConstructPathTree( int nSourceNodeId )
+	// Determine the shortest path from the source to the terminal.
+	int cur_vertex = nTargetNodeId;
+	std::list<int> tmp_list;
+	tmp_list.push_front(nTargetNodeId);
+	do
+	{
+		if (m_nextNodeMap[cur_vertex] == m_nSourceNodeId)
+		{
+			if(cur_vertex != m_nSourceNodeId) tmp_list.push_front(m_nSourceNodeId);
+			break;
+		}else
+		{
+			cur_vertex = m_nextNodeMap[cur_vertex];
+			tmp_list.push_front(cur_vertex);
+		}
+	} while(1);
+	//
+	copy(tmp_list.begin(), tmp_list.end(), back_inserter(vertex_list));
+
+	//
+	return new CQYDirectedPath(0, m_distanceMap[nTargetNodeId], vertex_list);
+}
+
+/************************************************************************/
+/* Calculate the shortest path from a source to a target.
+/************************************************************************/
+CQYDirectedPath* CQYShortestPath::GetShortestPath( int nSourceNodeId, int nTargetNodeId )
+{
+	if (m_nSourceNodeId != nSourceNodeId)
 	{
 		m_nSourceNodeId = nSourceNodeId;
 		_DijkstraShortestPathsAlg();
 	}
 
-	/************************************************************************/
-	/*
-	/************************************************************************/
-	void CQYShortestPath::_DijkstraShortestPathsAlg()
+	return _GetShortestPath(nTargetNodeId);
+}
+
+/************************************************************************/
+/* Based on the input - the source of the path, create a steiner tree. (???)
+/************************************************************************/
+void CQYShortestPath::ConstructPathTree( int nSourceNodeId )
+{
+	m_nSourceNodeId = nSourceNodeId;
+	_DijkstraShortestPathsAlg();
+}
+
+/************************************************************************/
+/*
+/************************************************************************/
+void CQYShortestPath::_DijkstraShortestPathsAlg()
+{
+	int edges_count = m_rGraph.GetNumberOfEdges();
+	int vertices_count = m_rGraph.GetNumberOfVertices();
+
+	//////////////////////////////////////////////////////////////////////////
+	// Initiate the boost graph
+	std::vector<Vertex_Descriptor> vResult4Vertices;
+	std::vector<double> vResult4Distance;
+	Boost_Graph_Type g(vertices_count);
+	boost::property_map<Boost_Graph_Type, boost::edge_weight_t>::type weightmap = get(boost::edge_weight, g);
+	//
+	for (std::size_t j = 0; j < static_cast<unsigned int>(edges_count); ++j)
 	{
-		int edges_count = m_rGraph.GetNumberOfEdges();
-		int vertices_count = m_rGraph.GetNumberOfVertices();
+		Edge_Descriptor e; bool inserted;
+		tie(e, inserted) = add_edge(m_vEdges[j].first, m_vEdges[j].second, g);
+		weightmap[e] = m_vWeights[j];
+	}
 
-		//////////////////////////////////////////////////////////////////////////
-		// Initiate the boost graph
-		vector<Vertex_Descriptor> vResult4Vertices;
-		vector<double> vResult4Distance;
-		Boost_Graph_Type g(vertices_count);
-		property_map<Boost_Graph_Type, edge_weight_t>::type weightmap = get(edge_weight, g);
-		//
-		for (std::size_t j = 0; j < static_cast<unsigned int>(edges_count); ++j)
-		{
-			Edge_Descriptor e; bool inserted;
-			tie(e, inserted) = add_edge(m_vEdges[j].first, m_vEdges[j].second, g);
-			weightmap[e] = m_vWeights[j];
-		}
+	// about the vertices in the boost graph
+	vResult4Vertices.resize(num_vertices(g));
+	vResult4Distance.resize(num_vertices(g));
+	Vertex_Descriptor s = vertex(m_nSourceNodeId, g);
 
-		// about the vertices in the boost graph
-		vResult4Vertices.resize(num_vertices(g));
-		vResult4Distance.resize(num_vertices(g));
-		Vertex_Descriptor s = vertex(m_nSourceNodeId, g);
+	// run the algorithm
+	// VC++ has trouble with the named parameters mechanism
+	boost::property_map<Boost_Graph_Type, boost::vertex_index_t>::type indexmap = get(boost::vertex_index, g);
+	dijkstra_shortest_paths(g, s, &vResult4Vertices[0], &vResult4Distance[0], weightmap, indexmap,
+		std::less<double>(), boost::closed_plus<double>(),
+		CQYDirectedGraph::DISCONNECT, 0, boost::default_dijkstra_visitor());
 
-		// run the algorithm
-		// VC++ has trouble with the named parameters mechanism
-		property_map<Boost_Graph_Type, vertex_index_t>::type indexmap = get(vertex_index, g);
-		dijkstra_shortest_paths(g, s, &vResult4Vertices[0], &vResult4Distance[0], weightmap, indexmap,
-			std::less<double>(), closed_plus<double>(),
-			CQYDirectedGraph::DISCONNECT, 0, default_dijkstra_visitor());
-
-		//////////////////////////////////////////////////////////////////////////
-		// Set the results
-		for (unsigned int i = 0; i < vResult4Vertices.size(); ++i)
-		{
-			m_distanceMap[i] = vResult4Distance[i];
-			m_nextNodeMap[i] = vResult4Vertices[i];
-		}
-
+	//////////////////////////////////////////////////////////////////////////
+	// Set the results
+	for (unsigned int i = 0; i < vResult4Vertices.size(); ++i)
+	{
+		m_distanceMap[i] = vResult4Distance[i];
+		m_nextNodeMap[i] = vResult4Vertices[i];
 	}
 }

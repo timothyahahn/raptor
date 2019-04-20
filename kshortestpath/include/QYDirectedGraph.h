@@ -34,68 +34,64 @@
 #include "QYInclude.h"
 #include <string>
 
-namespace asu_emit_qyan
+// ____________________________________________________________________________
+//
+// Class:       CQYDirectedGraph
+//
+// Purpose:     CQYDirectedGraph defines the directed graph with a list of
+//              directed edges, associated with its weight.
+//
+// Notes:		Two ways to construct a graph: 
+//				1. Assign the path of the file recording the graph
+//				2. Transfer an existing object.
+//
+// See Also:    
+//
+// ____________________________________________________________________________
+class CQYDirectedGraph  
 {
-    // ____________________________________________________________________________
-    //
-    // Class:       CQYDirectedGraph
-    //
-    // Purpose:     CQYDirectedGraph defines the directed graph with a list of
-    //              directed edges, associated with its weight.
-    //
-    // Notes:		Two ways to construct a graph: 
-	//				1. Assign the path of the file recording the graph
-	//				2. Transfer an existing object.
-    //
-    // See Also:    
-    //
-    // ____________________________________________________________________________
-	class CQYDirectedGraph  
-	{
-	public:
-		const static double DISCONNECT;
-		const static int DEADEND;
-		//
-		CQYDirectedGraph(){_Init();}
-		CQYDirectedGraph(const std::string& input_file_name);
-		CQYDirectedGraph(kShortestPathParms params);
-		virtual ~CQYDirectedGraph();
+public:
+	const static double DISCONNECT;
+	const static int DEADEND;
+	//
+	CQYDirectedGraph(){_Init();}
+	CQYDirectedGraph(const std::string& input_file_name);
+	CQYDirectedGraph(kShortestPathParms params);
+	virtual ~CQYDirectedGraph();
 		
-		CQYDirectedGraph(const CQYDirectedGraph& rGraph);
-		CQYDirectedGraph& operator=(const CQYDirectedGraph& rGraph);
+	CQYDirectedGraph(const CQYDirectedGraph& rGraph);
+	CQYDirectedGraph& operator=(const CQYDirectedGraph& rGraph);
 		
-		void RemoveEdge(int i, int j);
-		void AddEdge(int i, int j, double weight);
+	void RemoveEdge(int i, int j);
+	void AddEdge(int i, int j, double weight);
 
-		// Getter and setter
-		int GetNumberOfVertices() const { return m_nNumberOfVertices; }
-		void SetNumberOfVertices(int val) { m_nNumberOfVertices = val; }
+	// Getter and setter
+	int GetNumberOfVertices() const { return m_nNumberOfVertices; }
+	void SetNumberOfVertices(int val) { m_nNumberOfVertices = val; }
 		
-		int GetNumberOfEdges() const { return m_nNumberOfEdges; }
-		void SetNumberOfEdges(int val) { m_nNumberOfEdges = val; }
+	int GetNumberOfEdges() const { return m_nNumberOfEdges; }
+	void SetNumberOfEdges(int val) { m_nNumberOfEdges = val; }
 		
-		double GetMaxWeight() const { return m_dMaxWeight; }
-		void SetMaxWeight(double val) { m_dMaxWeight = val; }
+	double GetMaxWeight() const { return m_dMaxWeight; }
+	void SetMaxWeight(double val) { m_dMaxWeight = val; }
 		
-		double GetMinWeight() const { return m_dMinWeight; }
-		void SetMinWeight(double val) { m_dMinWeight = val; }
+	double GetMinWeight() const { return m_dMinWeight; }
+	void SetMinWeight(double val) { m_dMinWeight = val; }
 		
-		double GetWeight(int i, int j) const { return m_pDirectedEdges->count(std::pair<int, int>(i,j)) ? (*m_pDirectedEdges)[std::pair<int, int>(i,j)] : DISCONNECT; }
-		void SetWeight(int i, int j, double val) { (*m_pDirectedEdges)[std::pair<int, int>(i,j)] = val; }
+	double GetWeight(int i, int j) const { return m_pDirectedEdges->count(std::pair<int, int>(i,j)) ? (*m_pDirectedEdges)[std::pair<int, int>(i,j)] : DISCONNECT; }
+	void SetWeight(int i, int j, double val) { (*m_pDirectedEdges)[std::pair<int, int>(i,j)] = val; }
 		
-	private:
-		CQYConfigCenter::IntPair_Double_Map* m_pDirectedEdges;	
+private:
+	CQYConfigCenter::IntPair_Double_Map* m_pDirectedEdges;	
 		
-		int m_nNumberOfVertices;
-		int m_nNumberOfEdges;
+	int m_nNumberOfVertices;
+	int m_nNumberOfEdges;
 		
-		double m_dMaxWeight;
-		double m_dMinWeight;
+	double m_dMaxWeight;
+	double m_dMinWeight;
 		
-		void _Init();
+	void _Init();
 		
-	};
-	
-}
+};
 
 #endif //_QYDIRECTEDGRAPH_H_

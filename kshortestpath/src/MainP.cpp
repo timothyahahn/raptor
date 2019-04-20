@@ -2,16 +2,13 @@
 #include "QYKShortestPaths.h"
 #include "QYInclude.h"
 
-using namespace std;
-using namespace asu_emit_qyan;
-
 #ifdef __GNUC__ 
 	extern "C" void calc_k_shortest_paths(const kShortestPathParms &params, kShortestPathReturn* retVal);
 #else
 	extern "C" __declspec(dllexport) void calc_k_shortest_paths(const kShortestPathParms &params, kShortestPathReturn* retVal);
 #endif
 
-void copyResults(vector<CQYDirectedPath*> &topK_shortest_paths, const kShortestPathParms &params, kShortestPathReturn* retVal, bool dijkstra);
+void copyResults(std::vector<CQYDirectedPath*> &topK_shortest_paths, const kShortestPathParms &params, kShortestPathReturn* retVal, bool dijkstra);
 
 void calc_k_shortest_paths(const kShortestPathParms &params, kShortestPathReturn* retVal)
 {
@@ -19,7 +16,7 @@ void calc_k_shortest_paths(const kShortestPathParms &params, kShortestPathReturn
 
 	if(params.k_paths == 1)
 	{
-		vector<CQYDirectedPath*> topK_shortest_paths;
+		std::vector<CQYDirectedPath*> topK_shortest_paths;
 
 		CQYShortestPath sp(dg);
 		
@@ -34,7 +31,7 @@ void calc_k_shortest_paths(const kShortestPathParms &params, kShortestPathReturn
 	{
 		CQYKShortestPaths ksp(dg, params.src_node, params.dest_node, params.k_paths);
 
-		vector<CQYDirectedPath*> topK_shortest_paths = ksp.GetTopKShortestPaths();
+		std::vector<CQYDirectedPath*> topK_shortest_paths = ksp.GetTopKShortestPaths();
 
 		copyResults(topK_shortest_paths, params, retVal, false);
 	}
@@ -42,9 +39,9 @@ void calc_k_shortest_paths(const kShortestPathParms &params, kShortestPathReturn
 	return;
 }
 
-void copyResults(vector<CQYDirectedPath*> &topK_shortest_paths, const kShortestPathParms &params, kShortestPathReturn* retVal, bool dijkstra)
+void copyResults(std::vector<CQYDirectedPath*> &topK_shortest_paths, const kShortestPathParms &params, kShortestPathReturn* retVal, bool dijkstra)
 {
-	for(vector<CQYDirectedPath*>::iterator iter = topK_shortest_paths.begin(); iter != topK_shortest_paths.end(); ++iter)
+	for(std::vector<CQYDirectedPath*>::iterator iter = topK_shortest_paths.begin(); iter != topK_shortest_paths.end(); ++iter)
 	{
 		if((*iter)->GetLength() <= 0 || (*iter)->GetLength() >= params.total_nodes)
 		{

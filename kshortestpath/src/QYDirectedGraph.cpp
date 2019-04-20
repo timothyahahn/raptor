@@ -35,91 +35,85 @@
 #include <iostream>
 #include "QYDirectedGraph.h"
 
-namespace asu_emit_qyan
+const int CQYDirectedGraph::DEADEND = -1;
+const double CQYDirectedGraph::DISCONNECT = (std::numeric_limits<double>::max)();
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+CQYDirectedGraph::CQYDirectedGraph( kShortestPathParms params )
 {
-	using namespace std;
+	// Initiate the members of the class
+	_Init();
 
-	const int CQYDirectedGraph::DEADEND = -1;
-	const double CQYDirectedGraph::DISCONNECT = (numeric_limits<double>::max)();
-
-	//////////////////////////////////////////////////////////////////////
-	// Construction/Destruction
-	//////////////////////////////////////////////////////////////////////
-
-	CQYDirectedGraph::CQYDirectedGraph( kShortestPathParms params )
-	{
-		// Initiate the members of the class
-		_Init();
-
-		m_nNumberOfVertices = params.total_nodes;
+	m_nNumberOfVertices = params.total_nodes;
 		
-		for(unsigned int a = 0; a < params.total_edges; ++a)
+	for(unsigned int a = 0; a < params.total_edges; ++a)
+	{
+		int i = params.edge_list[a].src_node;
+		int j = params.edge_list[a].dest_node;
+		double w = params.edge_list[a].edge_cost;
+
+		m_pDirectedEdges->insert(std::pair<std::pair<int, int>, double>(std::pair<int, int>(i,j), w));
+			
+		++m_nNumberOfEdges;
+			
+		if (w > m_dMaxWeight)
 		{
-			int i = params.edge_list[a].src_node;
-			int j = params.edge_list[a].dest_node;
-			double w = params.edge_list[a].edge_cost;
-
-			m_pDirectedEdges->insert(pair<pair<int, int>, double>(pair<int, int>(i,j), w));
-			
-			++m_nNumberOfEdges;
-			
-			if (w > m_dMaxWeight)
-			{
-				m_dMaxWeight = w;
-			}
-			
-			if (w < m_dMinWeight)
-			{
-				m_dMinWeight = w;
-			}
-		}	
-		
-		m_nNumberOfEdges = m_pDirectedEdges->size();
-	}
-
-	CQYDirectedGraph::CQYDirectedGraph( const CQYDirectedGraph& rGraph )
-	{
-		*this = rGraph;	
-	}
-
-	CQYDirectedGraph& CQYDirectedGraph::operator=( const CQYDirectedGraph& rGraph )
-	{
-		m_nNumberOfVertices = rGraph.m_nNumberOfVertices;
-		m_nNumberOfEdges = rGraph.m_nNumberOfEdges;
-
-		m_pDirectedEdges = new CQYConfigCenter::IntPair_Double_Map(*(rGraph.m_pDirectedEdges));
-		
-		return *this;
-	}
-
-	CQYDirectedGraph::~CQYDirectedGraph()
-	{
-		if (m_pDirectedEdges != NULL)
-		{
-			delete m_pDirectedEdges;
+			m_dMaxWeight = w;
 		}
-	}
-
-	void CQYDirectedGraph::_Init()
-	{
-		m_nNumberOfEdges = 0;
-		m_dMaxWeight = 0;
-		m_dMinWeight = DISCONNECT;
-		m_pDirectedEdges = new CQYConfigCenter::IntPair_Double_Map();
-	}
-
-	void CQYDirectedGraph::RemoveEdge( int i, int j )
-	{
-		CQYConfigCenter::IntPair_Double_Map_Iterator pos = m_pDirectedEdges->find(pair<int, int>(i,j));
-		if (pos != m_pDirectedEdges->end())
+			
+		if (w < m_dMinWeight)
 		{
-			m_pDirectedEdges->erase(pos);
+			m_dMinWeight = w;
 		}
-	}
+	}	
+		
+	m_nNumberOfEdges = m_pDirectedEdges->size();
+}
 
-	void CQYDirectedGraph::AddEdge( int i, int j, double weight )
+CQYDirectedGraph::CQYDirectedGraph( const CQYDirectedGraph& rGraph )
+{
+	*this = rGraph;	
+}
+
+CQYDirectedGraph& CQYDirectedGraph::operator=( const CQYDirectedGraph& rGraph )
+{
+	m_nNumberOfVertices = rGraph.m_nNumberOfVertices;
+	m_nNumberOfEdges = rGraph.m_nNumberOfEdges;
+
+	m_pDirectedEdges = new CQYConfigCenter::IntPair_Double_Map(*(rGraph.m_pDirectedEdges));
+		
+	return *this;
+}
+
+CQYDirectedGraph::~CQYDirectedGraph()
+{
+	if (m_pDirectedEdges != NULL)
 	{
-		(*m_pDirectedEdges)[pair<int, int>(i,j)] = weight;	
+		delete m_pDirectedEdges;
 	}
+}
 
+void CQYDirectedGraph::_Init()
+{
+	m_nNumberOfEdges = 0;
+	m_dMaxWeight = 0;
+	m_dMinWeight = DISCONNECT;
+	m_pDirectedEdges = new CQYConfigCenter::IntPair_Double_Map();
+}
+
+void CQYDirectedGraph::RemoveEdge( int i, int j )
+{
+	CQYConfigCenter::IntPair_Double_Map_Iterator pos = m_pDirectedEdges->find(std::pair<int, int>(i,j));
+	if (pos != m_pDirectedEdges->end())
+	{
+		m_pDirectedEdges->erase(pos);
+	}
+}
+
+void CQYDirectedGraph::AddEdge( int i, int j, double weight )
+{
+	(*m_pDirectedEdges)[std::pair<int, int>(i,j)] = weight;	
 }
