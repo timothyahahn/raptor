@@ -33,11 +33,11 @@ endif(WIN32)
 
 if(WIN32)
     set(CMAKE_FIND_LIBRARY_PREFIXES "")
-    set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
 
 	find_library( PTHREAD_VC2_LIB
-                  NAMES pthreadVC2.dll
-                  HINTS "C:/pthreads/Pre-built.2/dll/x86"
+                  NAMES pthreadVC2.lib
+                  HINTS "C:/pthreads/Pre-built.2/lib/x64"
                 )
 
 	include_directories("C:/pthreads/Pre-built.2/include")
