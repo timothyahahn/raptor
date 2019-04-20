@@ -77,11 +77,16 @@ void MessageLogger::recordEvent(const std::string &e, bool print, unsigned int c
 
 	pthread_mutex_lock(&LogMutex);
 
-	struct tm current;
+	struct tm *current = nullptr;
 	time_t now;
 
 	time(&now);
-	localtime_s(&current,&now);
+#ifdef _MSC_VER
+	current = new tm;
+	localtime_s(current,&now);
+#else
+	current = localtime(&now);
+#endif //_MSC_VER
 
 	std::ostringstream message;
 
@@ -104,4 +109,5 @@ void MessageLogger::recordEvent(const std::string &e, bool print, unsigned int c
 		pthread_mutex_unlock(&PrintMutex);
 	}
 
+	delete current;
 }
