@@ -41,13 +41,13 @@ const double DirectedGraph::DISCONNECT = (std::numeric_limits<double>::max)();
 //////////////////////////////////////////////////////////////////////
 DirectedGraph::DirectedGraph():
 	m_nNumberOfVertices(0), m_nNumberOfEdges(0), m_dMaxWeight(0.0), m_dMinWeight(DISCONNECT),
-	m_pDirectedEdges(new CConfigCenter::SizeT_Pair_Double_Map())
+	m_pDirectedEdges(new ConfigCenter::SizeT_Pair_Double_Map())
 {
 }
 
 DirectedGraph::DirectedGraph( kShortestPathParms params ) :
 	m_nNumberOfVertices(0), m_nNumberOfEdges(0), m_dMaxWeight(0.0), m_dMinWeight(DISCONNECT),
-	m_pDirectedEdges(new CConfigCenter::SizeT_Pair_Double_Map())
+	m_pDirectedEdges(new ConfigCenter::SizeT_Pair_Double_Map())
 {
 	m_nNumberOfVertices = params.total_nodes;
 		
@@ -77,7 +77,7 @@ DirectedGraph::DirectedGraph( kShortestPathParms params ) :
 
 DirectedGraph::DirectedGraph( const DirectedGraph& rGraph ) :
 	m_nNumberOfVertices(0), m_nNumberOfEdges(0), m_dMaxWeight(0.0), m_dMinWeight(DISCONNECT),
-	m_pDirectedEdges(new CConfigCenter::SizeT_Pair_Double_Map())
+	m_pDirectedEdges(new ConfigCenter::SizeT_Pair_Double_Map())
 {
 	*this = rGraph;	
 }
@@ -87,7 +87,7 @@ DirectedGraph& DirectedGraph::operator=( const DirectedGraph& rGraph )
 	m_nNumberOfVertices = rGraph.m_nNumberOfVertices;
 	m_nNumberOfEdges = rGraph.m_nNumberOfEdges;
 
-	m_pDirectedEdges = new CConfigCenter::SizeT_Pair_Double_Map(*(rGraph.m_pDirectedEdges));
+	m_pDirectedEdges = new ConfigCenter::SizeT_Pair_Double_Map(*(rGraph.m_pDirectedEdges));
 		
 	return *this;
 }
@@ -105,12 +105,12 @@ void DirectedGraph::_Init()
 	m_nNumberOfEdges = 0;
 	m_dMaxWeight = 0;
 	m_dMinWeight = DISCONNECT;
-	m_pDirectedEdges = new CConfigCenter::SizeT_Pair_Double_Map();
+	m_pDirectedEdges = new ConfigCenter::SizeT_Pair_Double_Map();
 }
 
 void DirectedGraph::RemoveEdge( size_t i, size_t j )
 {
-	CConfigCenter::SizeT_Pair_Double_Map_Iterator pos = m_pDirectedEdges->find(CConfigCenter::SizeT_Pair(i,j));
+	ConfigCenter::SizeT_Pair_Double_Map_Iterator pos = m_pDirectedEdges->find(ConfigCenter::SizeT_Pair(i,j));
 	if (pos != m_pDirectedEdges->end())
 	{
 		m_pDirectedEdges->erase(pos);
@@ -119,5 +119,5 @@ void DirectedGraph::RemoveEdge( size_t i, size_t j )
 
 void DirectedGraph::AddEdge( size_t i, size_t j, double weight )
 {
-	(*m_pDirectedEdges)[CConfigCenter::SizeT_Pair(i,j)] = weight;
+	(*m_pDirectedEdges)[ConfigCenter::SizeT_Pair(i,j)] = weight;
 }

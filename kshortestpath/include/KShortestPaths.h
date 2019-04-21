@@ -65,7 +65,6 @@ public:
 
 private: // methods
 
-	void _Init();
 	void _SearchTopKShortestPaths();
 
 	void _DetermineCost2Target(std::vector<size_t> vertices_list, size_t deviated_node_id);
