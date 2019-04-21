@@ -2,11 +2,11 @@
 //
 //  General Information:
 //
-//  File Name:      QYDirectedGraph.cpp
+//  File Name:      DirectedGraph.cpp
 //  Author:         Timothy Hahn
 //  Project:        KShortestPath
 //
-//  Description:    Implementation of class(es) CQYDirectedGraph
+//  Description:    Implementation of class(es) DirectedGraph
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
@@ -26,9 +26,8 @@
 //
 // ____________________________________________________________________________
 
-#include "QYShortestPath.h"
-#include "QYKShortestPaths.h"
-#include "QYInclude.h"
+#include "ShortestPath.h"
+#include "KShortestPaths.h"
 
 #ifdef __GNUC__ 
 	extern "C" void calc_k_shortest_paths(const kShortestPathParms &params, kShortestPathReturn* retVal);
@@ -36,17 +35,17 @@
 	extern "C" __declspec(dllexport) void calc_k_shortest_paths(const kShortestPathParms &params, kShortestPathReturn* retVal);
 #endif
 
-void copyResults(std::vector<CQYDirectedPath*> &topK_shortest_paths, const kShortestPathParms &params, kShortestPathReturn* retVal, bool dijkstra);
+void copyResults(std::vector<DirectedPath*> &topK_shortest_paths, const kShortestPathParms &params, kShortestPathReturn* retVal, bool dijkstra);
 
 void calc_k_shortest_paths(const kShortestPathParms &params, kShortestPathReturn* retVal)
 {
-	CQYDirectedGraph dg(params);
+	DirectedGraph dg(params);
 
 	if(params.k_paths == 1)
 	{
-		std::vector<CQYDirectedPath*> topK_shortest_paths;
+		std::vector<DirectedPath*> topK_shortest_paths;
 
-		CQYShortestPath sp(dg);
+		ShortestPath sp(dg);
 		
 		topK_shortest_paths.push_back(sp.GetShortestPath(params.src_node, params.dest_node));
 
@@ -57,9 +56,9 @@ void calc_k_shortest_paths(const kShortestPathParms &params, kShortestPathReturn
 	}
 	else
 	{
-		CQYKShortestPaths ksp(dg, params.src_node, params.dest_node, params.k_paths);
+		KShortestPaths ksp(dg, params.src_node, params.dest_node, params.k_paths);
 
-		std::vector<CQYDirectedPath*> topK_shortest_paths = ksp.GetTopKShortestPaths();
+		std::vector<DirectedPath*> topK_shortest_paths = ksp.GetTopKShortestPaths();
 
 		copyResults(topK_shortest_paths, params, retVal, false);
 	}
@@ -67,9 +66,9 @@ void calc_k_shortest_paths(const kShortestPathParms &params, kShortestPathReturn
 	return;
 }
 
-void copyResults(std::vector<CQYDirectedPath*> &topK_shortest_paths, const kShortestPathParms &params, kShortestPathReturn* retVal, bool dijkstra)
+void copyResults(std::vector<DirectedPath*> &topK_shortest_paths, const kShortestPathParms &params, kShortestPathReturn* retVal, bool dijkstra)
 {
-	for(std::vector<CQYDirectedPath*>::iterator iter = topK_shortest_paths.begin(); iter != topK_shortest_paths.end(); ++iter)
+	for(std::vector<DirectedPath*>::iterator iter = topK_shortest_paths.begin(); iter != topK_shortest_paths.end(); ++iter)
 	{
 		if((*iter)->GetLength() <= 0 || (*iter)->GetLength() >= params.total_nodes)
 		{

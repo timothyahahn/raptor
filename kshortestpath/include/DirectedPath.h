@@ -6,7 +6,7 @@
 //  Author:         Yan Qi
 //  Project:        KShortestPath
 //
-//  Description:    Declaration of class(es) CQYDirectedPath
+//  Description:    Declaration of class(es) DirectedPath
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
@@ -29,30 +29,26 @@
 #ifndef _QYDIRECTEDPATH_H_
 #define _QYDIRECTEDPATH_H_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include <vector>
 #include <fstream>
 #include <algorithm>
+#include <iterator>
 
-
-class CQYDirectedPath
+class DirectedPath
 {
 public:
-	CQYDirectedPath()
+	DirectedPath()
 	: m_nId(0), m_nLength(0), m_dCost(0), m_nSourceNodeId(0), m_nTerminalNodeId(0)
 	{
 	}
 
-	CQYDirectedPath(size_t pId, double pCost, const std::vector<size_t>& pVertexList)
+	DirectedPath(size_t pId, double pCost, const std::vector<size_t>& pVertexList)
 		:m_nId(pId), m_nLength(0), m_dCost(pCost), m_nSourceNodeId(0), m_nTerminalNodeId(0)
 	{
 		m_vVertexList.assign(pVertexList.begin(), pVertexList.end());
 	}
 		
-	virtual ~CQYDirectedPath(){};
+	virtual ~DirectedPath(){};
 		
 	// Getter and Setter
 	size_t GetId() const { return m_nId; }
@@ -76,7 +72,7 @@ public:
 	void PrintOut(std::ostream& out_stream) const
 	{
 		out_stream << "Cost: " << m_dCost << " Length: " << m_vVertexList.size() << std::endl;
-		std::copy(m_vVertexList.rbegin(), m_vVertexList.rend(), std::ostream_iterator<size_t>(out_stream, " "));
+		std::copy(m_vVertexList.rbegin(), m_vVertexList.rend(), std::ostream_iterator<int>(out_stream, " "));
 		out_stream << std::endl <<  "*********************************************" << std::endl;	
 	}
 
@@ -97,7 +93,7 @@ public:
 	{
 	public:
 		// Lesson: the condition must be checked completely!!!
-		bool operator() (const CQYDirectedPath& s1, const CQYDirectedPath& s2) const 
+		bool operator() (const DirectedPath& s1, const DirectedPath& s2) const 
 		{
 			if (s1.GetCost() == s2.GetCost())
 			{
@@ -117,7 +113,7 @@ public:
 		}
 
 		//
-		bool operator() (const CQYDirectedPath* s1, const CQYDirectedPath* s2) const 
+		bool operator() (const DirectedPath* s1, const DirectedPath* s2) const 
 		{
 			return operator()(*s1, *s2);
 		}

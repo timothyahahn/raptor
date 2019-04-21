@@ -2,11 +2,11 @@
 //
 //  General Information:
 //
-//  File Name:      QYDirectedGraph.h
+//  File Name:      DirectedGraph.h
 //  Author:         Yan Qi
 //  Project:        KShortestPath
 //
-//  Description:    Declaration of class(es) CQYDirectedGraph
+//  Description:    Declaration of class(es) DirectedGraph
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
@@ -28,18 +28,19 @@
 //
 // ____________________________________________________________________________
 
-#ifndef _QYDIRECTEDGRAPH_H_
-#define _QYDIRECTEDGRAPH_H_
+#ifndef _DIRECTEDGRAPH_H_
+#define _DIRECTEDGRAPH_H_
 
-#include "QYConfigCenter.h"
-#include "QYInclude.h"
 #include <string>
+
+#include "ConfigCenter.h"
+#include "KShortestPaths.h"
 
 // ____________________________________________________________________________
 //
-// Class:       CQYDirectedGraph
+// Class:       DirectedGraph
 //
-// Purpose:     CQYDirectedGraph defines the directed graph with a list of
+// Purpose:     DirectedGraph defines the directed graph with a list of
 //              directed edges, associated with its weight.
 //
 // Notes:		Two ways to construct a graph: 
@@ -49,19 +50,19 @@
 // See Also:    
 //
 // ____________________________________________________________________________
-class CQYDirectedGraph  
+class DirectedGraph  
 {
 public:
 	const static double DISCONNECT;
 	const static size_t DEADEND;
 	//
-	CQYDirectedGraph();
-	CQYDirectedGraph(const std::string& input_file_name);
-	CQYDirectedGraph(kShortestPathParms params);
-	virtual ~CQYDirectedGraph();
+	DirectedGraph();
+	DirectedGraph(const std::string& input_file_name);
+	DirectedGraph(kShortestPathParms params);
+	virtual ~DirectedGraph();
 		
-	CQYDirectedGraph(const CQYDirectedGraph& rGraph);
-	CQYDirectedGraph& operator=(const CQYDirectedGraph& rGraph);
+	DirectedGraph(const DirectedGraph& rGraph);
+	DirectedGraph& operator=(const DirectedGraph& rGraph);
 		
 	void RemoveEdge(size_t i, size_t j);
 	void AddEdge(size_t i, size_t j, double weight);
@@ -79,11 +80,11 @@ public:
 	double GetMinWeight() const { return m_dMinWeight; }
 	void SetMinWeight(double val) { m_dMinWeight = val; }
 		
-	double GetWeight(size_t i, size_t j) const { return m_pDirectedEdges->count(CQYConfigCenter::SizeT_Pair(i,j)) ? (*m_pDirectedEdges)[CQYConfigCenter::SizeT_Pair(i,j)] : DISCONNECT; }
-	void SetWeight(size_t i, size_t j, double val) { (*m_pDirectedEdges)[CQYConfigCenter::SizeT_Pair(i,j)] = val; }
+	double GetWeight(size_t i, size_t j) const { return m_pDirectedEdges->count(ConfigCenter::SizeT_Pair(i,j)) ? (*m_pDirectedEdges)[ConfigCenter::SizeT_Pair(i,j)] : DISCONNECT; }
+	void SetWeight(size_t i, size_t j, double val) { (*m_pDirectedEdges)[ConfigCenter::SizeT_Pair(i,j)] = val; }
 		
 private:
-	CQYConfigCenter::SizeT_Pair_Double_Map* m_pDirectedEdges;
+	ConfigCenter::SizeT_Pair_Double_Map* m_pDirectedEdges;
 
 	size_t m_nNumberOfVertices;
 	size_t m_nNumberOfEdges;
@@ -95,4 +96,4 @@ private:
 		
 };
 
-#endif //_QYDIRECTEDGRAPH_H_
+#endif //_DIRECTEDGRAPH_H_

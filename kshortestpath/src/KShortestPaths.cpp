@@ -2,11 +2,11 @@
 //
 //  General Information:
 //
-//  File Name:      QYKShortestPaths.cpp
+//  File Name:      KShortestPaths.cpp
 //  Author:         Yan Qi
 //  Project:        KShortestPath
 //
-//  Description:    Implementation of class(es) CQYKShortestPaths
+//  Description:    Implementation of class(es) KShortestPaths
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
@@ -29,27 +29,27 @@
 
 #include <iostream>
 
-#include "QYKShortestPaths.h"
+#include "KShortestPaths.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CQYKShortestPaths::CQYKShortestPaths( const CQYDirectedGraph& rGraph, size_t nSource, size_t nTerminal, size_t nTopk )
+KShortestPaths::KShortestPaths( const DirectedGraph& rGraph, size_t nSource, size_t nTerminal, size_t nTopk )
 	: m_rGraph(rGraph), m_nSourceNodeId(nSource), m_nTargetNodeId(nTerminal), m_nTopK(nTopk)
 {
 	m_pIntermediateGraph = nullptr;
 	m_pShortestPath4IntermediateGraph = nullptr;
 }
 
-CQYKShortestPaths::~CQYKShortestPaths()
+KShortestPaths::~KShortestPaths()
 {
-	for (std::vector<CQYDirectedPath*>::iterator pos=m_vTopShortestPaths.begin(); pos!=m_vTopShortestPaths.end(); ++pos)
+	for (std::vector<DirectedPath*>::iterator pos=m_vTopShortestPaths.begin(); pos!=m_vTopShortestPaths.end(); ++pos)
 	{
 		delete *pos;
 	}
 	//For loop added by Tim Hahn to fix a memory leak issue.
-	for(std::set<CQYDirectedPath*, CQYDirectedPath::Comparator>::iterator pos = m_candidatePathsSet.begin(); pos != m_candidatePathsSet.end(); ++pos)
+	for(std::set<DirectedPath*, DirectedPath::Comparator>::iterator pos = m_candidatePathsSet.begin(); pos != m_candidatePathsSet.end(); ++pos)
 	{
 		delete *pos;
 	}
@@ -63,7 +63,7 @@ CQYKShortestPaths::~CQYKShortestPaths()
 /************************************************************************/
 /* Get the top k shortest paths.
 /************************************************************************/
-std::vector<CQYDirectedPath*> CQYKShortestPaths::GetTopKShortestPaths()
+std::vector<DirectedPath*> KShortestPaths::GetTopKShortestPaths()
 {
 	_SearchTopKShortestPaths();
 	return m_vTopShortestPaths;
@@ -73,12 +73,12 @@ std::vector<CQYDirectedPath*> CQYKShortestPaths::GetTopKShortestPaths()
 /************************************************************************/
 /*  The main function to do searching
 /************************************************************************/
-void CQYKShortestPaths::_SearchTopKShortestPaths()
+void KShortestPaths::_SearchTopKShortestPaths()
 {
 	//////////////////////////////////////////////////////////////////////////
 	// first, find the shortest path in the graph
-	m_pShortestPath4IntermediateGraph = new CQYShortestPath(m_rGraph);
-	CQYDirectedPath* the_shortest_path =
+	m_pShortestPath4IntermediateGraph = new CShortestPath(m_rGraph);
+	DirectedPath* the_shortest_path =
 		m_pShortestPath4IntermediateGraph->GetShortestPath(m_nSourceNodeId, m_nTargetNodeId);
 
 	// check the validity of the result
@@ -106,7 +106,7 @@ void CQYKShortestPaths::_SearchTopKShortestPaths()
 	{
 		// Fetch the smallest one from a queue of candidates;
 		// Note that it's one of results.
-		CQYDirectedPath* cur_path = (*m_candidatePathsSet.begin());
+		DirectedPath* cur_path = (*m_candidatePathsSet.begin());
 		m_candidatePathsSet.erase(m_candidatePathsSet.begin());
 
 		// Put this candidate into the result list.
@@ -123,7 +123,7 @@ void CQYKShortestPaths::_SearchTopKShortestPaths()
 		std::vector<size_t> node_list_in_path = cur_path->GetVertexList();
 
 		// Construct a temporal graph in order to determine the next shortest paths
-		m_pIntermediateGraph = new CQYDirectedGraph(m_rGraph);
+		m_pIntermediateGraph = new DirectedGraph(m_rGraph);
 
 		// Determine the costs of nodes in the graph
 		_DetermineCost2Target(node_list_in_path, deviated_node_id);
@@ -146,7 +146,7 @@ void CQYKShortestPaths::_SearchTopKShortestPaths()
 /************************************************************************/
 /* Remove vertices in the input, and recalculate the
 /************************************************************************/
-void CQYKShortestPaths::_DetermineCost2Target(std::vector<size_t> vertices_list, size_t deviated_node_id)
+void KShortestPaths::_DetermineCost2Target(std::vector<size_t> vertices_list, size_t deviated_node_id)
 {
 	// first: generate a temporary graph with only parts of the original graph
 	size_t count4vertices = m_pIntermediateGraph->GetNumberOfVertices();
@@ -159,9 +159,9 @@ void CQYKShortestPaths::_DetermineCost2Target(std::vector<size_t> vertices_list,
 		for (size_t j=0; j<count4vertices; ++j)
 		{
 			size_t cur_edges_count = m_pIntermediateGraph->GetNumberOfEdges();
-			if (m_pIntermediateGraph->GetWeight(remove_node_id, j) < CQYDirectedGraph::DISCONNECT)
+			if (m_pIntermediateGraph->GetWeight(remove_node_id, j) < DirectedGraph::DISCONNECT)
 			{
-				m_pIntermediateGraph->SetWeight(remove_node_id, j, CQYDirectedGraph::DISCONNECT);
+				m_pIntermediateGraph->SetWeight(remove_node_id, j, DirectedGraph::DISCONNECT);
 				--cur_edges_count;
 			}
 			m_pIntermediateGraph->SetNumberOfEdges(cur_edges_count);
@@ -177,7 +177,7 @@ void CQYKShortestPaths::_DetermineCost2Target(std::vector<size_t> vertices_list,
 	{
 		delete m_pShortestPath4IntermediateGraph;
 	}
-	m_pShortestPath4IntermediateGraph = new CQYShortestPath(*m_pIntermediateGraph);
+	m_pShortestPath4IntermediateGraph = new CShortestPath(*m_pIntermediateGraph);
 	m_pShortestPath4IntermediateGraph->ConstructPathTree(m_nTargetNodeId);
 
 	// third: reverse the edges in the graph again, go back to the original
@@ -187,7 +187,7 @@ void CQYKShortestPaths::_DetermineCost2Target(std::vector<size_t> vertices_list,
 /************************************************************************/
 /* Restore edges connecting start_node to end_node
 /************************************************************************/
-void CQYKShortestPaths::_RestoreEdges4CostAjustment(std::vector<size_t> vertices_list,
+void KShortestPaths::_RestoreEdges4CostAjustment(std::vector<size_t> vertices_list,
 	size_t start_node_id, size_t end_node_id, bool is_deviated_node)
 {
 	/// first: restore the arcs from 'start_node_id' except that reaching 'end_node_id';
@@ -199,7 +199,7 @@ void CQYKShortestPaths::_RestoreEdges4CostAjustment(std::vector<size_t> vertices
 	{
 		if(i == end_node_id || i == start_node_id) continue;
 		double edge_weight = m_rGraph.GetWeight(start_node_id, i);
-		if (edge_weight < CQYDirectedGraph::DISCONNECT)
+		if (edge_weight < DirectedGraph::DISCONNECT)
 		{
 			if (is_deviated_node && _EdgeHasBeenUsed(start_node_id, i)) continue; //???
 
@@ -208,7 +208,7 @@ void CQYKShortestPaths::_RestoreEdges4CostAjustment(std::vector<size_t> vertices
 
 			// update the distance if the restored arc makes for a shorter path to the target.
 			double node_cost = m_pShortestPath4IntermediateGraph->GetDistance(i);
-			if ( node_cost < CQYDirectedGraph::DISCONNECT
+			if ( node_cost < DirectedGraph::DISCONNECT
 				&& (edge_weight+node_cost) < m_pShortestPath4IntermediateGraph->GetDistance(start_node_id))
 			{
 				m_pShortestPath4IntermediateGraph->SetDistance(start_node_id, edge_weight+node_cost);
@@ -222,7 +222,7 @@ void CQYKShortestPaths::_RestoreEdges4CostAjustment(std::vector<size_t> vertices
 	double cost_of_start_node =
 		m_pShortestPath4IntermediateGraph->GetDistance(start_node_id);
 
-	if ( cost_of_start_node < CQYDirectedGraph::DISCONNECT)
+	if ( cost_of_start_node < DirectedGraph::DISCONNECT)
 	{
 		if(is_updated) _UpdateWeight4CostUntilNode(start_node_id); // a condition checking is added @ 20080111
 
@@ -258,7 +258,7 @@ void CQYKShortestPaths::_RestoreEdges4CostAjustment(std::vector<size_t> vertices
 
 		// Update the list of shortest paths
 		size_t new_node_id = m_candidatePathsSet.size() + m_vTopShortestPaths.size();
-		m_candidatePathsSet.insert(new CQYDirectedPath(new_node_id, cost_new_path, new_path));
+		m_candidatePathsSet.insert(new DirectedPath(new_node_id, cost_new_path, new_path));
 		m_pathDeviatedNodeMap.insert(std::pair<size_t, size_t>(new_node_id, start_node_id));
 	}
 
@@ -281,7 +281,7 @@ void CQYKShortestPaths::_RestoreEdges4CostAjustment(std::vector<size_t> vertices
 /* Update the weight of arcs before node_id in the graph
 /* TODO: Is there any way to improve the function below!??
 /************************************************************************/
-void CQYKShortestPaths::_UpdateWeight4CostUntilNode(size_t node_id)
+void KShortestPaths::_UpdateWeight4CostUntilNode(size_t node_id)
 {
 	size_t count4vertices = m_pIntermediateGraph->GetNumberOfVertices();
 	std::vector<size_t> candidate_node_list;
@@ -298,7 +298,7 @@ void CQYKShortestPaths::_UpdateWeight4CostUntilNode(size_t node_id)
 			double cost_node = m_pShortestPath4IntermediateGraph->GetDistance(i);
 			double cost_cur_node = m_pShortestPath4IntermediateGraph->GetDistance(cur_node_id);
 
-			if (edge_weight < CQYDirectedGraph::DISCONNECT
+			if (edge_weight < DirectedGraph::DISCONNECT
 				&& cost_node > cost_cur_node + edge_weight)
 			{
 				m_pShortestPath4IntermediateGraph->SetDistance(i, cost_cur_node+edge_weight);
@@ -317,7 +317,7 @@ void CQYKShortestPaths::_UpdateWeight4CostUntilNode(size_t node_id)
 /************************************************************************/
 /* Reverse directions of all edges in the graph
 /************************************************************************/
-void CQYKShortestPaths::_ReverseEdgesInGraph( CQYDirectedGraph& g )
+void KShortestPaths::_ReverseEdgesInGraph( DirectedGraph& g )
 {
 	size_t i;
 	size_t count4vertices = g.GetNumberOfVertices();
@@ -325,8 +325,8 @@ void CQYKShortestPaths::_ReverseEdgesInGraph( CQYDirectedGraph& g )
 	{
 		for (size_t j=0; j<i; ++j)
 		{
-			if(g.GetWeight(i,j) < CQYDirectedGraph::DISCONNECT
-				|| g.GetWeight(j,i) < CQYDirectedGraph::DISCONNECT )
+			if(g.GetWeight(i,j) < DirectedGraph::DISCONNECT
+				|| g.GetWeight(j,i) < DirectedGraph::DISCONNECT )
 			{
 				double dTmp = g.GetWeight(i,j);
 				g.SetWeight(i, j, g.GetWeight(j,i));
@@ -339,12 +339,12 @@ void CQYKShortestPaths::_ReverseEdgesInGraph( CQYDirectedGraph& g )
 /************************************************************************/
 /* Check if the edge from start_node to end_node has been in the results or not
 /************************************************************************/
-bool CQYKShortestPaths::_EdgeHasBeenUsed( size_t start_node_id, size_t end_node_id )
+bool KShortestPaths::_EdgeHasBeenUsed( size_t start_node_id, size_t end_node_id )
 {
 	size_t count_of_shortest_paths = m_vTopShortestPaths.size();
 	for (size_t i=0; i<count_of_shortest_paths; ++i)
 	{
-		CQYDirectedPath* cur_shortest_path = m_vTopShortestPaths[i];
+		DirectedPath* cur_shortest_path = m_vTopShortestPaths[i];
 		std::vector<size_t> cur_path_list = cur_shortest_path->GetVertexList();
 
 		std::vector<size_t>::iterator loc_of_start_id =

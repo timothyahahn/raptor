@@ -21,11 +21,11 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+#include "KShortestPaths.h"
+
 #include "Edge.h"
 
 #include <vector>
-
-#include "QYInclude.h"
 
 enum EventType {
 	ACTIVATE_WORKSTATIONS,

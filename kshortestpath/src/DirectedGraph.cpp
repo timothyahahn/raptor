@@ -2,11 +2,11 @@
 //
 //  General Information:
 //
-//  File Name:      QYDirectedGraph.cpp
+//  File Name:      DirectedGraph.cpp
 //  Author:         Yan Qi
 //  Project:        KShortestPath
 //
-//  Description:    Implementation of class(es) CQYDirectedGraph
+//  Description:    Implementation of class(es) DirectedGraph
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
@@ -27,30 +27,27 @@
 //
 // ____________________________________________________________________________
 
-#ifdef _MSC_VER
-#pragma warning(disable: 4786)
-#endif // _MSC_VER 
-
 #include <limits>
 #include <fstream>
 #include <iostream>
-#include "QYDirectedGraph.h"
 
-const size_t CQYDirectedGraph::DEADEND = -1;
-const double CQYDirectedGraph::DISCONNECT = (std::numeric_limits<double>::max)();
+#include "DirectedGraph.h"
+
+const size_t DirectedGraph::DEADEND = -1;
+const double DirectedGraph::DISCONNECT = (std::numeric_limits<double>::max)();
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-CQYDirectedGraph::CQYDirectedGraph():
+DirectedGraph::DirectedGraph():
 	m_nNumberOfVertices(0), m_nNumberOfEdges(0), m_dMaxWeight(0.0), m_dMinWeight(DISCONNECT),
-	m_pDirectedEdges(new CQYConfigCenter::SizeT_Pair_Double_Map())
+	m_pDirectedEdges(new CConfigCenter::SizeT_Pair_Double_Map())
 {
 }
 
-CQYDirectedGraph::CQYDirectedGraph( kShortestPathParms params ) :
+DirectedGraph::DirectedGraph( kShortestPathParms params ) :
 	m_nNumberOfVertices(0), m_nNumberOfEdges(0), m_dMaxWeight(0.0), m_dMinWeight(DISCONNECT),
-	m_pDirectedEdges(new CQYConfigCenter::SizeT_Pair_Double_Map())
+	m_pDirectedEdges(new CConfigCenter::SizeT_Pair_Double_Map())
 {
 	m_nNumberOfVertices = params.total_nodes;
 		
@@ -78,24 +75,24 @@ CQYDirectedGraph::CQYDirectedGraph( kShortestPathParms params ) :
 	m_nNumberOfEdges = m_pDirectedEdges->size();
 }
 
-CQYDirectedGraph::CQYDirectedGraph( const CQYDirectedGraph& rGraph ) :
+DirectedGraph::DirectedGraph( const DirectedGraph& rGraph ) :
 	m_nNumberOfVertices(0), m_nNumberOfEdges(0), m_dMaxWeight(0.0), m_dMinWeight(DISCONNECT),
-	m_pDirectedEdges(new CQYConfigCenter::SizeT_Pair_Double_Map())
+	m_pDirectedEdges(new CConfigCenter::SizeT_Pair_Double_Map())
 {
 	*this = rGraph;	
 }
 
-CQYDirectedGraph& CQYDirectedGraph::operator=( const CQYDirectedGraph& rGraph )
+DirectedGraph& DirectedGraph::operator=( const DirectedGraph& rGraph )
 {
 	m_nNumberOfVertices = rGraph.m_nNumberOfVertices;
 	m_nNumberOfEdges = rGraph.m_nNumberOfEdges;
 
-	m_pDirectedEdges = new CQYConfigCenter::SizeT_Pair_Double_Map(*(rGraph.m_pDirectedEdges));
+	m_pDirectedEdges = new CConfigCenter::SizeT_Pair_Double_Map(*(rGraph.m_pDirectedEdges));
 		
 	return *this;
 }
 
-CQYDirectedGraph::~CQYDirectedGraph()
+DirectedGraph::~DirectedGraph()
 {
 	if (m_pDirectedEdges != nullptr)
 	{
@@ -103,24 +100,24 @@ CQYDirectedGraph::~CQYDirectedGraph()
 	}
 }
 
-void CQYDirectedGraph::_Init()
+void DirectedGraph::_Init()
 {
 	m_nNumberOfEdges = 0;
 	m_dMaxWeight = 0;
 	m_dMinWeight = DISCONNECT;
-	m_pDirectedEdges = new CQYConfigCenter::SizeT_Pair_Double_Map();
+	m_pDirectedEdges = new CConfigCenter::SizeT_Pair_Double_Map();
 }
 
-void CQYDirectedGraph::RemoveEdge( size_t i, size_t j )
+void DirectedGraph::RemoveEdge( size_t i, size_t j )
 {
-	CQYConfigCenter::SizeT_Pair_Double_Map_Iterator pos = m_pDirectedEdges->find(CQYConfigCenter::SizeT_Pair(i,j));
+	CConfigCenter::SizeT_Pair_Double_Map_Iterator pos = m_pDirectedEdges->find(CConfigCenter::SizeT_Pair(i,j));
 	if (pos != m_pDirectedEdges->end())
 	{
 		m_pDirectedEdges->erase(pos);
 	}
 }
 
-void CQYDirectedGraph::AddEdge( size_t i, size_t j, double weight )
+void DirectedGraph::AddEdge( size_t i, size_t j, double weight )
 {
-	(*m_pDirectedEdges)[CQYConfigCenter::SizeT_Pair(i,j)] = weight;
+	(*m_pDirectedEdges)[CConfigCenter::SizeT_Pair(i,j)] = weight;
 }

@@ -2,11 +2,11 @@
 //
 //  General Information:
 //
-//  File Name:      QYKShortestPaths.h
+//  File Name:      KShortestPaths.h
 //  Author:         Yan Qi
 //  Project:        KShortestPath
 //
-//  Description:    Declaration of class(es) CQYKShortestPaths
+//  Description:    Declaration of class(es) KShortestPaths
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
@@ -27,32 +27,51 @@
 //
 // ____________________________________________________________________________
 
-#ifndef _QYKSHORTESTPATHS_H_
-#define _QYKSHORTESTPATHS_H_
+#ifndef _KShortestPaths_H_
+#define _KShortestPaths_H_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#include "DirectedGraph.h"
+#include "DirectedPath.h"
+#include "ShortestPath.h"
 
-#include "QYShortestPath.h"
+struct kShortestPathEdges {
+	size_t src_node;
+	size_t dest_node;
+	double edge_cost;
+};
 
-class CQYKShortestPaths  
+struct kShortestPathParms {
+	size_t src_node;
+	size_t dest_node;
+	size_t k_paths;
+	size_t total_nodes;
+	size_t total_edges;
+	kShortestPathEdges *edge_list;	
+};
+
+struct kShortestPathReturn {
+	size_t *pathinfo;
+	double *pathcost;
+	size_t *pathlen;
+};
+
+class KShortestPaths  
 {
 public:
-	CQYKShortestPaths(const CQYDirectedGraph& rGraph, size_t nSource, size_t nTerminal, size_t nTopk);
-	virtual ~CQYKShortestPaths();
+	KShortestPaths(const DirectedGraph& rGraph, size_t nSource, size_t nTerminal, size_t nTopk);
+	virtual ~KShortestPaths();
 
-	std::vector<CQYDirectedPath*> GetTopKShortestPaths();
+	std::vector<DirectedPath*> GetTopKKShortestPaths();
 
 private: // methods
 
 	void _Init();
-	void _SearchTopKShortestPaths();
+	void _SearchTopKKShortestPaths();
 
 	void _DetermineCost2Target(std::vector<size_t> vertices_list, size_t deviated_node_id);
 	void _RestoreEdges4CostAjustment(std::vector<size_t> vertices_list, size_t start_node_id, size_t end_node_id, bool is_deviated_node = false);
 	void _UpdateWeight4CostUntilNode(size_t node_id);
-	void _ReverseEdgesInGraph(CQYDirectedGraph& g);
+	void _ReverseEdgesInGraph(DirectedGraph& g);
 	bool _EdgeHasBeenUsed(size_t start_node_id, size_t end_node_id);
 
 private: // members
@@ -61,18 +80,18 @@ private: // members
 	size_t m_nSourceNodeId;
 	size_t m_nTargetNodeId;
 		
-	const CQYDirectedGraph& m_rGraph;
-	CQYDirectedGraph* m_pIntermediateGraph;
-	CQYShortestPath* m_pShortestPath4IntermediateGraph;
+	const DirectedGraph& m_rGraph;
+	DirectedGraph* m_pIntermediateGraph;
+	ShortestPath* m_pShortestPath4IntermediateGraph;
 
 	// variable to store the top shortest paths
-	std::vector<CQYDirectedPath*> m_vTopShortestPaths;
+	std::vector<DirectedPath*> m_vTopKShortestPaths;
 
 	// a queue of candidates
-	std::set<CQYDirectedPath*, CQYDirectedPath::Comparator> m_candidatePathsSet;  
+	std::set<DirectedPath*, DirectedPath::Comparator> m_candidatePathsSet;  
 
 	// index for node where the path derives from others
 	std::map<size_t,size_t> m_pathDeviatedNodeMap;
 }; 
 
-#endif //_QYKSHORTESTPATHS_H_
+#endif //_KShortestPaths_H_

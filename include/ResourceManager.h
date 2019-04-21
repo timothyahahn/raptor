@@ -31,8 +31,6 @@
 #include "Event.h"
 #include "Router.h"
 
-#include "QYInclude.h"
-
 struct DP_item
 {
 	Edge** path;

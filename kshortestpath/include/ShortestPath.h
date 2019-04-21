@@ -2,11 +2,11 @@
 //
 //  General Information:
 //
-//  File Name:      CQYShortestPath.h
+//  File Name:      ShortestPath.h
 //  Author:         Yan Qi
 //  Project:        KShortestPath
 //
-//  Description:    Declaration of class CQYShortestPath, which implements 
+//  Description:    Declaration of class ShortestPath, which implements 
 //  Dijkstra algorithm for the shortest path in the directed graph.
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -32,53 +32,49 @@
 #ifndef _QYSHORTETSPATH_H_
 #define _QYSHORTETSPATH_H_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include <map>
 #include <vector>
 
 #include <boost/graph/adjacency_list.hpp>
 
-#include "QYConfigCenter.h"
-#include "QYDirectedGraph.h"
-#include "QYDirectedPath.h"
+#include "ConfigCenter.h"
+#include "DirectedGraph.h"
+#include "DirectedPath.h"
 
-class CQYShortestPath  
+class ShortestPath  
 {
-	typedef CQYConfigCenter::SizeT_Pair Edge_Type;
+	typedef ConfigCenter::SizeT_Pair Edge_Type;
 	typedef boost::adjacency_list < boost::listS, boost::vecS, boost::directedS, boost::no_property, boost::property < boost::edge_weight_t, double > > Boost_Graph_Type;
 	typedef boost::graph_traits < Boost_Graph_Type >::edge_descriptor Edge_Descriptor;
 	typedef boost::graph_traits < Boost_Graph_Type >::vertex_descriptor Vertex_Descriptor;
 		
 public:
-	CQYShortestPath(const CQYDirectedGraph& rGraph);
-	virtual ~CQYShortestPath();
+	ShortestPath(const DirectedGraph& rGraph);
+	virtual ~ShortestPath();
 
-	CQYDirectedPath* GetShortestPath(size_t nSourceNodeId, size_t nTargetNodeId);
+	DirectedPath* GetShortestPath(size_t nSourceNodeId, size_t nTargetNodeId);
 	void ConstructPathTree(size_t nSourceNodeId);
 
-	double GetDistance(size_t i) { return m_distanceMap.count(i)? m_distanceMap[i] : CQYDirectedGraph::DISCONNECT; }
+	double GetDistance(size_t i) { return m_distanceMap.count(i)? m_distanceMap[i] : DirectedGraph::DISCONNECT; }
 	void SetDistance(size_t i, double new_value){ m_distanceMap[i] = new_value; }
 
-	size_t GetNextNodeId(size_t i) { return m_distanceMap.count(i)? m_nextNodeMap[i] : CQYDirectedGraph::DEADEND;}
+	size_t GetNextNodeId(size_t i) { return m_distanceMap.count(i)? m_nextNodeMap[i] : DirectedGraph::DEADEND;}
 	void SetNextNodeId(size_t i, size_t val) { m_nextNodeMap[i] = val; }
 
 private: // methods
 	void _Init();
 	void _DijkstraShortestPathsAlg();
-	CQYDirectedPath* _GetShortestPath(size_t nTargetNodeId);
+	DirectedPath* _GetShortestPath(size_t nTargetNodeId);
 
 private: // members
-	std::vector<CQYConfigCenter::SizeT_Pair> m_vEdges;
+	std::vector<ConfigCenter::SizeT_Pair> m_vEdges;
 	std::vector<double> m_vWeights;
 
 	std::map<size_t, double> m_distanceMap;
 	std::map<size_t, size_t> m_nextNodeMap;
 		
 	size_t m_nSourceNodeId;
-	const CQYDirectedGraph& m_rGraph;
+	const DirectedGraph& m_rGraph;
 };
 
 #endif //_QYSHORTETSPATH_H_

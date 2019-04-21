@@ -2,11 +2,11 @@
 //
 //  General Information:
 //
-//  File Name:      QYConfigCenter.h
+//  File Name:      ConfigCenter.h
 //  Author:         Yan Qi
 //  Project:        K-ShortestPath
 //
-//  Description:    The file defines the class CQYConfigCenter, which defines 
+//  Description:    The file defines the class ConfigCenter, which defines 
 //	basic functions and handles parameters inputted by the user.  
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -33,7 +33,7 @@
 
 #include <map>
 
-class CQYConfigCenter  
+class ConfigCenter  
 {
 public:
 	typedef std::pair<size_t, size_t> SizeT_Pair;
