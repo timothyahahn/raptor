@@ -45,6 +45,13 @@ DirectedGraph::DirectedGraph():
 {
 }
 
+DirectedGraph::DirectedGraph(const DirectedGraph& rGraph) :
+	m_nNumberOfVertices(0), m_nNumberOfEdges(0), m_dMaxWeight(0.0), m_dMinWeight(DISCONNECT),
+	m_pDirectedEdges(new ConfigCenter::SizeT_Pair_Double_Map())
+{
+	*this = rGraph;
+}
+
 DirectedGraph::DirectedGraph( kShortestPathParms params ) :
 	m_nNumberOfVertices(0), m_nNumberOfEdges(0), m_dMaxWeight(0.0), m_dMinWeight(DISCONNECT),
 	m_pDirectedEdges(new ConfigCenter::SizeT_Pair_Double_Map())
@@ -73,13 +80,6 @@ DirectedGraph::DirectedGraph( kShortestPathParms params ) :
 	}	
 		
 	m_nNumberOfEdges = m_pDirectedEdges->size();
-}
-
-DirectedGraph::DirectedGraph( const DirectedGraph& rGraph ) :
-	m_nNumberOfVertices(0), m_nNumberOfEdges(0), m_dMaxWeight(0.0), m_dMinWeight(DISCONNECT),
-	m_pDirectedEdges(new ConfigCenter::SizeT_Pair_Double_Map())
-{
-	*this = rGraph;	
 }
 
 DirectedGraph& DirectedGraph::operator=( const DirectedGraph& rGraph )

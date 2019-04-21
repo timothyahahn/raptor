@@ -55,9 +55,8 @@ class DirectedGraph
 public:
 	const static double DISCONNECT;
 	const static size_t DEADEND;
-	//
+
 	DirectedGraph();
-	DirectedGraph(const std::string& input_file_name);
 	DirectedGraph(kShortestPathParms params);
 	virtual ~DirectedGraph();
 		
