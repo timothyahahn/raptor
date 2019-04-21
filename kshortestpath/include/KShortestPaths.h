@@ -61,12 +61,12 @@ public:
 	KShortestPaths(const DirectedGraph& rGraph, size_t nSource, size_t nTerminal, size_t nTopk);
 	virtual ~KShortestPaths();
 
-	std::vector<DirectedPath*> GetTopKKShortestPaths();
+	std::vector<DirectedPath*> GetTopKShortestPaths();
 
 private: // methods
 
 	void _Init();
-	void _SearchTopKKShortestPaths();
+	void _SearchTopKShortestPaths();
 
 	void _DetermineCost2Target(std::vector<size_t> vertices_list, size_t deviated_node_id);
 	void _RestoreEdges4CostAjustment(std::vector<size_t> vertices_list, size_t start_node_id, size_t end_node_id, bool is_deviated_node = false);
