@@ -34,7 +34,7 @@
 #include <string>
 
 #include "ConfigCenter.h"
-#include "KShortestPaths.h"
+#include "KShortestPathStructs.h"
 
 // ____________________________________________________________________________
 //

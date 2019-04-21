@@ -34,27 +34,6 @@
 #include "DirectedPath.h"
 #include "ShortestPath.h"
 
-struct kShortestPathEdges {
-	size_t src_node;
-	size_t dest_node;
-	double edge_cost;
-};
-
-struct kShortestPathParms {
-	size_t src_node;
-	size_t dest_node;
-	size_t k_paths;
-	size_t total_nodes;
-	size_t total_edges;
-	kShortestPathEdges *edge_list;	
-};
-
-struct kShortestPathReturn {
-	size_t *pathinfo;
-	double *pathcost;
-	size_t *pathlen;
-};
-
 class KShortestPaths  
 {
 public:
