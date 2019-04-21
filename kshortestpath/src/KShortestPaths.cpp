@@ -44,7 +44,7 @@ KShortestPaths::KShortestPaths( const DirectedGraph& rGraph, size_t nSource, siz
 
 KShortestPaths::~KShortestPaths()
 {
-	for (std::vector<DirectedPath*>::iterator pos=m_vTopShortestPaths.begin(); pos!=m_vTopShortestPaths.end(); ++pos)
+	for (std::vector<DirectedPath*>::iterator pos=m_vTopKShortestPaths.begin(); pos!=m_vTopKShortestPaths.end(); ++pos)
 	{
 		delete *pos;
 	}
@@ -66,7 +66,7 @@ KShortestPaths::~KShortestPaths()
 std::vector<DirectedPath*> KShortestPaths::GetTopKShortestPaths()
 {
 	_SearchTopKShortestPaths();
-	return m_vTopShortestPaths;
+	return m_vTopKShortestPaths;
 }
 
 
@@ -77,7 +77,7 @@ void KShortestPaths::_SearchTopKShortestPaths()
 {
 	//////////////////////////////////////////////////////////////////////////
 	// first, find the shortest path in the graph
-	m_pShortestPath4IntermediateGraph = new CShortestPath(m_rGraph);
+	m_pShortestPath4IntermediateGraph = new ShortestPath(m_rGraph);
 	DirectedPath* the_shortest_path =
 		m_pShortestPath4IntermediateGraph->GetShortestPath(m_nSourceNodeId, m_nTargetNodeId);
 
@@ -110,10 +110,10 @@ void KShortestPaths::_SearchTopKShortestPaths()
 		m_candidatePathsSet.erase(m_candidatePathsSet.begin());
 
 		// Put this candidate into the result list.
-		m_vTopShortestPaths.push_back(cur_path);
+		m_vTopKShortestPaths.push_back(cur_path);
 
 		//Optimization added by Tim Hahn. If we have found the k shortest paths, why not return?
-		if(m_vTopShortestPaths.size() == m_nTopK)
+		if(m_vTopKShortestPaths.size() == m_nTopK)
 			break;
 
 		++cur_path_id;
@@ -177,7 +177,7 @@ void KShortestPaths::_DetermineCost2Target(std::vector<size_t> vertices_list, si
 	{
 		delete m_pShortestPath4IntermediateGraph;
 	}
-	m_pShortestPath4IntermediateGraph = new CShortestPath(*m_pIntermediateGraph);
+	m_pShortestPath4IntermediateGraph = new ShortestPath(*m_pIntermediateGraph);
 	m_pShortestPath4IntermediateGraph->ConstructPathTree(m_nTargetNodeId);
 
 	// third: reverse the edges in the graph again, go back to the original
@@ -257,7 +257,7 @@ void KShortestPaths::_RestoreEdges4CostAjustment(std::vector<size_t> vertices_li
 		}
 
 		// Update the list of shortest paths
-		size_t new_node_id = m_candidatePathsSet.size() + m_vTopShortestPaths.size();
+		size_t new_node_id = m_candidatePathsSet.size() + m_vTopKShortestPaths.size();
 		m_candidatePathsSet.insert(new DirectedPath(new_node_id, cost_new_path, new_path));
 		m_pathDeviatedNodeMap.insert(std::pair<size_t, size_t>(new_node_id, start_node_id));
 	}
@@ -341,10 +341,10 @@ void KShortestPaths::_ReverseEdgesInGraph( DirectedGraph& g )
 /************************************************************************/
 bool KShortestPaths::_EdgeHasBeenUsed( size_t start_node_id, size_t end_node_id )
 {
-	size_t count_of_shortest_paths = m_vTopShortestPaths.size();
+	size_t count_of_shortest_paths = m_vTopKShortestPaths.size();
 	for (size_t i=0; i<count_of_shortest_paths; ++i)
 	{
-		DirectedPath* cur_shortest_path = m_vTopShortestPaths[i];
+		DirectedPath* cur_shortest_path = m_vTopKShortestPaths[i];
 		std::vector<size_t> cur_path_list = cur_shortest_path->GetVertexList();
 
 		std::vector<size_t>::iterator loc_of_start_id =
