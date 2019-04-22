@@ -249,8 +249,11 @@ class Thread
 		boost::uniform_real<> *zo;
 		boost::variate_generator<boost::mt19937&, boost::uniform_real<> > *generateZeroToOne;
 
-		inline const char* getTopology()
+		inline const std::string& getTopology()
 			{ return topology; };
+
+		inline void setTopology(const std::string& t)
+			{ topology = t; };
 
 		inline MessageLogger* getLogger()
 			{ return logger; };
@@ -399,7 +402,7 @@ class Thread
 		int runCount;
 		int maxRunCount;
 
-		const char* topology;
+		std::string topology;
 
 		static const double TEN_HOURS;
 		static const double SPEED_OF_LIGHT;

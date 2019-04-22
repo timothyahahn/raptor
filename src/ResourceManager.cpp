@@ -1046,15 +1046,15 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(unsigned int src, unsign
 
 	unsigned int origK = k;
 	
-	if(strcmp(threadZero->getTopology(),"NSF") == 0 && k > 1 && k < 4)
+	if(threadZero->getTopology().compare("NSF") == 0 && k > 1 && k < 4)
 	{
 		k = 4;
 	}
-	else if(strcmp(threadZero->getTopology(),"Mesh") == 0 && k > 1 && k < 7)
+	else if(threadZero->getTopology().compare("Mesh") == 0 && k > 1 && k < 7)
 	{
 		k = 7;
 	}
-	else if(strcmp(threadZero->getTopology(),"Mesh8x8") == 0 && k > 1 && k < 7)
+	else if(threadZero->getTopology().compare("Mesh8x8") == 0 && k > 1 && k < 7)
 	{
 		k = 7;
 	}

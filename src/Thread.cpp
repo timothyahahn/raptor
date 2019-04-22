@@ -105,6 +105,8 @@ Thread::Thread(int ci, int argc, const char* argv[], bool isLPS, int rc)
 	std::string iterations = argv[5];
 	std::string probes = argv[6];
 
+	setTopology(topology);
+
 	if(controllerIndex == 0 && isLoadPrevious == false)
 	{
 		logger = new MessageLogger(topology, wavelengths, seed, probes, rc);
