@@ -542,8 +542,6 @@ void Thread::deactivate_workstations()
 {
 	threadZero->getLogger()->LockResultsMutex();
 
-	std::cerr << "CurrentRoutingAlgorithm: " << CurrentRoutingAlgorithm << std::endl;
-
 	std::ostringstream algorithm;
 	algorithm << "**ALGORITHM = " << threadZero->getRoutingAlgorithmName(CurrentRoutingAlgorithm) << "-" << threadZero->getWavelengthAlgorithmName(CurrentWavelengthAlgorithm)
 		<< ", WORKS = " << getCurrentActiveWorkstations() << ", PROBE = " << threadZero->getProbeStyleName(CurrentProbeStyle) << ", QA = " << getCurrentQualityAware();

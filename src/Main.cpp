@@ -209,6 +209,7 @@ void runSimulation(int argc, const char* argv[])
 		std::ostringstream buffer;
 		buffer << "Created " << threadCount << " threads " << std::endl;
 		threadZero->recordEvent(buffer.str(),true,0);
+		threadZero->flushLog(true);
 
 		for(unsigned int t = 1; t < threadCount; ++t)
 		{
