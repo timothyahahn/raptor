@@ -98,34 +98,33 @@ Thread::Thread(int ci, int argc, const char* argv[], bool isLPS, int rc)
 	controllerIndex = ci;
 	setGlobalTime(0.0);
 
-	std::ostringstream buffer;
+	std::string topology = argv[1];
+	std::string wavelengths = argv[2];
+	std::string seed = argv[3];
+	std::string threads = argv[4];
+	std::string iterations = argv[5];
+	std::string probes = argv[6];
 
 	if(controllerIndex == 0 && isLoadPrevious == false)
 	{
-		logger = new MessageLogger(argv[1],argv[2],argv[3],argv[6],rc);
+		logger = new MessageLogger(topology, wavelengths, seed, probes, rc);
 
-		buffer << "input/Quality-" << argv[1] << "-" << argv[2] << ".txt";
-		setQualityParameters(buffer.str());
-		buffer.clear();
+		std::string quality = "input/Quality-" + topology + "-" + wavelengths + ".txt";
+		setQualityParameters(quality);
 	}
 
-	topology = argv[1];
+	std::string topologyfile = "input/Topology-" + topology + ".txt";
+	setTopologyParameters(topologyfile);
 
-	std::ostringstream fileName;
-	fileName << "input/Topology-" << argv[1] << ".txt";
-	setTopologyParameters(fileName.str());
-	fileName.clear();
-
-	fileName << "input/Workstation-" << argv[1] << "-" << argv[2] << ".txt";
-	setWorkstationParameters(fileName.str());
-	fileName.clear();
+	std::string workstation = "input/Workstation-" + topology + "-" + wavelengths + ".txt";
+	setWorkstationParameters(workstation);
 
 	if(controllerIndex == 0 && isLoadPrevious == false)
 	{
 		qualityParams.max_probes = atoi(argv[6]);
 
-		fileName << "input/Algorithm.txt";
-		setAlgorithmParameters(fileName.str(),atoi(argv[5]));
+		std::string algorithm = "input/Algorithm.txt";
+		setAlgorithmParameters(algorithm, std::stoi(iterations));
 
 		numberOfConnections = static_cast<unsigned int>(TEN_HOURS) / 
 			static_cast<unsigned int>(threadZero->getQualityParams().arrival_interval);
@@ -504,9 +503,9 @@ void Thread::activate_workstations()
 		order_init = true;
 	}
 
-	char buffer[50];
-	sprintf(buffer,"Activate %d workstations.",getCurrentActiveWorkstations());
-	threadZero->recordEvent(buffer,false,controllerIndex);
+	std::ostringstream buffer;
+	buffer << "Activate " << getCurrentActiveWorkstations() << "workstations.";
+	threadZero->recordEvent(buffer.str(), false, controllerIndex);
 
 	for(unsigned int w = 0; w < getCurrentActiveWorkstations(); ++w)
 	{
@@ -514,9 +513,9 @@ void Thread::activate_workstations()
 #ifdef RUN_GUI
 		getRouterAt(getWorkstationAt(workstationOrder[w])->getParentRouterIndex())->incNumWorkstations();
 #endif
-		char buffer[50];
-		sprintf(buffer,"\tActivate workstation %d",workstationOrder[w]);
-		threadZero->recordEvent(buffer,false,controllerIndex);
+		buffer.clear();
+		buffer << "\tActivate workstation " << workstationOrder[w];
+		threadZero->recordEvent(buffer.str(), false, controllerIndex);
 	}
 
 	if(CurrentRoutingAlgorithm == PABR || CurrentRoutingAlgorithm == LORA)
@@ -548,13 +547,12 @@ void Thread::activate_workstations()
 ///////////////////////////////////////////////////////////////////
 void Thread::deactivate_workstations()
 {
-	char buffer[200];
-
 	threadZero->getLogger()->LockResultsMutex();
 
-	sprintf(buffer,"**ALGORITHM = %s-%s, WORKS = %d, PROBE = %s, QA = %d**",threadZero->getRoutingAlgorithmName(CurrentRoutingAlgorithm)->c_str(),
-		threadZero->getWavelengthAlgorithmName(CurrentWavelengthAlgorithm)->c_str(),getCurrentActiveWorkstations(),threadZero->getProbeStyleName(CurrentProbeStyle)->c_str(),getCurrentQualityAware());
-	threadZero->recordEvent(buffer,true,controllerIndex);
+	std::ostringstream algorithm;
+	algorithm << "**ALGORITHM = " << threadZero->getRoutingAlgorithmName(CurrentRoutingAlgorithm) << "-" << threadZero->getWavelengthAlgorithmName(CurrentWavelengthAlgorithm)
+		<< ", WORKS = " << getCurrentActiveWorkstations() << ", PROBE = " << threadZero->getProbeStyleName(CurrentProbeStyle) << ", QA = " << getCurrentQualityAware();
+	threadZero->recordEvent(algorithm.str(),true,controllerIndex);
 
 #ifdef RUN_GUI
 	strcpy(routing,threadZero->getRoutingAlgorithmName(CurrentRoutingAlgorithm)->c_str());
@@ -575,53 +573,65 @@ void Thread::deactivate_workstations()
 	avgXPMnoise = stats.xpmNoiseTotal / double(stats.ConnectionSuccesses);
 #endif
 
-	sprintf(buffer,"OVERALL BLOCKING (%d/%d) = %f", stats.ConnectionRequests - stats.ConnectionSuccesses, stats.ConnectionRequests, 
-		double(stats.ConnectionRequests - stats.ConnectionSuccesses) / double(stats.ConnectionRequests));
-	threadZero->recordEvent(buffer,true,controllerIndex);
-	
-	sprintf(buffer,"COLLISIONS (%d/%d) = %f", stats.CollisionFailures, 
-		stats.ConnectionRequests, double(stats.CollisionFailures) / double(stats.ConnectionRequests));
-	threadZero->recordEvent(buffer,true,controllerIndex);
+	std::ostringstream overall;
+	overall << "OVERALL BLOCKING (" << stats.ConnectionRequests - stats.ConnectionSuccesses << "/" << stats.ConnectionRequests
+		<< ") = " << double(stats.ConnectionRequests - stats.ConnectionSuccesses) / double(stats.ConnectionRequests);
+	threadZero->recordEvent(overall.str() , true, controllerIndex);
 
-	sprintf(buffer,"BAD QUALITY (%d/%d) = %f", stats.QualityFailures, stats.ConnectionRequests, 
-		double(stats.QualityFailures) / double(stats.ConnectionRequests));
-	threadZero->recordEvent(buffer,true,controllerIndex);
+	std::ostringstream collisions;
+	collisions << "COLLISIONS (" << stats.CollisionFailures << "/" << stats.ConnectionRequests << ") = "
+		<< double(stats.CollisionFailures) / double(stats.ConnectionRequests);
+	threadZero->recordEvent(collisions.str(),true,controllerIndex);
 
-	sprintf(buffer,"NON RESOURCES (%d/%d) = %f", stats.NoPathFailures, stats.ConnectionRequests, 
-		double(stats.NoPathFailures) / double(stats.ConnectionRequests));
-	threadZero->recordEvent(buffer,true,controllerIndex);
+	std::ostringstream quality;
+	quality << "BAD QUALITY (" << stats.QualityFailures << "/" << stats.ConnectionRequests << ") = "
+		<< double(stats.QualityFailures) / double(stats.ConnectionRequests);
+	threadZero->recordEvent(quality.str(),true,controllerIndex);
 
-	sprintf(buffer,"AVERAGE PROBES PER REQUEST (%d/%d) = %f", stats.ProbeSentCount, stats.ConnectionRequests, 
-		double(stats.ProbeSentCount) / double(stats.ConnectionRequests));
-	threadZero->recordEvent(buffer,true,controllerIndex);
+	std::ostringstream resources;
+	resources << "NON RESOURCES (" << stats.NoPathFailures << "/" << stats.ConnectionRequests << ") = "
+		<< double(stats.NoPathFailures) / double(stats.ConnectionRequests);
+	threadZero->recordEvent(resources.str(),true,controllerIndex);
 
-	sprintf(buffer,"AVERAGE REQUEST DELAY TIME (%f/%d) = %f", stats.totalSetupDelay, stats.ConnectionSuccesses, 
-		stats.totalSetupDelay / double(stats.ConnectionSuccesses));
-	threadZero->recordEvent(buffer,true,controllerIndex);
+	std::ostringstream probes;
+	probes << "AVERAGE PROBES PER REQUEST (" << stats.ProbeSentCount << "/" << stats.ConnectionRequests << ") = "
+		<< double(stats.ProbeSentCount) / double(stats.ConnectionRequests);
+	threadZero->recordEvent(probes.str(),true,controllerIndex);
 
-	sprintf(buffer,"AVERAGE CONNECTION HOP COUNT (%d/%d) = %f", stats.totalHopCount, stats.ConnectionSuccesses, 
-		double(stats.totalHopCount) / double(stats.ConnectionSuccesses));
-	threadZero->recordEvent(buffer,true,controllerIndex);
+	std::ostringstream delay;
+	delay << "AVERAGE REQUEST DELAY TIME (" << stats.totalSetupDelay << "/" << stats.ConnectionSuccesses << ") = "
+		<< stats.totalSetupDelay / double(stats.ConnectionSuccesses);
+	threadZero->recordEvent(delay.str(),true,controllerIndex);
 
-	sprintf(buffer,"AVERAGE CONNECTION SPAN COUNT (%d/%d) = %f", stats.totalSpanCount, stats.ConnectionSuccesses, 
-		double(stats.totalSpanCount) / double(stats.ConnectionSuccesses));
-	threadZero->recordEvent(buffer,true,controllerIndex);
+	std::ostringstream hopcount;
+	hopcount << "AVERAGE CONNECTION HOP COUNT (" << stats.totalHopCount << "/" << stats.ConnectionSuccesses << ") = "
+		<< double(stats.totalHopCount) / double(stats.ConnectionSuccesses);
+	threadZero->recordEvent(hopcount.str(),true,controllerIndex);
 
-	sprintf(buffer,"AVERAGE ASE NOISE (%f/%d) = %e", stats.aseNoiseTotal, stats.ConnectionSuccesses,
-		stats.aseNoiseTotal / double(stats.ConnectionSuccesses));
-	threadZero->recordEvent(buffer,true,controllerIndex);
+	std::ostringstream connection;
+	connection << "AVERAGE CONNECTION SPAN COUNT (" << stats.totalSpanCount << "/" << stats.ConnectionSuccesses << ") = "
+		<< double(stats.totalSpanCount) / double(stats.ConnectionSuccesses);
+	threadZero->recordEvent(connection.str(),true,controllerIndex);
 
-	sprintf(buffer,"AVERAGE FWM NOISE (%f/%d) = %e", stats.fwmNoiseTotal, stats.ConnectionSuccesses,
-		stats.fwmNoiseTotal / double(stats.ConnectionSuccesses));
-	threadZero->recordEvent(buffer,true,controllerIndex);
+	std::ostringstream ase;
+	ase << "AVERAGE ASE NOISE (" << stats.aseNoiseTotal << "/" << stats.ConnectionSuccesses << ") = "
+		<< stats.aseNoiseTotal / double(stats.ConnectionSuccesses);
+	threadZero->recordEvent(ase.str(),true,controllerIndex);
 
-	sprintf(buffer,"AVERAGE XPM NOISE (%f/%d) = %e", stats.xpmNoiseTotal, stats.ConnectionSuccesses,
-		stats.xpmNoiseTotal / double(stats.ConnectionSuccesses));
-	threadZero->recordEvent(buffer,true,controllerIndex);
+	std::ostringstream fwm;
+	fwm << "AVERAGE FWM NOISE (" << stats.fwmNoiseTotal << "/" << stats.ConnectionSuccesses << ") = "
+		<< stats.fwmNoiseTotal / double(stats.ConnectionSuccesses);
+	threadZero->recordEvent(fwm.str(),true,controllerIndex);
 
-	sprintf(buffer,"AVERAGE RA RUN TIME (%f/%d) = %e", stats.raRunTime, stats.ConnectionRequests,
-		stats.raRunTime / double(stats.ConnectionRequests));
-	threadZero->recordEvent(buffer,true,controllerIndex);
+	std::ostringstream xpm;
+	xpm << "AVERAGE XPM NOISE (" << stats.xpmNoiseTotal << "/" << stats.ConnectionSuccesses << ") = "
+		<< stats.xpmNoiseTotal / double(stats.ConnectionSuccesses);
+	threadZero->recordEvent(xpm.str(),true,controllerIndex);
+
+	std::ostringstream runtime;
+	runtime << "AVERAGE RA RUN TIME (" << stats.raRunTime << "/" << stats.ConnectionRequests << ") = "
+		<< stats.raRunTime / double(stats.ConnectionRequests);
+	threadZero->recordEvent(runtime.str(),true,controllerIndex);
 
 	if(threadZero->getQualityParams().q_factor_stats == true)
 	{
@@ -677,26 +687,32 @@ void Thread::deactivate_workstations()
 			}
 		}
 
-		sprintf(buffer,"DROPPED CONNECTIONS (%d/%d) = %f", int(droppedTotal), stats.ConnectionRequests, 
-			droppedTotal / double(stats.ConnectionRequests));
-		threadZero->recordEvent(buffer,true,controllerIndex);
+		std::ostringstream dropped;
+		dropped << "DROPPED CONNECTIONS (" << int(droppedTotal) << "/" << stats.ConnectionRequests << ") = "
+			<< droppedTotal / double(stats.ConnectionRequests);
+		threadZero->recordEvent(dropped.str(),true,controllerIndex);
 
-		sprintf(buffer,"OVERALL W/DROPPED (%d/%d) = %f", int(stats.ConnectionRequests - stats.ConnectionSuccesses + droppedTotal), stats.ConnectionRequests, 
-			double(stats.ConnectionRequests - stats.ConnectionSuccesses + droppedTotal) / double(stats.ConnectionRequests));
-		threadZero->recordEvent(buffer,true,controllerIndex);
+		std::ostringstream odropped;
+		odropped << "OVERALL W/DROPPED (" << int(stats.ConnectionRequests - stats.ConnectionSuccesses + droppedTotal) << "/" << stats.ConnectionRequests << ") = "
+			<< double(stats.ConnectionRequests - stats.ConnectionSuccesses + droppedTotal) / double(stats.ConnectionRequests);
+		threadZero->recordEvent(odropped.str(),true,controllerIndex);
 
-		sprintf(buffer,"INITIAL Q: MIN = %f, MAX = %f, AVG = %f",worstInitQ,bestInitQ,averageInitQ / countTotal);
-		threadZero->recordEvent(buffer,true,controllerIndex);
+		std::ostringstream initialq;
+		initialq << "INITIAL Q: MIN = " << worstInitQ << ", MAX = " << bestInitQ << ", AVG = " << averageInitQ / countTotal;
+		threadZero->recordEvent(initialq.str(),true,controllerIndex);
 
-		sprintf(buffer,"AVERAGE Q: MIN = %f, MAX = %f, AVG = %f",worstAvgQ,bestAvgQ,averageAvgQ / countTotal);
-		threadZero->recordEvent(buffer,true,controllerIndex);
+		std::ostringstream averageq;
+		averageq << "AVERAGE Q: MIN = " << worstAvgQ << ", MAX  = " << bestAvgQ << ", AVG = " << averageAvgQ / countTotal;
+		threadZero->recordEvent(averageq.str(),true,controllerIndex);
 
-		sprintf(buffer,"%% TIME Q BELOW: MIN = %f, MAX = %f, AVG = %f",worstPerQ,bestPerQ,averagePerQ / timeTotal);
-		threadZero->recordEvent(buffer,true,controllerIndex);
+		std::ostringstream timebelow;
+		timebelow << "%% TIME Q BELOW : MIN = " << worstPerQ << ", MAX = " << bestPerQ << ", AVG = " << averagePerQ / timeTotal;
+		threadZero->recordEvent(timebelow.str(),true,controllerIndex);
 	}
 
-	sprintf(buffer,"***********************************************\n");
-	threadZero->recordEvent(buffer,true,controllerIndex);
+	std::ostringstream stars;
+	stars << std::string("**********************************************") << std::endl;
+	threadZero->recordEvent(stars.str(),true,controllerIndex);
 
 	threadZero->flushLog(true);
 
@@ -728,9 +744,9 @@ void Thread::deactivate_workstations()
 	{
 		if(getWorkstationAt(w)->getActive() == true)
 		{
-			char buffer[50];
-			sprintf(buffer,"\tDeactivate workstation %d",w);
-			threadZero->recordEvent(buffer,false,controllerIndex);
+			std::ostringstream deactivate;
+			deactivate << "\tDeactivate workstation " << w;
+			threadZero->recordEvent(deactivate.str(),false,controllerIndex);
 
 			getWorkstationAt(w)->setActive(false);
 		}
@@ -1552,11 +1568,12 @@ void Thread::setQualityParameters(const std::string& f)
 	//Default setting is uniform. Can be modifed using the parameter file.
 	qualityParams.dest_dist = UNIFORM;
 
-	char buffer[200];
-	sprintf(buffer,"Reading Quality Parameters from %s file.",f);
-	threadZero->recordEvent(buffer,true,0);
+	std::string log = "Reading Quality Parameters from " + f + " file.";
+	threadZero->recordEvent(log,true,0);
 
 	std::ifstream inFile(f);
+
+	char buffer[200];
 
 	while(inFile.getline(buffer,199))
 	{

@@ -33,7 +33,7 @@ extern Thread** threads;
 // Description:		Default constructor
 //
 ///////////////////////////////////////////////////////////////////
-MessageLogger::MessageLogger(const char* topo, const char* lambda, const char* seed, const char* k,int runCount)
+MessageLogger::MessageLogger(const std::string& topo, const std::string& lambda, const std::string& seed, const std::string& k,int runCount)
 {
 	pthread_mutex_init(&LogMutex,nullptr);
 	pthread_mutex_init(&PrintMutex,nullptr);
