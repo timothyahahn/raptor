@@ -262,8 +262,8 @@ class Thread
 		std::vector<Router*> routers;
 		std::vector<Workstation*> workstations;
 
-		void setTopologyParameters(const char* f);
-		void setWorkstationParameters(const char* f);
+		void setTopologyParameters(const std::string& f);
+		void setWorkstationParameters(const std::string& f);
 
 		EventQueue* queue;
 
@@ -277,7 +277,7 @@ class Thread
 		const std::string* WavelengthAlgorithmNames[NUMBER_OF_WAVELENGTH_ALGORITHMS];
 		const std::string* ProbeStyleNames[NUMBER_OF_PROBE_STYLES];
 
-		void setAlgorithmParameters(const char* f, unsigned int iterationCount);
+		void setAlgorithmParameters(const std::string& f, unsigned int iterationCount);
 
 		void activate_workstations();
 		void deactivate_workstations();

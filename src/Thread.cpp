@@ -98,31 +98,34 @@ Thread::Thread(int ci, int argc, const char* argv[], bool isLPS, int rc)
 	controllerIndex = ci;
 	setGlobalTime(0.0);
 
-	char fileName[200];
+	std::ostringstream buffer;
 
 	if(controllerIndex == 0 && isLoadPrevious == false)
 	{
 		logger = new MessageLogger(argv[1],argv[2],argv[3],argv[6],rc);
 
-		std::ostringstream buffer;
 		buffer << "input/Quality-" << argv[1] << "-" << argv[2] << ".txt";
 		setQualityParameters(buffer.str());
+		buffer.clear();
 	}
 
 	topology = argv[1];
 
-	sprintf(fileName,"input/Topology-%s.txt",argv[1]);
-	setTopologyParameters(fileName);
+	std::ostringstream fileName;
+	fileName << "input/Topology-" << argv[1] << ".txt";
+	setTopologyParameters(fileName.str());
+	fileName.clear();
 
-	sprintf(fileName,"input/Workstation-%s-%s.txt",argv[1],argv[2]);
-	setWorkstationParameters(fileName);
+	fileName << "input/Workstation-" << argv[1] << "-" << argv[2] << ".txt";
+	setWorkstationParameters(fileName.str());
+	fileName.clear();
 
 	if(controllerIndex == 0 && isLoadPrevious == false)
 	{
 		qualityParams.max_probes = atoi(argv[6]);
 
-		sprintf(fileName,"input/Algorithm.txt");
-		setAlgorithmParameters(fileName,atoi(argv[5]));
+		fileName << "input/Algorithm.txt";
+		setAlgorithmParameters(fileName.str(),atoi(argv[5]));
 
 		numberOfConnections = static_cast<unsigned int>(TEN_HOURS) / 
 			static_cast<unsigned int>(threadZero->getQualityParams().arrival_interval);
@@ -1832,7 +1835,7 @@ void Thread::setQualityParameters(const std::string& f)
 //					specified by the command line arguement
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::setTopologyParameters(const char * f)
+void Thread::setTopologyParameters(const std::string& f)
 {
 	char buffer[200];
 	sprintf(buffer,"Reading Topology Parameters from %s file.",f);
@@ -1905,7 +1908,7 @@ void Thread::setTopologyParameters(const char * f)
 //					specified by the command line arguement
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::setWorkstationParameters(const char * f)
+void Thread::setWorkstationParameters(const std::string& f)
 {
 	char buffer[200];
 	sprintf(buffer,"Reading Workstation Parameters from %s file.",f);
@@ -1998,7 +2001,7 @@ void Thread::setWorkstationParameters(const char * f)
 //					specified by the command line argument
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::setAlgorithmParameters(const char * f, unsigned int iterationCount)
+void Thread::setAlgorithmParameters(const std::string& f, unsigned int iterationCount)
 {
 	RoutingAlgorithmNames[SHORTEST_PATH] = new std::string("SP");
 	RoutingAlgorithmNames[PABR] = new std::string("PABR");
