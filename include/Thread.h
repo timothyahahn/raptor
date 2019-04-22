@@ -143,11 +143,11 @@ class Thread
 		void setMinDuration(unsigned int spans);
 		void setQFactorMin(unsigned int spans);
 
-		inline const std::string* getRoutingAlgorithmName(unsigned int a)
+		inline const std::string getRoutingAlgorithmName(unsigned int a)
 			{ return RoutingAlgorithmNames[a]; };
-		inline const std::string* getWavelengthAlgorithmName(unsigned int w)
+		inline const std::string getWavelengthAlgorithmName(unsigned int w)
 			{ return WavelengthAlgorithmNames[w]; };
-		inline const std::string* getProbeStyleName(unsigned int p)
+		inline const std::string getProbeStyleName(unsigned int p)
 			{ return ProbeStyleNames[p]; };
 
 #ifdef RUN_GUI
@@ -276,9 +276,9 @@ class Thread
 
 		ResourceManager* rm;
 
-		const std::string* RoutingAlgorithmNames[NUMBER_OF_ROUTING_ALGORITHMS];
-		const std::string* WavelengthAlgorithmNames[NUMBER_OF_WAVELENGTH_ALGORITHMS];
-		const std::string* ProbeStyleNames[NUMBER_OF_PROBE_STYLES];
+		std::string RoutingAlgorithmNames[NUMBER_OF_ROUTING_ALGORITHMS];
+		std::string WavelengthAlgorithmNames[NUMBER_OF_WAVELENGTH_ALGORITHMS];
+		std::string ProbeStyleNames[NUMBER_OF_PROBE_STYLES];
 
 		void setAlgorithmParameters(const std::string& f, unsigned int iterationCount);
 

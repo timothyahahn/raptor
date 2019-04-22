@@ -167,15 +167,6 @@ Thread::~Thread()
 
 		delete logger;
 		delete rm;
-
-		for(unsigned int a = 0; a < NUMBER_OF_ROUTING_ALGORITHMS; ++a)
-			delete RoutingAlgorithmNames[a];
-
-		for(unsigned int w = 0; w < NUMBER_OF_WAVELENGTH_ALGORITHMS; ++w)
-			delete WavelengthAlgorithmNames[w];
-
-		for(unsigned int p = 0; p < NUMBER_OF_PROBE_STYLES; ++p)
-			delete ProbeStyleNames[p];
 	}
 
 	for(unsigned int r = 0; r < routers.size(); ++r)
@@ -550,6 +541,8 @@ void Thread::activate_workstations()
 void Thread::deactivate_workstations()
 {
 	threadZero->getLogger()->LockResultsMutex();
+
+	std::cerr << "CurrentRoutingAlgorithm: " << CurrentRoutingAlgorithm << std::endl;
 
 	std::ostringstream algorithm;
 	algorithm << "**ALGORITHM = " << threadZero->getRoutingAlgorithmName(CurrentRoutingAlgorithm) << "-" << threadZero->getWavelengthAlgorithmName(CurrentWavelengthAlgorithm)
@@ -2022,37 +2015,39 @@ void Thread::setWorkstationParameters(const std::string& f)
 ///////////////////////////////////////////////////////////////////
 void Thread::setAlgorithmParameters(const std::string& f, unsigned int iterationCount)
 {
-	RoutingAlgorithmNames[SHORTEST_PATH] = new std::string("SP");
-	RoutingAlgorithmNames[PABR] = new std::string("PABR");
-	RoutingAlgorithmNames[LORA] = new std::string("LORA");
-	RoutingAlgorithmNames[IMPAIRMENT_AWARE] = new std::string("IA");
-	RoutingAlgorithmNames[Q_MEASUREMENT] = new std::string("QM");
-	RoutingAlgorithmNames[ADAPTIVE_QoS] = new std::string("AQoS");
-	RoutingAlgorithmNames[DYNAMIC_PROGRAMMING] = new std::string("DP");
-	RoutingAlgorithmNames[ACO] = new std::string("ACO");
-	RoutingAlgorithmNames[MAX_MIN_ACO] = new std::string("MM-ACO");
+	RoutingAlgorithmNames[SHORTEST_PATH] = std::string("SP");
+	RoutingAlgorithmNames[PABR] = std::string("PABR");
+	RoutingAlgorithmNames[LORA] = std::string("LORA");
+	RoutingAlgorithmNames[IMPAIRMENT_AWARE] = std::string("IA");
+	RoutingAlgorithmNames[Q_MEASUREMENT] = std::string("QM");
+	RoutingAlgorithmNames[ADAPTIVE_QoS] = std::string("AQoS");
+	RoutingAlgorithmNames[DYNAMIC_PROGRAMMING] = std::string("DP");
+	RoutingAlgorithmNames[ACO] = std::string("ACO");
+	RoutingAlgorithmNames[MAX_MIN_ACO] = std::string("MM-ACO");
 
-	WavelengthAlgorithmNames[FIRST_FIT] = new std::string("FF");
-	WavelengthAlgorithmNames[FIRST_FIT_ORDERED] = new std::string("FFwO");
-	WavelengthAlgorithmNames[BEST_FIT] = new std::string("BF");
-	WavelengthAlgorithmNames[RANDOM_FIT] = new std::string("RP");
-	WavelengthAlgorithmNames[QUAL_FIRST_FIT] = new std::string("Q-FF");
-	WavelengthAlgorithmNames[QUAL_FIRST_FIT_ORDERED] = new std::string("Q-FFwO");
-	WavelengthAlgorithmNames[QUAL_RANDOM_FIT] = new std::string("Q-RP");
-	WavelengthAlgorithmNames[LEAST_QUALITY] = new std::string("LQ");
-	WavelengthAlgorithmNames[MOST_QUALITY] = new std::string("MQ");
-	WavelengthAlgorithmNames[MOST_USED] = new std::string("MU");
-	WavelengthAlgorithmNames[QUAL_MOST_USED] = new std::string("Q-MU");
+	WavelengthAlgorithmNames[FIRST_FIT] = std::string("FF");
+	WavelengthAlgorithmNames[FIRST_FIT_ORDERED] = std::string("FFwO");
+	WavelengthAlgorithmNames[BEST_FIT] = std::string("BF");
+	WavelengthAlgorithmNames[RANDOM_FIT] = std::string("RP");
+	WavelengthAlgorithmNames[QUAL_FIRST_FIT] = std::string("Q-FF");
+	WavelengthAlgorithmNames[QUAL_FIRST_FIT_ORDERED] = std::string("Q-FFwO");
+	WavelengthAlgorithmNames[QUAL_RANDOM_FIT] = std::string("Q-RP");
+	WavelengthAlgorithmNames[LEAST_QUALITY] = std::string("LQ");
+	WavelengthAlgorithmNames[MOST_QUALITY] = std::string("MQ");
+	WavelengthAlgorithmNames[MOST_USED] = std::string("MU");
+	WavelengthAlgorithmNames[QUAL_MOST_USED] = std::string("Q-MU");
 
-	ProbeStyleNames[SINGLE] = new std::string("SINGLE");
-	ProbeStyleNames[SERIAL] = new std::string("SERIAL");
-	ProbeStyleNames[PARALLEL] = new std::string("PARALLEL");
+	ProbeStyleNames[SINGLE] = std::string("SINGLE");
+	ProbeStyleNames[SERIAL] = std::string("SERIAL");
+	ProbeStyleNames[PARALLEL] = std::string("PARALLEL");
+
+	std::ostringstream log;
+	log << "Reading Algorithm Parameters from " << f << " file.";
+	threadZero->recordEvent(log.str(),false,0);
 
 	char buffer[200];
-	sprintf(buffer,"Reading Algorithm Parameters from %s file.",f);
-	threadZero->recordEvent(buffer,false,0);
 
-	std::ifstream inFile(f);
+	std::ifstream inFile(f.c_str());
 
 	while(inFile.getline(buffer,199))
 	{
@@ -2074,7 +2069,8 @@ void Thread::setAlgorithmParameters(const std::string& f, unsigned int iteration
 
 			for(unsigned int r = 0; r < NUMBER_OF_ROUTING_ALGORITHMS; ++r)
 			{
-				if(strcmp(ra,RoutingAlgorithmNames[r]->c_str()) == 0)
+				//if(strcmp(ra,RoutingAlgorithmNames[r]->c_str()) == 0)
+				if (RoutingAlgorithmNames[r].compare(ra) == 0)
 				{
 					CurrentRoutingAlgorithm = static_cast<RoutingAlgorithm>(r);
 					break;
@@ -2083,7 +2079,7 @@ void Thread::setAlgorithmParameters(const std::string& f, unsigned int iteration
 
 			for(unsigned int w = 0; w < NUMBER_OF_WAVELENGTH_ALGORITHMS; ++w)
 			{
-				if(strcmp(wa,WavelengthAlgorithmNames[w]->c_str()) == 0)
+				if(WavelengthAlgorithmNames[w].compare(wa) == 0)
 				{
 					CurrentWavelengthAlgorithm = static_cast<WavelengthAlgorithm>(w);
 					break;
@@ -2092,7 +2088,7 @@ void Thread::setAlgorithmParameters(const std::string& f, unsigned int iteration
 
 			for(unsigned int p = 0; p < NUMBER_OF_PROBE_STYLES; ++p)
 			{
-				if(strcmp(ps,ProbeStyleNames[p]->c_str()) == 0)
+				if(ProbeStyleNames[p].compare(ps) == 0)
 				{
 					CurrentProbeStyle = static_cast<ProbeStyle>(p);
 					break;
