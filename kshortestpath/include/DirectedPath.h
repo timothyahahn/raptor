@@ -72,7 +72,7 @@ public:
 	void PrintOut(std::ostream& out_stream) const
 	{
 		out_stream << "Cost: " << m_dCost << " Length: " << m_vVertexList.size() << std::endl;
-		std::copy(m_vVertexList.rbegin(), m_vVertexList.rend(), std::ostream_iterator<int>(out_stream, " "));
+		std::copy(m_vVertexList.rbegin(), m_vVertexList.rend(), std::ostream_iterator<size_t>(out_stream, " "));
 		out_stream << std::endl <<  "*********************************************" << std::endl;	
 	}
 

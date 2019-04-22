@@ -104,8 +104,9 @@ Thread::Thread(int ci, int argc, const char* argv[], bool isLPS, int rc)
 	{
 		logger = new MessageLogger(argv[1],argv[2],argv[3],argv[6],rc);
 
-		sprintf(fileName,"input/Quality-%s-%s.txt",argv[1],argv[2]);
-		setQualityParameters(fileName);
+		std::ostringstream buffer;
+		buffer << "input/Quality-" << argv[1] << "-" << argv[2] << ".txt";
+		setQualityParameters(buffer.str());
 	}
 
 	topology = argv[1];
@@ -1543,7 +1544,7 @@ int Thread::getKthParameterInt(char* f)
 //					specified by the command line arguement
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::setQualityParameters(const char* f)
+void Thread::setQualityParameters(const std::string& f)
 {
 	//Default setting is uniform. Can be modifed using the parameter file.
 	qualityParams.dest_dist = UNIFORM;

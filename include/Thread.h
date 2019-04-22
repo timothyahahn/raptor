@@ -345,7 +345,7 @@ class Thread
 		unsigned int CurrentActiveWorkstations;
 
 		QualityParameters qualityParams;
-		void setQualityParameters(const char* f);
+		void setQualityParameters(const std::string& f);
 
 		unsigned int randomSeed;
 
