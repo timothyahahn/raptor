@@ -1938,50 +1938,28 @@ void Thread::setWorkstationParameters(const std::string& f)
 			exit(ERROR_WORKSTATION_FILE);
 		}
 
-		char buffer[200];
+		std::string line;
 
-		if(!inFile.getline(buffer,199))
+		if(std::getline(inFile, line))
 		{
 			std::cerr << "Error reading workstation file: " << f << std::endl;
 			exit(ERROR_WORKSTATION_FILE);
 		}
 
-		char *param;
-		char *parent;
-		char *traffic;
+		std::vector<std::string> tokens = split(line,'=');
 
-		param = strtok(buffer,"=");
-		parent = strtok(nullptr," ,\t");
-
-		if(strcmp(param,"NumberOfWorkstations") == 0)
-			numberOfWorkstations = atoi(parent);
-		else
+		if (tokens.size() != 2)
 		{
-			threadZero->recordEvent("ERROR: Invalid line in the input file!!!",true,0);
-			exit(ERROR_WORKSTATION_INPUT_QUANTITY);
+			std::cerr << "Invalid algorithm line: " << line;
+			exit(ERROR_WORKSTATION_FILE);
 		}
 
-		//Add the specific configuration of workstations, if specified.
-		while(inFile.getline(buffer,199))
+		if(tokens[0] == "NumberOfWorkstations")
+			numberOfWorkstations = std::stoi(tokens[1]);
+		else
 		{
-			Workstation* w = new Workstation();
-
-			param = strtok(buffer,"=");
-			parent = strtok(nullptr," ,\t");
-			traffic = strtok(nullptr," ,\t");
-
-			if(strcmp(param,"Workstation") == 0)
-			{
-				w->setParentRouterIndex(atoi(parent));
-			}
-			else
-			{
-				threadZero->recordEvent("ERROR: Invalid line in the input file!!!",true,0);
-				inFile.close();
-				exit(ERROR_WORKSTATION_INPUT_PARENT);
-			}
-
-			addWorkstation(w);
+			std::cerr << "ERROR: Invalid line in the input file!!!" << std::endl;
+			exit(ERROR_WORKSTATION_INPUT_QUANTITY);
 		}
 
 		//If workstations are not specified, then just uniformly distribute them amongst the routers.
