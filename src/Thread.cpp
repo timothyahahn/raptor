@@ -1057,9 +1057,9 @@ void Thread::destroy_connection_probe(DestroyConnectionProbeEvent* dcpe)
 		unsigned int srcIndex = edge->getSourceIndex();
 		unsigned int destIndex = edge->getDestinationIndex();
 
-		char buffer[100];
-		sprintf(buffer,"ERROR: Something is wrong, an edge from %d to %d on wave %d should be marked as used is actually free already.",srcIndex,destIndex,dcpe->wavelength);
-		threadZero->recordEvent(buffer,true,controllerIndex);
+		std::ostringstream buffer;
+		buffer << "ERROR: Something is wrong, an edge from " << srcIndex << " to " << destIndex << " on wave " << dcpe->wavelength << " shou;d be marked as used is actually free already.";
+		threadZero->recordEvent(buffer.str(),true,controllerIndex);
 		exit(ERROR_EDGE_IS_FREE);
 	}
 
@@ -1920,9 +1920,9 @@ void Thread::setTopologyParameters(const std::string& f)
 ///////////////////////////////////////////////////////////////////
 void Thread::setWorkstationParameters(const std::string& f)
 {
-	char buffer[200];
-	sprintf(buffer,"Reading Workstation Parameters from %s file.",f);
-	threadZero->recordEvent(buffer,false,0);
+	std::ostringstream reading;
+	reading << "Reading Workstation Parameters from " << f << " file.";
+	threadZero->recordEvent(reading.str(),false,0);
 
 #ifdef RUN_GUI
 	strcpy(wkstFile,f);
@@ -1937,6 +1937,8 @@ void Thread::setWorkstationParameters(const std::string& f)
 			std::cerr << "Error opening workstation file: " << f << std::endl;
 			exit(ERROR_WORKSTATION_FILE);
 		}
+
+		char buffer[200];
 
 		if(!inFile.getline(buffer,199))
 		{
@@ -2000,8 +2002,9 @@ void Thread::setWorkstationParameters(const std::string& f)
 		exit(ERROR_WORKSTATION_FILE);
 	}
 
-	sprintf(buffer,"\tCreated %d workstations.",numberOfWorkstations);
-	threadZero->recordEvent(buffer,false,0);
+	std::ostringstream created;
+	created << "\tCreated " << numberOfWorkstations << " workstations.";
+	threadZero->recordEvent(created.str(),false,0);
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -2252,9 +2255,9 @@ kShortestPathReturn* Thread::getKShortestPaths(ConnectionRequestEvent *cre, unsi
 	}
 	else
 	{
-		char buffer[200];
-		sprintf(buffer,"Invalid values for CurrentAlgorithm (%d) and CurrentWavelengthAlgorithm (%d)\n",
-			CurrentRoutingAlgorithm,CurrentWavelengthAlgorithm);
+		std::ostringstream buffer;
+		buffer << "Invalid values for CurrentAlgorithm (" << CurrentRoutingAlgorithm << ") and CurrentWavelengthAlgorithm (" << CurrentWavelengthAlgorithm << ")";
+		threadZero->recordEvent(buffer.str(), true, controllerIndex);
 		exit(ERROR_ALGORITHM_INPUT);
 	}
 
