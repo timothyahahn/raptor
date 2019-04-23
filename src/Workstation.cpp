@@ -26,7 +26,8 @@
 // Description:		Default constructor with no arguments.
 //
 ///////////////////////////////////////////////////////////////////
-Workstation::Workstation()
+Workstation::Workstation() :
+	parentRouterIndex(0), active(false)
 {
 	active = false;
 }

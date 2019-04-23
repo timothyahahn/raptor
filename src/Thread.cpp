@@ -1940,7 +1940,7 @@ void Thread::setWorkstationParameters(const std::string& f)
 
 		std::string line;
 
-		if(std::getline(inFile, line))
+		if(!std::getline(inFile, line))
 		{
 			std::cerr << "Error reading workstation file: " << f << std::endl;
 			exit(ERROR_WORKSTATION_FILE);
