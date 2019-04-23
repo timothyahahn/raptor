@@ -1822,9 +1822,9 @@ void Thread::setQualityParameters(const std::string& f)
 ///////////////////////////////////////////////////////////////////
 void Thread::setTopologyParameters(const std::string& f)
 {
-	char buffer[200];
-	sprintf(buffer,"Reading Topology Parameters from %s file.",f);
-	threadZero->recordEvent(buffer,false,0);
+	std::ostringstream buffer;
+	buffer << "Reading Topology Parameters from " << f << " file.";
+	threadZero->recordEvent(buffer.str(),false,0);
 
 #ifdef RUN_GUI
 	strcpy(topoFile,f);
@@ -1832,34 +1832,70 @@ void Thread::setTopologyParameters(const std::string& f)
 
 	std::ifstream inFile(f);
 
-	char *param;
-		
+	if (!inFile.is_open())
+	{
+		std::cerr << "Error opening toplogy file: " << f << std::endl;
+		exit(ERROR_TOPOLOGY_FILE);
+	}
+
+	std::string line;
+
 	numberOfRouters = 0;
 	numberOfEdges = 0;
 
-	while(inFile.getline(buffer,199))
+	while(std::getline(inFile, line))
 	{
-		param = strtok(buffer,"=");
+		std::vector<std::string> tokens = split(line, '=');
 
-		if(strcmp(param,"Router") == 0)
+		if (tokens.size() != 2)
+		{
+			std::string err = "Invalid line in topology file: " + line;
+			threadZero->recordEvent(err, false, 0);
+			inFile.close();
+			exit(ERROR_TOPOLOGY_FILE);
+		}
+
+		std::string param = tokens[0];
+
+		if(param == "Router")
 		{
 			Router* r = new Router;
 
 			r->setIndex(numberOfRouters);
 
 #ifdef RUN_GUI
-			r->setXPercent(atoi(strtok(nullptr,",")));
-			r->setYPercent(atoi(strtok(nullptr,",")));
+			std::vector<std::string> coordinates = split(tokens[1], ',');
+
+			if (coordinates.size() != 2)
+			{
+				std::string err = "Invalid router line in topology file: " + line;
+				threadZero->recordEvent(err, false, 0);
+				inFile.close();
+				exit(ERROR_TOPOLOGY_INPUT_ROUTERS)
+			}
+
+			r->setXPercent(std::stoi(coordinates[0]));
+			r->setYPercent(std::stoi(coordinates[1])):
 #endif
 			addRouter(r);
 
 			++numberOfRouters;
 		}
-		else if(strcmp(param,"Edge") == 0)
+		else if(param == "Edge")
 		{
-			unsigned int from = atoi(strtok(nullptr,","));
-			unsigned int to = atoi(strtok(nullptr,","));
-			unsigned int spans = atoi(strtok(nullptr,","));
+			std::vector<std::string> coordinates = split(tokens[1], ',');
+
+			if (coordinates.size() != 3)
+			{
+				std::string err = "Invalid edge line in topology file: " + line;
+				threadZero->recordEvent(err, false, 0);
+				inFile.close();
+				exit(ERROR_TOPOLOGY_INPUT_EDGES);
+			}
+
+			unsigned int from = std::stoi(coordinates[0]);
+			unsigned int to = std::stoi(coordinates[1]);
+			unsigned int spans = std::stoi(coordinates[2]);
 
 			Edge* e1 = new Edge(from,to,spans);
 			Edge* e2 = new Edge(to,from,spans);
@@ -1873,15 +1909,17 @@ void Thread::setTopologyParameters(const std::string& f)
 		{
 			threadZero->recordEvent("ERROR: Invalid line in the input file!!!",true,0);
 			inFile.close();
-			exit(ERROR_TOPOLOGY_INPUT_EDGES);
+			exit(ERROR_TOPOLOGY_FILE);
 		}
 	}
 
-	sprintf(buffer,"\tCreated %d routers.",numberOfRouters);
-	threadZero->recordEvent(buffer,false,0);
+	std::ostringstream routers;
+	routers << "\tCreated " << numberOfRouters << " routers.";
+	threadZero->recordEvent(buffer.str(),false,0);
 
-	sprintf(buffer,"\tCreated %d edges.",numberOfEdges);
-	threadZero->recordEvent(buffer,false,0);
+	std::ostringstream edges;
+	edges << "\tCreated " << numberOfEdges << " edges.";
+	threadZero->recordEvent(buffer.str(),false,0);
 
 	inFile.close();
 }
