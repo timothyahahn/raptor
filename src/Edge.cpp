@@ -75,7 +75,7 @@ Edge::Edge(int src, int dest, int spans)
 	numberOfSpans = spans;
 
 	status = new EdgeStatus[threadZero->getNumberOfWavelengths()];
-	activeSession = new int[threadZero->getNumberOfWavelengths()];
+	activeSession = new size_t[threadZero->getNumberOfWavelengths()];
 
 	degredation = new double[threadZero->getNumberOfWavelengths()];
 
@@ -175,7 +175,7 @@ void Edge::resetPheremone(unsigned int ci, unsigned int spans)
 // Description:		Adds the pheremone level based upon the solution quality.
 //
 ///////////////////////////////////////////////////////////////////
-void Edge::addPheremone(unsigned int hops, unsigned int ci)
+void Edge::addPheremone(size_t hops, unsigned int ci)
 {
 	pheremone = pheremone + 1.0 / double(hops);
 

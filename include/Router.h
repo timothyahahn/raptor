@@ -40,7 +40,7 @@ struct DP_node
 	Edge** paths;
 	bool* waveAvailability;
 	unsigned int* pathLength;
-	unsigned int* pathSpans;
+	size_t* pathSpans;
 	unsigned int* optimalWave;
 	double* pathQuality;
 	double* pathWeight;
@@ -52,9 +52,9 @@ class Router
 		Router();
 		~Router();
 
-		inline void setIndex(unsigned int i)
+		inline void setIndex(size_t i)
 			{ routerIndex = i; };
-		inline unsigned int getIndex()
+		inline size_t getIndex()
 			{ return routerIndex; };
 
 		void generateProbabilities();
@@ -87,7 +87,7 @@ class Router
 		inline Edge* getEdgeByIndex(unsigned int e)
 			{ return edgeList[e]; };
 
-		Edge* getEdgeByDestination(unsigned int r);
+		Edge* getEdgeByDestination(size_t r);
 
 		void updateUsage();
 		void resetUsage();
@@ -108,7 +108,7 @@ class Router
 		inline unsigned int getNumberOfEdges()
 			{ return static_cast<unsigned int>(edgeList.size()); };
 
-		void generateACOProbabilities(unsigned int dest);
+		void generateACOProbabilities(size_t dest);
 		Edge* chooseEdge(double p);
 
 #ifdef RUN_GUI
@@ -193,7 +193,7 @@ class Router
 		DP_node* dp_node;
 
 	private:
-		unsigned int routerIndex;
+		size_t routerIndex;
 
 		unsigned int qualityFailures;
 		unsigned int waveFailures;

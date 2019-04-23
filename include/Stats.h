@@ -25,15 +25,15 @@
 
 struct GlobalStats
 {
-	unsigned int ConnectionRequests;
-	unsigned int ConnectionSuccesses;
-	unsigned int CollisionFailures;
-	unsigned int QualityFailures;
-	unsigned int NoPathFailures;
-	unsigned int DroppedFailures;
-	unsigned int ProbeSentCount;
-	unsigned int totalHopCount;
-	unsigned int totalSpanCount;
+	size_t ConnectionRequests;
+	size_t ConnectionSuccesses;
+	size_t CollisionFailures;
+	size_t QualityFailures;
+	size_t NoPathFailures;
+	size_t DroppedFailures;
+	size_t ProbeSentCount;
+	size_t totalHopCount;
+	size_t totalSpanCount;
 	double aseNoiseTotal;
 	double xpmNoiseTotal;
 	double fwmNoiseTotal;
@@ -43,7 +43,7 @@ struct GlobalStats
 
 struct EdgeStats
 {
-	unsigned int droppedConnections;
+	size_t droppedConnections;
 	double minInitalQFactor;
 	double minAverageQFactor;
 	double minPercentQFactor;

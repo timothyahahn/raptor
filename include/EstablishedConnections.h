@@ -25,7 +25,7 @@
 struct EstablishedConnection
 {
 	Edge **connectionPath;
-	unsigned int connectionLength;
+	size_t connectionLength;
 	int wavelength;
 	double connectionStartTime;
 	double connectionEndTime;

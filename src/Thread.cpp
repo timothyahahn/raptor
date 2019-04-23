@@ -752,9 +752,9 @@ void Thread::deactivate_workstations()
 //					connections.
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::generateTrafficEvent(unsigned int session)
+void Thread::generateTrafficEvent(size_t session)
 {
-	unsigned int workstation = session / threadZero->getNumberOfConnections();
+	size_t workstation = session / threadZero->getNumberOfConnections();
 
 	Event* tr = new Event();
 	ConnectionRequestEvent* tr_data = new ConnectionRequestEvent();
@@ -1041,8 +1041,8 @@ void Thread::destroy_connection_probe(DestroyConnectionProbeEvent* dcpe)
 	}
 	else
 	{
-		unsigned int srcIndex = edge->getSourceIndex();
-		unsigned int destIndex = edge->getDestinationIndex();
+		size_t srcIndex = edge->getSourceIndex();
+		size_t destIndex = edge->getDestinationIndex();
 
 		std::ostringstream buffer;
 		buffer << "ERROR: Something is wrong, an edge from " << srcIndex << " to " << destIndex << " on wave " << dcpe->wavelength << " shou;d be marked as used is actually free already.";
@@ -1783,7 +1783,7 @@ void Thread::setQualityParameters(const std::string& f)
 
 	qualityParams.ASE_perEDFA = new double[getNumberOfWavelengths()];
 
-	for(unsigned int w = 0; w < getNumberOfWavelengths(); ++w)
+	for(size_t w = 0; w < getNumberOfWavelengths(); ++w)
 	{
 		double F_n = pow(10.0, (qualityParams.EDFA_Noise_Figure / 10.0));
 		double h = 6.6260689633e-34;
@@ -2180,7 +2180,7 @@ void Thread::update_link_usage()
 //					the current routing algorithm.
 //
 ///////////////////////////////////////////////////////////////////
-kShortestPathReturn* Thread::getKShortestPaths(ConnectionRequestEvent *cre, unsigned int probesToSend)
+kShortestPathReturn* Thread::getKShortestPaths(ConnectionRequestEvent *cre, size_t probesToSend)
 {
 	kShortestPathReturn* kPath;
 
@@ -2616,7 +2616,7 @@ void Thread::update_gui()
 //					link.
 //
 ///////////////////////////////////////////////////////////////////
-double Thread::calculateDelay(unsigned int spans)
+double Thread::calculateDelay(size_t spans)
 {
 	if(CurrentRoutingAlgorithm == IMPAIRMENT_AWARE || CurrentRoutingAlgorithm == DYNAMIC_PROGRAMMING)
 	{
@@ -2786,7 +2786,7 @@ int Thread::otherResponse(CreateConnectionProbeEvent* probe)
 //					or dropped.
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::updateQMDegredation(Edge **connectionPath, unsigned int connectionLength, unsigned int wavelength)
+void Thread::updateQMDegredation(Edge **connectionPath, size_t connectionLength, unsigned int wavelength)
 {
 	time_t start;
 	time_t end;
@@ -2809,7 +2809,7 @@ void Thread::updateQMDegredation(Edge **connectionPath, unsigned int connectionL
 //					or dropped.
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::updateQFactorStats(Edge **connectionPath, unsigned int connectionLength, unsigned int wavelength)
+void Thread::updateQFactorStats(Edge **connectionPath, size_t connectionLength, unsigned int wavelength)
 {
 	for(unsigned int p = 0; p < connectionLength ; ++p)
 	{

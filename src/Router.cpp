@@ -113,7 +113,7 @@ void Router::addEdge(Edge* e)
 //					specific router.
 //
 ///////////////////////////////////////////////////////////////////
-Edge* Router::getEdgeByDestination(unsigned int r)
+Edge* Router::getEdgeByDestination(size_t r)
 {
 	for(unsigned int e = 0; e < edgeList.size(); ++e)
 	{
@@ -145,7 +145,7 @@ void Router::updateUsage()
 //					current pheremone levels.
 //
 ///////////////////////////////////////////////////////////////////
-void Router::generateACOProbabilities(unsigned int dest)
+void Router::generateACOProbabilities(size_t dest)
 {
 	double *destinationTaus = new double[getNumberOfEdges()];
 	double *destinationEtas = new double[getNumberOfEdges()];
@@ -275,7 +275,7 @@ void Router::generateProbabilities()
 	double totalProbs = 0.0;
 	double cumulativeProbs = 0.0;
 
-	unsigned int pathSpans = 0;
+	size_t pathSpans = 0;
 
 	destinationProbs = new double[threadZero->getNumberOfRouters()];
 
@@ -287,7 +287,7 @@ void Router::generateProbabilities()
 
 			kShortestPathReturn *kPath = threadZero->getResourceManager()->calculate_SP_path(r1,getIndex(),1,0);
 
-			for(unsigned int r2 = 0; r2 < kPath->pathlen[0] - 1; ++r2)
+			for(size_t r2 = 0; r2 < kPath->pathlen[0] - 1; ++r2)
 				pathSpans += threadZero->getRouterAt(kPath->pathinfo[r2])->
 					getEdgeByDestination(kPath->pathinfo[r2+1])->getNumberOfSpans();
 

@@ -44,26 +44,26 @@ class Edge
 
 		~Edge();
 
-		inline int getSourceIndex() 
+		inline size_t getSourceIndex() 
 			{ return sourceIndex; };
-		inline int getDestinationIndex() 
+		inline size_t getDestinationIndex() 
 			{ return destinationIndex; };
-		inline void setSourceIndex(short int s)
+		inline void setSourceIndex(size_t s)
 			{	sourceIndex = s;	};
-		inline void setDestinationIndex(short int d)
+		inline void setDestinationIndex(size_t d)
 			{	destinationIndex = d;	};
 
-		inline int getNumberOfSpans() 
+		inline size_t getNumberOfSpans() 
 			{ return numberOfSpans; };
 		inline void setNumberOfSpans(int s) 
 			{ numberOfSpans = s; };
 
-		inline EdgeStatus getStatus(int w)
+		inline EdgeStatus getStatus(size_t w)
 			{ return status[w]; };
-		inline int getActiveSession(int w)
+		inline size_t getActiveSession(int w)
 			{ return activeSession[w]; };
 
-		inline void setUsed(int session, int w)
+		inline void setUsed(size_t session, size_t w)
 			{ status[w] = EDGE_USED; activeSession[w] = session; };
 		inline void setFree(int w)
 			{ status[w] = EDGE_FREE; activeSession[w] = -1; degredation[w] = 0.0; };
@@ -95,7 +95,7 @@ class Edge
 		 void resetPheremone(unsigned int ci, unsigned int spans);
 
 		void evaporatePheremone(unsigned int ci);
-		void addPheremone(unsigned int hops, unsigned int ci);
+		void addPheremone(size_t hops, unsigned int ci);
 
 #ifdef RUN_GUI
 		inline int getMaxActualUsage()
@@ -123,11 +123,11 @@ class Edge
 		void removeEstablishedConnection(void* dcpe_void);
 
 private:
-		int sourceIndex;
-		int destinationIndex;
-		int numberOfSpans;
+		size_t sourceIndex;
+		size_t destinationIndex;
+		size_t numberOfSpans;
 
-		int *activeSession;
+		size_t *activeSession;
 		EdgeStatus *status;
 
 		double algorithmUsage;

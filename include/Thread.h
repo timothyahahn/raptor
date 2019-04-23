@@ -53,9 +53,9 @@ class Thread
 		Thread(int ci, int argc, const char* argv[], bool isLPS);
 		~Thread();
 
-		inline Router* getRouterAt(unsigned int i)
+		inline Router* getRouterAt(size_t i)
 			{ return routers[i]; };
-		inline Workstation* getWorkstationAt(unsigned int i)
+		inline Workstation* getWorkstationAt(size_t i)
 			{ return workstations[i]; };
 
 		inline void addRouter(Router* r)
@@ -104,17 +104,17 @@ class Thread
 				exit(ERROR_NO_FLUSH);
 		}
 
-		inline unsigned int getNumberOfRouters()
+		inline size_t getNumberOfRouters()
 			{ return numberOfRouters; };
-		inline unsigned int getNumberOfWorkstations()
+		inline size_t getNumberOfWorkstations()
 			{ return numberOfWorkstations; };
-		inline unsigned int getNumberOfEdges()
+		inline size_t getNumberOfEdges()
 			{ return numberOfEdges; };
-		inline unsigned int getNumberOfWavelengths()
+		inline size_t getNumberOfWavelengths()
 			{ return numOfWavelengths; };
-		inline void setNumberOfWavelengths(unsigned int n)
+		inline void setNumberOfWavelengths(size_t n)
 			{	numOfWavelengths = n;	};
-		inline unsigned int getRandomSeed()
+		inline size_t getRandomSeed()
 			{ return randomSeed; };
 
 		inline ResourceManager* getResourceManager()
@@ -241,7 +241,7 @@ class Thread
 		void detailScreen();
 #endif
 
-		inline unsigned int getNumberOfConnections()
+		inline size_t getNumberOfConnections()
 			{ return numberOfConnections; };
 
 		//Random generator for zero to one
@@ -284,7 +284,7 @@ class Thread
 
 		void activate_workstations();
 		void deactivate_workstations();
-		void generateTrafficEvent(unsigned int session);
+		void generateTrafficEvent(size_t session);
 
 		void update_link_usage();
 
@@ -301,7 +301,7 @@ class Thread
 
 		bool isLoadPrevious;
 
-		unsigned int numOfWavelengths;
+		size_t numOfWavelengths;
 
 #ifdef RUN_GUI
 		double maxMaxUsage;
@@ -350,32 +350,32 @@ class Thread
 		QualityParameters qualityParams;
 		void setQualityParameters(const std::string& f);
 
-		unsigned int randomSeed;
+		size_t randomSeed;
 
-		unsigned int numberOfRouters;
-		unsigned int numberOfWorkstations;
-		unsigned int numberOfEdges;
+		size_t numberOfRouters;
+		size_t numberOfWorkstations;
+		size_t numberOfEdges;
 
-		unsigned int numberOfConnections;
+		size_t numberOfConnections;
 
 		bool order_init;
 		unsigned int* workstationOrder;
 
-		double calculateDelay(unsigned int spans);
+		double calculateDelay(size_t spans);
 
 		bool sendResponse(CreateConnectionProbeEvent* probe);
 		void clearResponses(CreateConnectionProbeEvent* probe);
 		bool moreProbes(CreateConnectionProbeEvent* probe);
 		int otherResponse(CreateConnectionProbeEvent* probe);
 
-		void updateQMDegredation(Edge **connectionPath, unsigned int connectionLength, unsigned int wavelength);
-		void updateQFactorStats(Edge **connectionPath, unsigned int connectionLength, unsigned int wavelength);
+		void updateQMDegredation(Edge **connectionPath, size_t connectionLength, unsigned int wavelength);
+		void updateQFactorStats(Edge **connectionPath, size_t connectionLength, unsigned int wavelength);
 
 		double minDuration;
 
 		unsigned int maxSpans;
 
-		kShortestPathReturn* getKShortestPaths(ConnectionRequestEvent *cre, unsigned int probesToSend);
+		kShortestPathReturn* getKShortestPaths(ConnectionRequestEvent *cre, size_t probesToSend);
 		CreateConnectionProbeEvent** calcProbesToSend(ConnectionRequestEvent *cre, kShortestPathReturn *kPath, 
 		unsigned int &probesToSend, unsigned int &probeStart, unsigned int &probesSkipped);
 		void sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath, CreateConnectionProbeEvent** probesList,
