@@ -2046,17 +2046,26 @@ void Thread::setAlgorithmParameters(const std::string& f, unsigned int iteration
 	log << "Reading Algorithm Parameters from " << f << " file.";
 	threadZero->recordEvent(log.str(),false,0);
 
-	char buffer[200];
+	std::string line;
 
 	std::ifstream inFile(f.c_str());
 
-	while(inFile.getline(buffer,199))
+	while(std::getline(inFile,line))
 	{
-		char *ra = strtok(buffer,",") + strlen("RA=") * sizeof(char);
-		char *wa = strtok(nullptr,",") + strlen("WA=") * sizeof(char);
-		char *ps = strtok(nullptr,",") + strlen("PS=") * sizeof(char);
-		char *qa = strtok(nullptr,",") + strlen("QA=") * sizeof(char);
-		char *run = strtok(nullptr,",") + strlen("RUN=") * sizeof(char);
+		std::vector<std::string> tokens = split(line, ',');
+
+		if (tokens.size() != 5)
+		{
+			std::string token = "Invalid algorithm line: " + line;
+			threadZero->recordEvent(token,true,0);
+			continue;
+		}
+
+		std::string ra = tokens[0].replace(0, 3, "");
+		std::string wa = tokens[1].replace(0, 3, "");
+		std::string ps = tokens[2].replace(0, 3, "");
+		std::string qa = tokens[3].replace(0, 3, "");
+		std::string run = tokens[4].replace(0, 4, "");
 
 		int i_qa = std::stoi(qa);
 		int i_run = std::stoi(run);
@@ -2827,6 +2836,24 @@ void Thread::updateQFactorStats(Edge **connectionPath, unsigned int connectionLe
 double Thread::getBeta()
 {
 	return threadZero->getQualityParams().beta;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// Function Name:	split
+// Description:		Tokenizes a string by specified delimiter
+//
+///////////////////////////////////////////////////////////////////
+std::vector<std::string> Thread::split(const std::string& s, char delimiter)
+{
+	std::vector<std::string> tokens;
+	std::string token;
+	std::istringstream tokenStream(s);
+	while (std::getline(tokenStream, token, delimiter))
+	{
+		tokens.push_back(token);
+	}
+	return tokens;
 }
 
 #ifdef RUN_GUI

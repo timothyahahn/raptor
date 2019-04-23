@@ -399,6 +399,8 @@ class Thread
 		int getKthParameterInt(char *f);
 		double getKthParameterdouble(char *f);
 
+		std::vector<std::string> split(const std::string& s, char delimiter);
+
 		int runCount;
 		int maxRunCount;
 
