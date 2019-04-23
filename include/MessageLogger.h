@@ -31,7 +31,7 @@
 class MessageLogger
 {
 	public:
-		MessageLogger(const std::string&, const std::string&, const std::string&, const std::string&, int runCount);
+		MessageLogger(const std::string&, const std::string&, const std::string&, const std::string&);
 		~MessageLogger();
 
 		void recordEvent(const std::string &e, bool print, unsigned int ci);

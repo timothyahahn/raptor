@@ -33,14 +33,14 @@ extern Thread** threads;
 // Description:		Default constructor
 //
 ///////////////////////////////////////////////////////////////////
-MessageLogger::MessageLogger(const std::string& topo, const std::string& lambda, const std::string& seed, const std::string& k,int runCount)
+MessageLogger::MessageLogger(const std::string& topo, const std::string& lambda, const std::string& seed, const std::string& k)
 {
 	pthread_mutex_init(&LogMutex,nullptr);
 	pthread_mutex_init(&PrintMutex,nullptr);
 	pthread_mutex_init(&ResultsMutex,nullptr);
 
 	std::ostringstream buffer;
-	buffer << "output/EventLog-" << topo << "-" << lambda << "-" << seed << "-" << k << "-R" << runCount << ".txt";
+	buffer << "output/EventLog-" << topo << "-" << lambda << "-" << seed << "-" << k << ".txt";
 
 	eventLogger.open(buffer.str());
 }

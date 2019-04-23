@@ -40,9 +40,6 @@ extern unsigned int threadCount;
 
 extern std::vector<AlgorithmToRun*> algParams;
 
-const int Thread::MORE_SIMULATIONS = 1;
-const int Thread::COMPLETED_ALL_SIMULATIONS = 2;
-
 const double Thread::TEN_HOURS = 10.0 * 60.0 * 60.0;
 const double Thread::SPEED_OF_LIGHT = double(299792458);
 
@@ -67,12 +64,9 @@ Thread::Thread()
 //					and initializes the controller.
 //
 ///////////////////////////////////////////////////////////////////
-Thread::Thread(int ci, int argc, const char* argv[], bool isLPS, int rc)
+Thread::Thread(int ci, int argc, const char* argv[], bool isLPS)
 {
 	isLoadPrevious = isLPS;
-
-	runCount = rc;
-	maxRunCount = 0;
 
 	if(!isLoadPrevious)
 	{	threads[ci] = this;	}
@@ -109,7 +103,7 @@ Thread::Thread(int ci, int argc, const char* argv[], bool isLPS, int rc)
 
 	if(controllerIndex == 0 && isLoadPrevious == false)
 	{
-		logger = new MessageLogger(topology, wavelengths, seed, probes, rc);
+		logger = new MessageLogger(topology, wavelengths, seed, probes);
 
 		std::string quality = "input/Quality-" + topology + "-" + wavelengths + ".txt";
 		setQualityParameters(quality);
@@ -371,14 +365,7 @@ int Thread::runThread(AlgorithmToRun* alg)
 		}
 	}
 	
-	if(runCount != maxRunCount)
-	{
-		return MORE_SIMULATIONS;
-	}
-	else
-	{
-		return COMPLETED_ALL_SIMULATIONS;
-	}
+	return 0;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -1482,75 +1469,6 @@ void Thread::collision_notification(CollisionNotificationEvent* cne)
 
 ///////////////////////////////////////////////////////////////////
 //
-// Function Name:	getKthParameterdouble
-// Description:		Gets the kth parameter and returns it as a double.
-//
-///////////////////////////////////////////////////////////////////
-double Thread::getKthParameterdouble(char* f)
-{
-	if(strchr(f,',') == 0)
-	{
-		return atof(f);
-	}
-	else
-	{
-		char* token = strtok(f,",");
-		double retVal;
-		int t = 0;
-
-		while(token != 0)
-		{
-			if(t == runCount)
-				retVal = atof(token);
-
-			token = strtok(nullptr,",");
-
-			if(t > maxRunCount)
-				maxRunCount = t;
-
-			++t;
-		}
-
-		return retVal;
-	}
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// Function Name:	getKthParameterInt
-// Description:		Gets the kth parameter and returns it as an int.
-//
-///////////////////////////////////////////////////////////////////
-int Thread::getKthParameterInt(char* f)
-{
-	if(strchr(f,',') == 0)
-	{
-		return atoi(f);
-	}
-	else
-	{
-		char* token = strtok(f,",");
-		int retVal;
-		int t = 0;
-
-		while(token != 0)
-		{
-			if(t == runCount)
-				retVal = atoi(f);
-
-			++t;
-			token = strtok(nullptr,",");
-
-			if(t > maxRunCount)
-				maxRunCount = t;
-		}
-
-		return retVal;
-	}
-}
-
-///////////////////////////////////////////////////////////////////
-//
 // Function Name:	setQualityParameters
 // Description:		Opens up the Quality Paremeters file that was
 //					specified by the command line arguement
@@ -1566,238 +1484,295 @@ void Thread::setQualityParameters(const std::string& f)
 
 	std::ifstream inFile(f);
 
-	char buffer[200];
-
-	while(inFile.getline(buffer,199))
+	if (!inFile.is_open())
 	{
-		char *param;
-		char *value;
-		
-		param = strtok(buffer,"=");
-		value = strtok(nullptr,"\t");
+		std::cerr << "Error opening quality file: " << f << std::endl;
+		exit(ERROR_QUALITY_FILE);
+	}
 
-		if(strcmp(param,"arrival_interval") == 0)
+	std::string line;
+
+	while(std::getline(inFile, line))
+	{
+		std::string param;
+		std::string value;
+
+		std::vector<std::string> entire_line_tokens = split(line, '=');
+		
+		if (entire_line_tokens.size() < 2)
 		{
-			qualityParams.arrival_interval = getKthParameterdouble(value);
-			sprintf(buffer,"\tarrival_interval = %f",qualityParams.arrival_interval);
-			threadZero->recordEvent(buffer,true,0);
+			std::cerr << "Invalid algorithm line: " << line << std::endl;
+			exit(ERROR_QUALITY_FILE);
 		}
-		else if(strcmp(param,"duration") == 0)
+
+		std::vector<std::string> value_tokens = split(entire_line_tokens[1], ' ');
+
+		if (value_tokens.size() <  2)
 		{
-			qualityParams.duration = getKthParameterdouble(value);
-			sprintf(buffer,"\tduration = %f",qualityParams.duration);
-			threadZero->recordEvent(buffer,true,0);
+			std::cerr << "Invalid algorithm line: " << line << std::endl;
+			exit(ERROR_QUALITY_FILE);
 		}
-		else if(strcmp(param,"nonlinear_halfwin") == 0)
+
+		param = entire_line_tokens[0];
+		value = value_tokens[0];
+
+		if(param == "arrival_interval")
 		{
-			qualityParams.nonlinear_halfwin = getKthParameterInt(value);
-			sprintf(buffer,"\tnonlinear_halfwin = %d",qualityParams.nonlinear_halfwin);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.arrival_interval = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tarrival_interval = " << qualityParams.arrival_interval;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"halfwavelength") == 0)
+		else if (param == "duration")
 		{
-			qualityParams.halfwavelength = getKthParameterInt(value);
-			sprintf(buffer,"\thalfwavelength = %d",qualityParams.halfwavelength);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.duration = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tduration = " << qualityParams.duration;
+			threadZero->recordEvent(buffer.str(),true,0);
+		}
+		else if (param == "nonlinear_halfwin")
+		{
+			qualityParams.nonlinear_halfwin = std::stoi(value);
+			std::ostringstream buffer;
+			buffer << "\tnonlinear_halfwin = " << qualityParams.nonlinear_halfwin;
+			threadZero->recordEvent(buffer.str(),true,0);
+		}
+		else if(param == "halfwavelength")
+		{
+			qualityParams.halfwavelength = std::stoi(value);
+			std::ostringstream halfbuffer;
+			halfbuffer << "\thalfwavelength = " << qualityParams.halfwavelength;
+			threadZero->recordEvent(halfbuffer.str(),true,0);
 
 			numOfWavelengths = 2 * qualityParams.halfwavelength + 1;
-			sprintf(buffer,"\tsys_wavelength = %d",threadZero->getNumberOfWavelengths());
-			threadZero->recordEvent(buffer,true,0);
+			std::ostringstream buffer;
+			buffer << "\tsys_wavelength = " << threadZero->getNumberOfWavelengths();
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"fc") == 0)
+		else if(param == "fc")
 		{
-			qualityParams.fc = getKthParameterdouble(value);
-			sprintf(buffer,"\tfc = %f",qualityParams.fc);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.fc = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tfc = " << qualityParams.fc;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"f_step") == 0)
+		else if(param == "f_step")
 		{
-			qualityParams.f_step = getKthParameterdouble(value);
-			sprintf(buffer,"\tf_step = %f",qualityParams.f_step);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.f_step = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tf_step = " << qualityParams.f_step;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"channel_power") == 0)
+		else if(param == "channel_power")
 		{
-			qualityParams.channel_power = getKthParameterdouble(value);
-			sprintf(buffer,"\tchannel_power = %f",qualityParams.channel_power);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.channel_power = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tchannel_power = " << qualityParams.channel_power;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"L") == 0)
+		else if(param == "L")
 		{
-			qualityParams.L = getKthParameterdouble(value);
-			sprintf(buffer,"\tL = %f",qualityParams.L);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.L = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tL = " << qualityParams.L;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"alphaDB") == 0)
+		else if(param == "alphaDB")
 		{
-			qualityParams.alphaDB = getKthParameterdouble(value);
+			qualityParams.alphaDB = std::stod(value);
 			qualityParams.alpha = double(qualityParams.alphaDB * 0.1 / log10(exp(1.0)));
-			sprintf(buffer,"\talphaDB = %f",qualityParams.alphaDB);
-			threadZero->recordEvent(buffer,true,0);
+			std::ostringstream buffer;
+			buffer << "\talphaDB = " << qualityParams.alphaDB;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"D") == 0)
+		else if(param == "D")
 		{
-			qualityParams.D = getKthParameterdouble(value);
-			sprintf(buffer,"\tD = %f",qualityParams.D);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.D = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tD = " << qualityParams.D;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"S") == 0)
+		else if(param == "S")
 		{
-			qualityParams.S = getKthParameterdouble(value);
-			sprintf(buffer,"\tS = %f",qualityParams.S);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.S = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tS = " << qualityParams.S;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"gamma") == 0)
+		else if(param == "gamma")
 		{
-			qualityParams.gamma = getKthParameterdouble(value);
-			sprintf(buffer,"\tgamma = %f",qualityParams.gamma);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.gamma = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tgamma = " << qualityParams.gamma;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"QFactor_factor") == 0)
+		else if(param == "QFactor_factor")
 		{
-			qualityParams.QFactor_factor = getKthParameterdouble(value);
-			sprintf(buffer,"\tQFactor_factor = %f",qualityParams.QFactor_factor);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.QFactor_factor = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tQFactor_factor = " << qualityParams.QFactor_factor;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"EDFA_Noise_Figure") == 0)
+		else if(param == "EDFA_Noise_Figure")
 		{
-			qualityParams.EDFA_Noise_Figure = getKthParameterdouble(value);
-			sprintf(buffer,"\tEDFA_Noise_Figure = %f",qualityParams.EDFA_Noise_Figure);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.EDFA_Noise_Figure = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tEDFA_Noise_Figure = " << qualityParams.EDFA_Noise_Figure;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"EDFA_Gain") == 0)
+		else if(param == "EDFA_Gain")
 		{
-			qualityParams.EDFA_Gain = getKthParameterdouble(value);
-			sprintf(buffer,"\tEDFA_Gain = %f",qualityParams.EDFA_Gain);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.EDFA_Gain = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tEDFA_Gain = " << qualityParams.EDFA_Gain;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"B_w") == 0)
+		else if(param == "B_w")
 		{
-			qualityParams.B_w = getKthParameterdouble(value);
-			sprintf(buffer,"\tB_w = %e",qualityParams.B_w);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.B_w = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tB_w = " << qualityParams.B_w;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"usage_update_interval") == 0)
+		else if(param == "usage_update_interval")
 		{
-			qualityParams.usage_update_interval = getKthParameterdouble(value);
-			sprintf(buffer,"\tusage_update_interval = %f",qualityParams.usage_update_interval);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.usage_update_interval = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tusage_update_interval = " << qualityParams.usage_update_interval;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"beta") == 0)
+		else if(param == "beta")
 		{
-			qualityParams.beta = getKthParameterdouble(value);
-			sprintf(buffer,"\tbeta = %f",qualityParams.beta);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.beta = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tbeta = " << qualityParams.beta;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"gui_update_interval") == 0)
+		else if(param == "gui_update_interval")
 		{
-			qualityParams.gui_update_interval = getKthParameterInt(value);
-			sprintf(buffer,"\tgui_update_interval = %d",qualityParams.gui_update_interval);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.gui_update_interval = std::stoi(value);
+			std::ostringstream buffer;
+			buffer << "\tgui_update_interval = " << qualityParams.gui_update_interval;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"refractive_index") == 0)
+		else if(param == "refractive_index")
 		{
-			qualityParams.refractive_index = getKthParameterdouble(value);
-			sprintf(buffer,"\trefractive_index = %f",qualityParams.refractive_index);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.refractive_index = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\trefractive_index = " << qualityParams.refractive_index;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"q_factor_stats") == 0)
+		else if(param == "q_factor_stats")
 		{
-			if(getKthParameterInt(value) == 1)
+			if(std::stoi(value) == 1)
 				qualityParams.q_factor_stats = true;
-			else if(getKthParameterInt(value) == 0)
+			else if(std::stoi(value) == 0)
 				qualityParams.q_factor_stats = false;
 			else
 			{
-				sprintf(buffer,"Unexpected value input for q_factor_stats.");
-				threadZero->recordEvent(buffer,true,0);
+				std::ostringstream buffer;
+				buffer << "Unexpected value input for q_factor_stats.";
+				threadZero->recordEvent(buffer.str(),true,0);
 				qualityParams.q_factor_stats = false;
 			}
 
-			sprintf(buffer,"\tq_factor_stats = %d",qualityParams.q_factor_stats);
-			threadZero->recordEvent(buffer,true,0);
+			std::ostringstream buffer;
+			buffer << "\tq_factor_stats = " << qualityParams.q_factor_stats;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"detailed_log") == 0)
+		else if(param == "detailed_log")
 		{
-			if(getKthParameterInt(value) == 1)
+			if(std::stoi(value) == 1)
 				qualityParams.detailed_log = true;
-			else if(getKthParameterInt(value) == 0)
+			else if(std::stoi(value) == 0)
 				qualityParams.detailed_log = false;
 			else
 			{
-				sprintf(buffer,"Unexpected buffer input for detailed_log.");
-				threadZero->recordEvent(buffer,true,0);
+				std::ostringstream buffer;
+				buffer << "Unexpected buffer input for detailed_log.";
+				threadZero->recordEvent(buffer.str(),true,0);
 				qualityParams.detailed_log = false;
 			}
 
-			sprintf(buffer,"\tdetailed_log = %d",qualityParams.detailed_log);
-			threadZero->recordEvent(buffer,true,0);
+			std::ostringstream buffer;
+			buffer << "\tdetailed_log = " << qualityParams.detailed_log;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"dest_dist") == 0)
+		else if(param == "dest_dist")
 		{
-			if(getKthParameterInt(value) == 1)
+			if(std::stoi(value) == 1)
 				qualityParams.dest_dist = UNIFORM;
-			else if(getKthParameterInt(value) == 2)
+			else if(std::stoi(value) == 2)
 				qualityParams.dest_dist = DISTANCE;
-			else if(getKthParameterInt(value) == 3)
+			else if(std::stoi(value) == 3)
 				qualityParams.dest_dist = INVERSE_DISTANCE;
 			else
 			{
-				sprintf(buffer,"Unexpected value input for dest_dist.");
-				threadZero->recordEvent(buffer,true,0);
+				std::ostringstream buffer;
+				buffer << "Unexpected value input for dest_dist.";
+				threadZero->recordEvent(buffer.str(),true,0);
 				qualityParams.detailed_log = false;
 			}
 
-			sprintf(buffer,"\tdest_dist = %d",qualityParams.dest_dist);
-			threadZero->recordEvent(buffer,true,0);
+			std::ostringstream buffer;
+			buffer << "\tdest_dist = " << qualityParams.dest_dist;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"DP_alpha") == 0)
+		else if(param == "DP_alpha")
 		{
-			qualityParams.DP_alpha = getKthParameterdouble(value);
-			sprintf(buffer,"\tDP_alpha = %f",qualityParams.DP_alpha);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.DP_alpha = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tDP_alpha = " << qualityParams.DP_alpha;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"ACO_ants") == 0)
+		else if(param == "ACO_ants")
 		{
-			qualityParams.ACO_ants = getKthParameterInt(value);
-			sprintf(buffer,"\tACO_ants = %d",qualityParams.ACO_ants);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.ACO_ants = std::stoi(value);
+			std::ostringstream buffer;
+			buffer << "\tACO_ants = " << qualityParams.ACO_ants;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"ACO_alpha") == 0)
+		else if(param == "ACO_alpha")
 		{
-			qualityParams.ACO_alpha = getKthParameterdouble(value);
-			sprintf(buffer,"\tACO_alpha = %f",qualityParams.ACO_alpha);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.ACO_alpha = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tACO_alpha = " << qualityParams.ACO_alpha;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"ACO_beta") == 0)
+		else if(param == "ACO_beta")
 		{
-			qualityParams.ACO_beta = getKthParameterdouble(value);
-			sprintf(buffer,"\tACO_beta = %f",qualityParams.ACO_beta);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.ACO_beta = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tACO_beta = " << qualityParams.ACO_beta;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"ACO_rho") == 0)
+		else if(param == "ACO_rho")
 		{
-			qualityParams.ACO_rho = getKthParameterdouble(value);
-			sprintf(buffer,"\tACO_rho = %f",qualityParams.ACO_rho);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.ACO_rho = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tACO_rho = " << qualityParams.ACO_rho;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"MM_ACO_gamma") == 0)
+		else if(param == "MM_ACO_gamma")
 		{
-			qualityParams.MM_ACO_gamma = getKthParameterdouble(value);
-			sprintf(buffer,"\tMM_ACO_gamma = %f",qualityParams.MM_ACO_gamma);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.MM_ACO_gamma = std::stod(value);
+			std::ostringstream buffer;
+			buffer << "\tMM_ACO_gamma = " << qualityParams.MM_ACO_gamma;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"MM_ACO_N_iter") == 0)
+		else if(param == "MM_ACO_N_iter")
 		{
-			qualityParams.MM_ACO_N_iter = getKthParameterInt(value);
-			sprintf(buffer,"\tMM_ACO_N_iter = %d",qualityParams.MM_ACO_N_iter);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.MM_ACO_N_iter = std::stoi(value);
+			std::ostringstream buffer;
+			buffer << "\tMM_ACO_N_iter = " << qualityParams.MM_ACO_N_iter;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
-		else if(strcmp(param,"MM_ACO_N_reset") == 0)
+		else if(param == "MM_ACO_N_reset")
 		{
-			qualityParams.MM_ACO_N_reset = getKthParameterInt(value);
-			sprintf(buffer,"\tMM_ACO_N_reset = %d",qualityParams.MM_ACO_N_reset);
-			threadZero->recordEvent(buffer,true,0);
+			qualityParams.MM_ACO_N_reset = std::stoi(value);
+			std::ostringstream buffer;
+			buffer << "\tMM_ACO_N_reset = " << qualityParams.MM_ACO_N_reset;
+			threadZero->recordEvent(buffer.str(),true,0);
 		}
 		else
 		{

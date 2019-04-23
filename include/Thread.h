@@ -50,7 +50,7 @@ class Thread
 {
 	public:
 		Thread();
-		Thread(int ci, int argc, const char* argv[], bool isLPS, int rc);
+		Thread(int ci, int argc, const char* argv[], bool isLPS);
 		~Thread();
 
 		inline Router* getRouterAt(unsigned int i)
@@ -395,9 +395,6 @@ class Thread
 		boost::mt19937 rng3;
 		boost::exponential_distribution<> *ai;
 		boost::variate_generator<boost::mt19937&, boost::exponential_distribution<> > *generateArrivalInterval;
-
-		int getKthParameterInt(char *f);
-		double getKthParameterdouble(char *f);
 
 		std::vector<std::string> split(const std::string& s, char delimiter);
 

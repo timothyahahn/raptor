@@ -166,83 +166,75 @@ END_OF_MAIN()
 void runSimulation(int argc, const char* argv[])
 {
 	int* threadZeroReturn = 0;
-	int runCount = 0;
 
-	while(threadZeroReturn == 0 || *threadZeroReturn == Thread::MORE_SIMULATIONS)
-	{
-		delete threadZeroReturn;
+	std::vector<pthread_t*> pThreads;
 
-		std::vector<pthread_t*> pThreads;
+	threadCount = atoi(argv[4]);
 
-		threadCount = atoi(argv[4]);
+	threads = new Thread*[threadCount];
 
-		threads = new Thread*[threadCount];
-
-		unsigned int iterationCount = atoi(argv[5]);
+	unsigned int iterationCount = atoi(argv[5]);
 
 #ifdef RUN_GUI
 	rectfill(screen, 0, 0, SCREEN_W, 40, color);
-	textprintf_ex(screen,font,20,15,color2,color,"Building XPM Database, please wait..."); 
+	textprintf_ex(screen,font,20,15,color2,color,"Building XPM Database, please wait...");
 #endif
 
-		Thread* thread = new Thread(0,argc,argv,false,runCount);
+	Thread* thread = new Thread(0,argc,argv,false);
 
-		threadZero->initResourceManager();
+	threadZero->initResourceManager();
 
 #ifdef RUN_GUI
-		rectfill(screen, 0, 0, SCREEN_W, 40, color);
+	rectfill(screen, 0, 0, SCREEN_W, 40, color);
 #endif
 
-		pthread_mutex_init(&ScheduleMutex,nullptr);
+	pthread_mutex_init(&ScheduleMutex,nullptr);
 
-		if(threadCount > algParams.size())
-			threadCount = static_cast<unsigned int>(algParams.size());
+	if(threadCount > algParams.size())
+		threadCount = static_cast<unsigned int>(algParams.size());
 
-		for(unsigned int t = 1; t < threadCount; ++t)
-		{
-			Thread* thread = new Thread(t,argc,argv,false,runCount);
-			pThreads.push_back(new pthread_t);
+	for(unsigned int t = 1; t < threadCount; ++t)
+	{
+		Thread* thread = new Thread(t,argc,argv,false);
+		pThreads.push_back(new pthread_t);
 
-			thread->initResourceManager();
-		}
+		thread->initResourceManager();
+	}
 
-		std::ostringstream buffer;
-		buffer << "Created " << threadCount << " threads " << std::endl;
-		threadZero->recordEvent(buffer.str(),true,0);
-		threadZero->flushLog(true);
+	std::ostringstream buffer;
+	buffer << "Created " << threadCount << " threads " << std::endl;
+	threadZero->recordEvent(buffer.str(),true,0);
+	threadZero->flushLog(true);
 
-		for(unsigned int t = 1; t < threadCount; ++t)
-		{
-			pthread_create(pThreads[t-1],nullptr,runThread,new unsigned int(t));
-		}
+	for(unsigned int t = 1; t < threadCount; ++t)
+	{
+		pthread_create(pThreads[t-1],nullptr,runThread,new unsigned int(t));
+	}
 
-		threadZeroReturn = static_cast<int*>(runThread(new unsigned int(0)));
+	threadZeroReturn = static_cast<int*>(runThread(new unsigned int(0)));
 
-		for(unsigned int t = 1; t < threadCount; ++t)
-		{
-			pthread_join(*pThreads[t-1],nullptr);
+	for(unsigned int t = 1; t < threadCount; ++t)
+	{
+		pthread_join(*pThreads[t-1],nullptr);
 
 #ifdef RUN_GUI
 		textprintf_ex(screen,font,20,500,makecol(0,255,0),makecol(0,0,0),"Thread %5d",t-1);
 #endif
-		}
-
-		for(unsigned int t = 0; t < threadCount; ++t)
-		{
-			delete threads[t];
-
-			if(t != 0)
-				delete pThreads[t-1];
-		}
-
-		delete[] threads;
-
-		pThreads.clear();
-
-		pthread_mutex_destroy(&ScheduleMutex);
-
-		++runCount;
 	}
+
+	for(unsigned int t = 0; t < threadCount; ++t)
+	{
+		delete threads[t];
+
+		if(t != 0)
+			delete pThreads[t-1];
+	}
+
+	delete[] threads;
+
+	pThreads.clear();
+
+	pthread_mutex_destroy(&ScheduleMutex);
 
 	delete threadZeroReturn;
 
