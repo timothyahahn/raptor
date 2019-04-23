@@ -28,9 +28,15 @@
 // ____________________________________________________________________________
 
 #include <iostream>
+
+#include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 
 #include "ShortestPath.h"
+
+typedef boost::adjacency_list < boost::listS, boost::vecS, boost::directedS, boost::no_property, boost::property < boost::edge_weight_t, double > > Boost_Graph_Type;
+typedef boost::graph_traits < Boost_Graph_Type >::edge_descriptor Edge_Descriptor;
+typedef boost::graph_traits < Boost_Graph_Type >::vertex_descriptor Vertex_Descriptor;
 
 /* Default Constructor
 /************************************************************************/
@@ -57,7 +63,7 @@ void ShortestPath::_Init()
 		{
 			if (m_rGraph.GetWeight(i,j) != DirectedGraph::DISCONNECT)
 			{
-				m_vEdges.push_back(Edge_Type(i,j));
+				m_vEdges.push_back(ConfigCenter::Edge_Type(i,j));
 				m_vWeights.push_back(m_rGraph.GetWeight(i,j));
 			}
 		}

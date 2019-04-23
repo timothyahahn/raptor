@@ -35,7 +35,6 @@
 #include <map>
 #include <vector>
 
-#include <boost/graph/adjacency_list.hpp>
 
 #include "ConfigCenter.h"
 #include "DirectedGraph.h"
@@ -43,10 +42,6 @@
 
 class ShortestPath  
 {
-	typedef ConfigCenter::SizeT_Pair Edge_Type;
-	typedef boost::adjacency_list < boost::listS, boost::vecS, boost::directedS, boost::no_property, boost::property < boost::edge_weight_t, double > > Boost_Graph_Type;
-	typedef boost::graph_traits < Boost_Graph_Type >::edge_descriptor Edge_Descriptor;
-	typedef boost::graph_traits < Boost_Graph_Type >::vertex_descriptor Vertex_Descriptor;
 		
 public:
 	ShortestPath(const DirectedGraph& rGraph);

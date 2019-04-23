@@ -37,6 +37,7 @@ class ConfigCenter
 {
 public:
 	typedef std::pair<size_t, size_t> SizeT_Pair;
+	typedef SizeT_Pair Edge_Type;
 	typedef std::map<SizeT_Pair, double> SizeT_Pair_Double_Map;
 	typedef std::map<SizeT_Pair, double>::iterator SizeT_Pair_Double_Map_Iterator;
 };

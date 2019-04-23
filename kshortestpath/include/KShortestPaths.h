@@ -30,6 +30,8 @@
 #ifndef _KShortestPaths_H_
 #define _KShortestPaths_H_
 
+#include <set>
+
 #include "DirectedGraph.h"
 #include "DirectedPath.h"
 #include "ShortestPath.h"
