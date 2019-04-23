@@ -1118,10 +1118,9 @@ void Thread::create_connection_confirmation(CreateConnectionConfirmationEvent* c
 	{
 		//Oops...a collision. We need to send a response upstream to notify the routers to release the
 		//resources that were scheduled for this event.
-		char buffer[200];		
-		sprintf(buffer,"COLLISION: Session = %d, Sequence = %d\n",ccce->session, ccce->sequence);
-
-		threadZero->recordEvent(buffer,false,controllerIndex);
+		std::ostringstream buffer;
+		buffer << "COLLISION: Session = " << ccce->session << ", Sequence = " << ccce->sequence;
+		threadZero->recordEvent(buffer.str(),false,controllerIndex);
 
 		Event* event = new Event();
 		CollisionNotificationEvent* cne = new CollisionNotificationEvent();
