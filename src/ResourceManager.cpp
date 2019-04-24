@@ -30,6 +30,7 @@
 
 #include <cmath>
 #include <cstdlib>
+#include <cstring>
 #include <iomanip>
 #include <sstream>
 
