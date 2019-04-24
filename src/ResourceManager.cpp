@@ -2421,7 +2421,7 @@ void ResourceManager::build_KSP_EdgeList()
 	{
 		for(size_t b = 0; b < threadZero->getNumberOfRouters(); ++b)
 		{
-			size_t edgeID = threadZero->getRouterAt(a)->isAdjacentTo(b);
+			long long int edgeID = threadZero->getRouterAt(a)->isAdjacentTo(b);
 
 			if(edgeID >= 0)
 			{
