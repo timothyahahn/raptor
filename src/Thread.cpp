@@ -24,6 +24,8 @@
 
 #include "Thread.h"
 
+#include <sstream>
+
 #ifdef RUN_GUI
 
 #include "AllegroWrapper.h"
@@ -98,6 +100,10 @@ Thread::Thread(int ci, int argc, const char* argv[], bool isLPS)
 	std::string threads = argv[4];
 	std::string iterations = argv[5];
 	std::string probes = argv[6];
+
+	generator = std::default_random_engine(std::stoi(seed));
+
+	generateZeroToOne = std::uniform_real_distribution<double>(0, 1);
 
 	setTopology(topology);
 
@@ -400,24 +406,13 @@ void Thread::activate_workstations()
 	stats.raRunTime = 0.0;
 
 	//Random generator for destination router
-	rng.seed(boost::uint32_t(getRandomSeed()));
-	rt = new boost::uniform_int<>(0,getNumberOfRouters() - 1);
-	generateRandomRouter = new boost::variate_generator<boost::mt19937&, boost::uniform_int<> >(rng, *rt);
+	generateRandomRouter = std::uniform_int_distribution<size_t>(0, getNumberOfRouters() - 1);
 
 	//Random generator for duration time
-	rng2.seed(boost::uint32_t(getRandomSeed()));
-	dt = new boost::exponential_distribution<>(1.0 / double(threadZero->getQualityParams().duration));
-	generateRandomDuration = new boost::variate_generator<boost::mt19937&, boost::exponential_distribution<> >(rng2, *dt);
+	generateRandomDuration = std::exponential_distribution<double>(1.0 / double(threadZero->getQualityParams().duration));
 
 	//Random generator for arrival interval
-	rng3.seed(boost::uint32_t(getRandomSeed() * getRandomSeed()));
-	ai = new boost::exponential_distribution<>(1.0 / double(threadZero->getQualityParams().arrival_interval));
-	generateArrivalInterval = new boost::variate_generator<boost::mt19937&, boost::exponential_distribution<> >(rng3, *ai);
-
-	//Random generator for zero to one
-	rng4.seed(boost::uint32_t(getRandomSeed()));
-	zo = new boost::uniform_real<>(0,1);
-	generateZeroToOne = new boost::variate_generator<boost::mt19937&, boost::uniform_real<> >(rng4, *zo);
+	generateArrivalInterval = std::exponential_distribution<double>(1.0 / double(threadZero->getQualityParams().arrival_interval));
 
 	if(CurrentRoutingAlgorithm == SHORTEST_PATH)
 	{
@@ -450,10 +445,7 @@ void Thread::activate_workstations()
 
 	if(order_init == false)
 	{
-		boost::mt19937 rng;
-		rng.seed(boost::uint32_t(getRandomSeed()));
-		boost::uniform_int<> wk(0,getNumberOfWorkstations() - 1);
-		boost::variate_generator<boost::mt19937&, boost::uniform_int<> > generateRandomWorkstation(rng, wk);
+		std::uniform_int_distribution<size_t> generateRandomWorkstation = std::uniform_int_distribution<size_t>(0, getNumberOfWorkstations() - 1);
 		
 		bool* init = new bool[getNumberOfWorkstations()];
 
@@ -467,7 +459,7 @@ void Thread::activate_workstations()
 
 		while(numberFound < getNumberOfWorkstations())
 		{
-			int wkstn = generateRandomWorkstation();
+			size_t wkstn = generateRandomWorkstation(generator);
 
 			if(init[wkstn] == false)
 			{
@@ -731,18 +723,6 @@ void Thread::deactivate_workstations()
 			getWorkstationAt(w)->setActive(false);
 		}
 	}
-
-	delete rt;
-	delete generateRandomRouter;
-
-	delete dt;
-	delete generateRandomDuration;
-
-	delete ai;
-	delete generateArrivalInterval;
-
-	delete zo;
-	delete generateZeroToOne;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -759,11 +739,11 @@ void Thread::generateTrafficEvent(size_t session)
 	Event* tr = new Event();
 	ConnectionRequestEvent* tr_data = new ConnectionRequestEvent();
 
-	tr->e_time = getGlobalTime() + double((*generateArrivalInterval)());
+	tr->e_time = getGlobalTime() + generateArrivalInterval(generator);
 	tr->e_type = CONNECTION_REQUEST;
 	tr->e_data = tr_data;
 
-	tr_data->connectionDuration = double((*generateRandomDuration)());
+	tr_data->connectionDuration = generateRandomDuration(generator);
 
 	if(tr_data->connectionDuration < threadZero->getMinDuration())
 		tr_data->connectionDuration = threadZero->getMinDuration();
@@ -779,10 +759,10 @@ void Thread::generateTrafficEvent(size_t session)
 	while(tr_data->sourceRouterIndex == tr_data->destinationRouterIndex)
 	{
 		if(threadZero->getQualityParams().dest_dist == UNIFORM)
-			tr_data->destinationRouterIndex = (*generateRandomRouter)();
+			tr_data->destinationRouterIndex = (generateRandomRouter(generator));
 		else if(threadZero->getQualityParams().dest_dist == DISTANCE ||
 				threadZero->getQualityParams().dest_dist == INVERSE_DISTANCE)
-			tr_data->destinationRouterIndex = getRouterAt(tr_data->sourceRouterIndex)->generateDestination((*generateZeroToOne)());
+			tr_data->destinationRouterIndex = getRouterAt(tr_data->sourceRouterIndex)->generateDestination(generateZeroToOne(generator));
 	}
 
 //ifdef RUN_GUI, increment the number of connection attempts FROM the source

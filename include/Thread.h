@@ -29,7 +29,9 @@
 #include <cstdio>
 #include <iostream>
 #include <fstream>
+#include <limits>
 #include <queue>
+#include <random>
 #include <string>
 #include <vector>
 
@@ -43,8 +45,6 @@
 #include "Router.h"
 #include "Stats.h"
 #include "Workstation.h"
-
-#include "boost/random.hpp"
 
 class Thread
 {
@@ -244,10 +244,16 @@ class Thread
 		inline size_t getNumberOfConnections()
 			{ return numberOfConnections; };
 
-		//Random generator for zero to one
-		boost::mt19937 rng4;
-		boost::uniform_real<> *zo;
-		boost::variate_generator<boost::mt19937&, boost::uniform_real<> > *generateZeroToOne;
+		inline double generateRandomZeroToOne()
+			{ return generateZeroToOne(generator); }
+
+		std::default_random_engine generator;
+
+		std::uniform_real_distribution<double> generateZeroToOne;
+		std::uniform_int_distribution<size_t> generateRandomRouter;
+
+		std::exponential_distribution<double> generateRandomDuration;
+		std::exponential_distribution<double> generateArrivalInterval;
 
 		inline const std::string& getTopology()
 			{ return topology; };
@@ -380,21 +386,6 @@ class Thread
 		unsigned int &probesToSend, unsigned int &probeStart, unsigned int &probesSkipped);
 		void sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath, CreateConnectionProbeEvent** probesList,
 		unsigned int probesToSend, unsigned int probeStart, unsigned int probesSkipped);
-
-		//Random generator for destination router
-		boost::mt19937 rng;
-		boost::uniform_int<> *rt;
-		boost::variate_generator<boost::mt19937&, boost::uniform_int<> > *generateRandomRouter;
-
-		//Random generator for duration time
-		boost::mt19937 rng2;
-		boost::exponential_distribution<> *dt;
-		boost::variate_generator<boost::mt19937&, boost::exponential_distribution<> > *generateRandomDuration;
-
-		//Random generator for arrival interval
-		boost::mt19937 rng3;
-		boost::exponential_distribution<> *ai;
-		boost::variate_generator<boost::mt19937&, boost::exponential_distribution<> > *generateArrivalInterval;
 
 		std::vector<std::string> split(const std::string& s, char delimiter);
 

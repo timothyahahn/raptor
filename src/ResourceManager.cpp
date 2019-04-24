@@ -31,8 +31,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <iomanip>
-
-#include "boost/random.hpp"
+#include <sstream>
 
 extern Thread* threadZero;
 extern Thread** threads;
@@ -56,7 +55,7 @@ ResourceManager::ResourceManager()
 
 	calc_min_spans();
 
-	OctaveWrapper::build_nonlinear_datastructure(sys_fs,sys_link_xpm_database);
+	OctaveWrapper::build_nonlinear_datastructure(sys_fs, sys_link_xpm_database);
 
 	precompute_fwm_combinations();
 }
@@ -734,7 +733,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(size_t src_index, size_
 
 			while(ants[a].location != threads[ci]->getRouterAt(dest_index) && ants[a].pathlen + 1 < (int)threadZero->getNumberOfRouters() - 1)
 			{
-				Edge *new_edge = ants[a].location->chooseEdge((*(threads[ci]->generateZeroToOne))());
+				Edge* new_edge = ants[a].location->chooseEdge(threads[ci]->generateRandomZeroToOne());
 
 				ants[a].location = threads[ci]->getRouterAt(new_edge->getDestinationIndex());
 				ants[a].path[ants[a].pathlen] = new_edge;
@@ -1994,15 +1993,13 @@ int ResourceManager::most_used(CreateConnectionProbeEvent* ccpe, unsigned int ci
 ///////////////////////////////////////////////////////////////////
 int ResourceManager::random_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available, size_t numberAvailableWaves)
 {
-	boost::mt19937 rng;
-	rng.seed(boost::uint32_t(threadZero->getRandomSeed() * ccpe->sourceRouterIndex * ccpe->destinationRouterIndex * numberAvailableWaves));
-	boost::uniform_int<> wk(0,numberAvailableWaves - 1);
-	boost::variate_generator<boost::mt19937&, boost::uniform_int<> > generateWavelength(rng, wk);
+	std::default_random_engine generator = std::default_random_engine(threadZero->getRandomSeed() * ccpe->sourceRouterIndex * ccpe->destinationRouterIndex * numberAvailableWaves);
+	std::uniform_int_distribution<size_t> generateWavelength = std::uniform_int_distribution<size_t>(0, numberAvailableWaves - 1);
 
-	unsigned int waveToReturn = generateWavelength();
-	unsigned int waveIndex = 0;
+	size_t waveToReturn = generateWavelength(generator);
+	size_t waveIndex = 0;
 
-	for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+	for(size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
 	{
 		if(wave_available[w] == true)
 		{

@@ -24,6 +24,7 @@
 #include "pthread.h"
 
 #include <iostream>
+#include <sstream>
 #include <vector>
 
 #ifdef RUN_GUI

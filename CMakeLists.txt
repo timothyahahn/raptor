@@ -28,10 +28,6 @@ if(WIN32)
 endif(WIN32)
 
 if(WIN32)
-    include_directories("C:/boost_1_70_0")
-endif(WIN32)
-
-if(WIN32)
     set(CMAKE_FIND_LIBRARY_PREFIXES "")
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
 
