@@ -53,7 +53,12 @@ const double Thread::SPEED_OF_LIGHT = double(299792458);
 //					required.
 //
 ///////////////////////////////////////////////////////////////////
-Thread::Thread()
+Thread::Thread() :
+	CurrentActiveWorkstations(0), CurrentProbeStyle(ProbeStyle::NUMBER_OF_PROBE_STYLES), CurrentQualityAware(false),
+	CurrentWavelengthAlgorithm(WavelengthAlgorithm::NUMBER_OF_WAVELENGTH_ALGORITHMS), globalTime(0.0), logger(nullptr),
+	maxRunCount(0), maxSpans(0), minDuration(0.0), numOfWavelengths(0), numberOfConnections(0), numberOfEdges(0), numberOfRouters(0),
+	numberOfWorkstations(0), order_init(false), qualityParams(), queue(nullptr), randomSeed(0), rm(nullptr), runCount(0), stats(),
+	workstationOrder(nullptr)
 {
 	threadZero->recordEvent(std::string("Unable to initialize the controller without command line arguments.\n"),true,controllerIndex);
 	exit(ERROR_THREAD_INIT);
@@ -66,7 +71,12 @@ Thread::Thread()
 //					and initializes the controller.
 //
 ///////////////////////////////////////////////////////////////////
-Thread::Thread(int ci, int argc, const char* argv[], bool isLPS)
+Thread::Thread(int ci, int argc, const char* argv[], bool isLPS) :
+	CurrentActiveWorkstations(0), CurrentProbeStyle(ProbeStyle::NUMBER_OF_PROBE_STYLES), CurrentQualityAware(false), 
+	CurrentWavelengthAlgorithm(WavelengthAlgorithm::NUMBER_OF_WAVELENGTH_ALGORITHMS), globalTime(0.0), logger(nullptr),
+	maxRunCount(0), maxSpans(0), minDuration(0.0), numOfWavelengths(0), numberOfConnections(0), numberOfEdges(0), numberOfRouters(0),
+	numberOfWorkstations(0), order_init(false), qualityParams(), queue(nullptr), randomSeed(0), rm(nullptr), runCount(0), stats(), 
+	workstationOrder(nullptr)
 {
 	isLoadPrevious = isLPS;
 

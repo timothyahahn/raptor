@@ -58,7 +58,7 @@ extern std::vector<Router*> topoRouters;
 ///////////////////////////////////////////////////////////////////
 Edge::Edge() :
 	QMDegredation(0.0), activeSession(0), actualUsage(0), algorithmUsage(0.0), degredation(nullptr), destinationIndex(0), 
-	numberOfSpans(0), pheremone(0.0), sourceIndex(0), stats(nullptr)
+	numberOfSpans(0), pheremone(0.0), sourceIndex(0), stats(nullptr), status(nullptr)
 {
 
 }
@@ -72,7 +72,7 @@ Edge::Edge() :
 ///////////////////////////////////////////////////////////////////
 Edge::Edge(int src, int dest, int spans) :
 	QMDegredation(0.0), activeSession(0), actualUsage(0), algorithmUsage(0.0), degredation(nullptr), destinationIndex(dest),
-	numberOfSpans(spans), pheremone(0.0), sourceIndex(src), stats(nullptr)
+	numberOfSpans(spans), pheremone(0.0), sourceIndex(src), stats(nullptr), status(nullptr)
 {
 	status = new EdgeStatus[threadZero->getNumberOfWavelengths()];
 	activeSession = new long long int[threadZero->getNumberOfWavelengths()];
@@ -522,7 +522,7 @@ void Edge::resetQMDegredation()
 void Edge::removeEstablishedConnection(void* dcpe_void)
 {
 	DestroyConnectionProbeEvent* dcpe = static_cast<DestroyConnectionProbeEvent*>(dcpe_void);
-	EstablishedConnection* ec;
+	EstablishedConnection* ec = nullptr;
 
 	for(std::list<void*>::iterator iter = establishedConnections.begin();
 		iter != establishedConnections.end(); ++iter)

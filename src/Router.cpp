@@ -39,7 +39,8 @@ extern Thread* threadZero;
 // Description:		Default constructor with no arguments.
 //
 ///////////////////////////////////////////////////////////////////
-Router::Router()
+Router::Router() :
+	dp_node(nullptr), qualityFailures(0), routerIndex(0), waveFailures(0)
 {
 	adjacencyList = 0;
 	
