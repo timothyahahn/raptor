@@ -127,7 +127,7 @@ private:
 		size_t destinationIndex;
 		size_t numberOfSpans;
 
-		size_t *activeSession;
+		long long int *activeSession;
 		EdgeStatus *status;
 
 		double algorithmUsage;

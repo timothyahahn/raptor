@@ -110,7 +110,7 @@ kShortestPathReturn* ResourceManager::calculate_SP_path(size_t src_index, size_t
 				return SP_paths[src_index * threadZero->getNumberOfRouters() + dest_index];
 	}
 
-	if(kSP_edgeList == 0)
+	if(kSP_edgeList == nullptr)
 		build_KSP_EdgeList();
 
 	kShortestPathParms kSP_params;
@@ -2415,11 +2415,11 @@ void ResourceManager::build_KSP_EdgeList()
 {
 	kSP_edgeList = new kShortestPathEdges[threadZero->getNumberOfEdges()];
 
-	unsigned int num = 0;
+	size_t num = 0;
 
-	for(unsigned int a = 0; a < threadZero->getNumberOfRouters(); ++a)
+	for(size_t a = 0; a < threadZero->getNumberOfRouters(); ++a)
 	{
-		for(unsigned int b = 0; b < threadZero->getNumberOfRouters(); ++b)
+		for(size_t b = 0; b < threadZero->getNumberOfRouters(); ++b)
 		{
 			int edgeID = threadZero->getRouterAt(a)->isAdjacentTo(b);
 

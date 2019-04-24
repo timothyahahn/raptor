@@ -56,7 +56,9 @@ extern std::vector<Router*> topoRouters;
 // Description:		Default constructor with no arguments.
 //
 ///////////////////////////////////////////////////////////////////
-Edge::Edge()
+Edge::Edge() :
+	QMDegredation(0.0), activeSession(0), actualUsage(0), algorithmUsage(0.0), degredation(nullptr), destinationIndex(0), 
+	numberOfSpans(0), pheremone(0.0), sourceIndex(0), stats(nullptr)
 {
 
 }
@@ -68,14 +70,12 @@ Edge::Edge()
 //					destination, and number of spans.
 //
 ///////////////////////////////////////////////////////////////////
-Edge::Edge(int src, int dest, int spans)
+Edge::Edge(int src, int dest, int spans) :
+	QMDegredation(0.0), activeSession(0), actualUsage(0), algorithmUsage(0.0), degredation(nullptr), destinationIndex(dest),
+	numberOfSpans(spans), pheremone(0.0), sourceIndex(src), stats(nullptr)
 {
-	sourceIndex = src;
-	destinationIndex = dest;
-	numberOfSpans = spans;
-
 	status = new EdgeStatus[threadZero->getNumberOfWavelengths()];
-	activeSession = new size_t[threadZero->getNumberOfWavelengths()];
+	activeSession = new long long int[threadZero->getNumberOfWavelengths()];
 
 	degredation = new double[threadZero->getNumberOfWavelengths()];
 
@@ -85,15 +85,11 @@ Edge::Edge(int src, int dest, int spans)
 
 	resetEdgeStats();
 
-	for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+	for(size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
 	{
 		status[w] = EDGE_FREE;
 		activeSession[w] = -1;
 	}
-
-	algorithmUsage = 0.0;
-	actualUsage = 0;
-	QMDegredation = 0.0;
 
 #ifdef RUN_GUI
 	max_actual_usage = 0;
