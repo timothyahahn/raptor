@@ -45,15 +45,11 @@ extern "C" void calc_k_shortest_paths(const kShortestPathParms &params, kShortes
 // Description:		Default constructor with no arguments.
 //
 ///////////////////////////////////////////////////////////////////
-ResourceManager::ResourceManager()
+ResourceManager::ResourceManager() :
+	fwm_combinations(nullptr), fwm_fs(nullptr), inter_indecies(nullptr), span_distance(nullptr), sys_fs_num(0),
+	SP_paths(nullptr), kSP_edgeList(nullptr), wave_ordering(nullptr), sys_fs(new double[threadZero->getNumberOfWavelengths()]),
+	sys_link_xpm_database(new double[threadZero->getNumberOfWavelengths() * threadZero->getNumberOfWavelengths()])
 {
-	SP_paths = nullptr;
-	kSP_edgeList = nullptr;
-	wave_ordering = nullptr;
-
-	sys_fs = new double[threadZero->getNumberOfWavelengths()];
-	sys_link_xpm_database = new double[threadZero->getNumberOfWavelengths() * threadZero->getNumberOfWavelengths()];
-
 	calc_min_spans();
 
 	OctaveWrapper::build_nonlinear_datastructure(sys_fs, sys_link_xpm_database);
