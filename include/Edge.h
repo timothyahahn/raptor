@@ -65,13 +65,13 @@ class Edge
 
 		inline void setUsed(size_t session, size_t w)
 			{ status[w] = EDGE_USED; activeSession[w] = session; };
-		inline void setFree(int w)
+		inline void setFree(long long int w)
 			{ status[w] = EDGE_FREE; activeSession[w] = -1; degredation[w] = 0.0; };
 
 		void updateUsage();
 		
-		void updateQMDegredation(unsigned int ci, unsigned int wavelength);
-		void updateQFactorStats(unsigned int ci, unsigned int wavelength);
+		void updateQMDegredation(unsigned int ci, long long int wavelength);
+		void updateQFactorStats(unsigned int ci, long long int wavelength);
 
 		std::list <void*> establishedConnections;
 

@@ -143,7 +143,7 @@ Thread::Thread(int ci, int argc, const char* argv[], bool isLPS)
 		randomSeed = atoi(argv[3]);
 
 		order_init = false;
-		workstationOrder = new unsigned int[getNumberOfWorkstations()];
+		workstationOrder = new size_t[getNumberOfWorkstations()];
 	}
 
 	return;
@@ -449,13 +449,13 @@ void Thread::activate_workstations()
 		
 		bool* init = new bool[getNumberOfWorkstations()];
 
-		for(unsigned int w = 0; w <getNumberOfWorkstations(); ++w)
+		for(size_t w = 0; w <getNumberOfWorkstations(); ++w)
 		{
 			init[w] = false;
 			workstationOrder[w] = 0;
 		}
 
-		unsigned int numberFound = 0;
+		size_t numberFound = 0;
 
 		while(numberFound < getNumberOfWorkstations())
 		{
@@ -800,9 +800,9 @@ void Thread::connection_request(ConnectionRequestEvent* cre)
 		++stats.ProbeSentCount;
 	}
 
-	unsigned int probesToSend = 0;
-	unsigned int probeStart = 0;
-	unsigned int probesSkipped = 0;
+	long long int probesToSend = 0;
+	long long int probeStart = 0;
+	long long int probesSkipped = 0;
 
 	if(CurrentProbeStyle == SINGLE)
 		probesToSend = 1;
@@ -1272,9 +1272,9 @@ void Thread::create_connection_confirmation(CreateConnectionConfirmationEvent* c
 		}
 		else if(CurrentProbeStyle == SERIAL && ccce->sequence < ccce->max_sequence - 1)
 		{
-			unsigned int probesToSend = 0;
-			unsigned int probeStart = 0;
-			unsigned int probesSkipped = ccce->sequence + 1;
+			long long int probesToSend = 0;
+			long long int probeStart = 0;
+			long long int probesSkipped = ccce->sequence + 1;
 
 			ConnectionRequestEvent *cre = new ConnectionRequestEvent;
 
@@ -2254,7 +2254,7 @@ kShortestPathReturn* Thread::getKShortestPaths(ConnectionRequestEvent *cre, size
 //					kPaths and the Routing/Wavelength Algorithms
 //
 ///////////////////////////////////////////////////////////////////
-CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cre, kShortestPathReturn *kPath, unsigned int &probesToSend, unsigned int &probeStart, unsigned int &probesSkipped)
+CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cre, kShortestPathReturn *kPath, long long int &probesToSend, long long int &probeStart, long long int &probesSkipped)
 {
 	CreateConnectionProbeEvent** probesList = 0;
 
@@ -2262,12 +2262,12 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 	//scheme, while the others use a backward reservation scheme.
 	if(CurrentRoutingAlgorithm == IMPAIRMENT_AWARE || CurrentRoutingAlgorithm == DYNAMIC_PROGRAMMING)
 	{
-		unsigned int probesTotal = 0;
-		int probeFirst = -1;
+		long long int probesTotal = 0;
+		long long int probeFirst = -1;
 
 		if(CurrentRoutingAlgorithm == IMPAIRMENT_AWARE)
 		{
-			for(unsigned int w = probesSkipped; w < threadZero->getNumberOfWavelengths(); ++w)
+			for(long long int w = probesSkipped; w < static_cast<long long int>(threadZero->getNumberOfWavelengths()); ++w)
 			{
 				if(kPath->pathcost[w] != std::numeric_limits<double>::infinity())
 				{
@@ -2285,7 +2285,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 			if(CurrentProbeStyle == SINGLE)
 				max_probes = 1;
 
-			for(unsigned int w = probesSkipped; w < max_probes; ++w)
+			for(long long int w = probesSkipped; w < max_probes; ++w)
 			{
 				if(kPath->pathcost[w] != std::numeric_limits<double>::infinity())
 				{
@@ -2368,7 +2368,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 	{
 		probesToSend = 0;
 
-		for(unsigned int a = probesSkipped; a < threadZero->getQualityParams().max_probes; ++a)
+		for(long long int a = probesSkipped; a < threadZero->getQualityParams().max_probes; ++a)
 		{
 			if(kPath->pathcost[a] != std::numeric_limits<double>::infinity())
 			{
@@ -2405,7 +2405,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(ConnectionRequestEvent *cr
 //					input parameters.
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath, CreateConnectionProbeEvent** probesList, unsigned int probesToSend, unsigned int probeStart, unsigned int probesSkipped)
+void Thread::sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath, CreateConnectionProbeEvent** probesList, long long int probesToSend, long long int probeStart, long long int probesSkipped)
 {
 	if(probesToSend == 0)
 	{
@@ -2427,9 +2427,9 @@ void Thread::sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath,
 	}
 	else
 	{
-		unsigned int newProbesSkipped = 0;
+		long long int newProbesSkipped = 0;
 
-		for(unsigned int p = probeStart; p < probeStart + newProbesSkipped + probesToSend; ++p)
+		for(long long int p = probeStart; p < probeStart + newProbesSkipped + probesToSend; ++p)
 		{
 			if(CurrentRoutingAlgorithm == IMPAIRMENT_AWARE || CurrentRoutingAlgorithm == DYNAMIC_PROGRAMMING)
 			{
@@ -2766,7 +2766,7 @@ int Thread::otherResponse(CreateConnectionProbeEvent* probe)
 //					or dropped.
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::updateQMDegredation(Edge **connectionPath, size_t connectionLength, unsigned int wavelength)
+void Thread::updateQMDegredation(Edge **connectionPath, size_t connectionLength, long long int wavelength)
 {
 	time_t start;
 	time_t end;
@@ -2789,7 +2789,7 @@ void Thread::updateQMDegredation(Edge **connectionPath, size_t connectionLength,
 //					or dropped.
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::updateQFactorStats(Edge **connectionPath, size_t connectionLength, unsigned int wavelength)
+void Thread::updateQFactorStats(Edge **connectionPath, size_t connectionLength, long long int wavelength)
 {
 	for(unsigned int p = 0; p < connectionLength ; ++p)
 	{

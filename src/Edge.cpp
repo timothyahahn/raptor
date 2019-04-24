@@ -365,7 +365,7 @@ void Edge::updateUsage()
 // Description:		Updates the usage of the edges
 //
 ///////////////////////////////////////////////////////////////////
-void Edge::updateQMDegredation(unsigned int ci, unsigned int wavelength)
+void Edge::updateQMDegredation(unsigned int ci, long long int wavelength)
 {	
 	ResourceManager* rm = threadZero->getResourceManager();
 
@@ -454,7 +454,7 @@ void Edge::updateQMDegredation(unsigned int ci, unsigned int wavelength)
 // Description:		Updates the Q Factor stats
 //
 ///////////////////////////////////////////////////////////////////
-void Edge::updateQFactorStats(unsigned int ci, unsigned int wavelength)
+void Edge::updateQFactorStats(unsigned int ci, long long int wavelength)
 {
 	ResourceManager* rm = threadZero->getResourceManager();
 

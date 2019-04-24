@@ -50,12 +50,12 @@ struct ConnectionRequestEvent
 {
 	size_t sourceRouterIndex;
 	size_t destinationRouterIndex;
-	int wavelength;
+	long long int wavelength;
 	double connectionDuration;
 	double requestBeginTime;
 	size_t session;
-	unsigned int sequence;
-	unsigned int max_sequence;
+	long long int sequence;
+	long long int max_sequence;
 	bool qualityFail;
 };
 
@@ -71,8 +71,8 @@ struct CreateConnectionProbeEvent
 	size_t numberOfHops;
 	long long int wavelength;
 	size_t session;
-	unsigned int sequence;
-	unsigned int max_sequence;
+	long long int sequence;
+	long long int max_sequence;
 	kShortestPathReturn *kPaths;
 	CreateConnectionProbeEvent **probes;
 	bool atDestination;
@@ -87,9 +87,9 @@ struct CollisionNotificationEvent
 	size_t connectionLength;
 	size_t numberOfHops;
 	size_t session;
-	unsigned int sequence;
-	unsigned int max_sequence;
-	int wavelength;
+	long long int sequence;
+	long long int max_sequence;
+	long long int wavelength;
 	CreateConnectionProbeEvent **probes;
 	bool finalFailure;
 };
@@ -103,11 +103,11 @@ struct CreateConnectionConfirmationEvent
 	Edge **connectionPath;
 	size_t connectionLength;
 	size_t numberOfHops;
-	unsigned int max_sequence;
-	int wavelength;
-	int originalWavelength;
+	long long int max_sequence;
+	long long int wavelength;
+	long long int originalWavelength;
 	size_t session;
-	unsigned int sequence;
+	long long int sequence;
 	kShortestPathReturn *kPaths;
 	CreateConnectionProbeEvent **probes;
 	bool finalFailure;
@@ -119,8 +119,8 @@ struct DestroyConnectionProbeEvent
 	size_t connectionLength;
 	size_t numberOfHops;
 	size_t session;
-	unsigned int sequence;
-	int wavelength;
+	long long int sequence;
+	long long int wavelength;
 	CreateConnectionProbeEvent **probes;
 };
 

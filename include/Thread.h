@@ -365,7 +365,7 @@ class Thread
 		size_t numberOfConnections;
 
 		bool order_init;
-		unsigned int* workstationOrder;
+		size_t* workstationOrder;
 
 		double calculateDelay(size_t spans);
 
@@ -374,8 +374,8 @@ class Thread
 		bool moreProbes(CreateConnectionProbeEvent* probe);
 		int otherResponse(CreateConnectionProbeEvent* probe);
 
-		void updateQMDegredation(Edge **connectionPath, size_t connectionLength, unsigned int wavelength);
-		void updateQFactorStats(Edge **connectionPath, size_t connectionLength, unsigned int wavelength);
+		void updateQMDegredation(Edge **connectionPath, size_t connectionLength, long long int wavelength);
+		void updateQFactorStats(Edge **connectionPath, size_t connectionLength, long long int wavelength);
 
 		double minDuration;
 
@@ -383,9 +383,9 @@ class Thread
 
 		kShortestPathReturn* getKShortestPaths(ConnectionRequestEvent *cre, size_t probesToSend);
 		CreateConnectionProbeEvent** calcProbesToSend(ConnectionRequestEvent *cre, kShortestPathReturn *kPath, 
-		unsigned int &probesToSend, unsigned int &probeStart, unsigned int &probesSkipped);
+			long long int &probesToSend, long long int &probeStart, long long int &probesSkipped);
 		void sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath, CreateConnectionProbeEvent** probesList,
-		unsigned int probesToSend, unsigned int probeStart, unsigned int probesSkipped);
+			long long int probesToSend, long long int probeStart, long long int probesSkipped);
 
 		std::vector<std::string> split(const std::string& s, char delimiter);
 
