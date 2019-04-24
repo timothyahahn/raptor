@@ -19,8 +19,8 @@
 #include "OctaveWrapper.h"
 
 #ifndef NO_OCTAVE
-#include <oct.h>
-#include <octave.h>
+#include <octave/oct.h>
+#include <octave/octave.h>
 #endif //NO_OCTAVE
 
 #include "Thread.h"

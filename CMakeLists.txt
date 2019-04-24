@@ -56,55 +56,86 @@ if(UNIX)
 endif(UNIX)
 
 if(WIN32)
-     add_definitions("-DNO_OCTAVE")
-#    set(CMAKE_FIND_LIBRARY_PREFIXES "")
-#    set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib" ".dll")
+    set(CMAKE_FIND_LIBRARY_PREFIXES "")
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib" ".dll")
 
-#    find_library( OCTAVE_LIB
-#                  NAMES liboctave-7
-#                  HINTS "C:/Octave/Octave-5.1.0.0/bin"
-#                )
+    file(GLOB CANDIDATE_OCTAVE_LIB_DIRS "C:/Octave/Octave-5.1.0.0/bin")
 
-#    find_library( OCTINTERP_LIB
-#                  NAMES liboctinterp-7
-#                  HINTS "C:/Octave/Octave-5.1.0.0/bin"
-#                )
+    find_library( OCTAVE_LIB
+                  NAMES liboctave-7
+                  HINTS ${CANDIDATE_OCTAVE_LIB_DIRS}
+                )
 
-#   include_directories("C:/Octave/Octave-5.1.0.0/mingw32/include/octave-5.1.0/octave")
+    find_library( OCTINTERP_LIB
+                  NAMES liboctinterp-7
+                  HINTS ${CANDIDATE_OCTAVE_LIB_DIRS}
+                )
+
+    if(NOT OCTAVE_LIB OR NOT OCTINTERP_LIB)
+        message("Warning: Octave libraries not found in: ${CANDIDATE_OCTAVE_LIB_DIRS}")
+        message("Defining NO_OCTAVE")
+        add_definitions(-DNO_OCTAVE)
+    else()
+        target_link_libraries(raptor ${OCTAVE_LIB})
+        target_link_libraries(raptor ${OCTINTERP_LIB})
+    endif()
+
+    file(GLOB CANDIDATE_OCTAVE_HEADER_DIRS "C:/Octave/Octave-5.1.0.0/mingw32/include/octave-5.1.0")
+
+    find_path( OCTAVE_HEADERS
+               NAMES octave/octave.h
+               HINTS ${CANDIDATE_OCTAVE_HEADER_DIRS}
+	     )
+
+    if(NOT OCTAVE_HEADERS)
+        message("Warning: Octave headers not found in: ${CANDIDATE_OCTAVE_HEADER_DIRS}")
+        message("Defining NO_OCTAVE")
+        add_definitions(-DNO_OCTAVE)
+    else()
+        include_directories(${OCTAVE_HEADERS})
+    endif()
+
 endif(WIN32)
 
 if(UNIX)
     SET(CMAKE_FIND_LIBRARY_PREFIXES "lib")
     SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a")
 
+    file(GLOB CANDIDATE_OCTAVE_LIB_DIRS /usr/lib64/octave/* /usr/lib64)
+
     find_library( OCTAVE_LIB
                   NAMES octave
+                  HINTS ${CANDIDATE_OCTAVE_LIB_DIRS}
                 )
 
     find_library( OCTINTERP_LIB
                   NAMES octinterp
+                  HINTS ${CANDIDATE_OCTAVE_LIB_DIRS}
                 )
 
-	file(GLOB CANDIDATE_OCTAVE_HEADER_DIRS /usr/include/octave*/octave /usr/include/octave)
+    if(NOT OCTAVE_LIB OR NOT OCTINTERP_LIB)
+        message("Warning: Octave libraries not found in: ${CANDIDATE_OCTAVE_LIB_DIRS}")
+        message("Defining NO_OCTAVE")
+        add_definitions(-DNO_OCTAVE)
+    else()
+        target_link_libraries(raptor ${OCTAVE_LIB})
+        target_link_libraries(raptor ${OCTINTERP_LIB})
+    endif()
 
-	find_path( OCTAVE_HEADERS
-			   NAMES octave.h
-			   HINTS ${CANDIDATE_OCTAVE_HEADER_DIRS}
-			 )
+    file(GLOB CANDIDATE_OCTAVE_HEADER_DIRS /usr/include/octave* /usr/include)
 
-    include_directories(${OCTAVE_HEADERS})
+    find_path( OCTAVE_HEADERS
+               NAMES octave/octave.h
+               HINTS ${CANDIDATE_OCTAVE_HEADER_DIRS}
+	     )
+
+    if(NOT OCTAVE_HEADERS)
+        message("Warning: Octave headers not found in: ${CANDIDATE_OCTAVE_HEADER_DIRS}")
+        message("Defining NO_OCTAVE")
+        add_definitions(-DNO_OCTAVE)
+    else()
+        include_directories(${OCTAVE_HEADERS})
+    endif()
+
 endif(UNIX)
 
-if(OCTAVE_LIB)
-    target_link_libraries(raptor ${OCTAVE_LIB})
-else()
-    message("OCTAVE_LIB not found, defining NO_OCTAVE")
-    add_definitions(-DNO_OCTAVE)
-endif(OCTAVE_LIB)
-
-if(OCTINTERP_LIB)
-    target_link_libraries(raptor ${OCTINTERP_LIB})
-else()
-    message("OCTINTERP_LIB not found, defining NO_OCTAVE")
-    add_definitions(-DNO_OCTAVE)
-endif(OCTINTERP_LIB)
