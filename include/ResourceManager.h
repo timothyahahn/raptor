@@ -55,9 +55,9 @@ class ResourceManager
 		kShortestPathReturn* calculate_ACO_path(size_t src_index, size_t dest_index, size_t k, unsigned int ci);
 		kShortestPathReturn* calculate_MM_ACO_path(size_t src_index, size_t dest_index, size_t k, unsigned int ci);
 
-		int choose_wavelength(CreateConnectionProbeEvent* ccpe, unsigned int ci);
+		long long int choose_wavelength(CreateConnectionProbeEvent* ccpe, unsigned int ci);
 
-		double estimate_Q(int lambda, Edge **Path, size_t pathLen, double *xpm, double *fwm, double *ase, unsigned int ci);
+		double estimate_Q(long long int lambda, Edge **Path, size_t pathLen, double *xpm, double *fwm, double *ase, unsigned int ci);
 
 		void initSPMatrix();
 		void freeSPMatrix();
@@ -73,11 +73,11 @@ class ResourceManager
 		unsigned int* span_distance;
 
 	private:
-		double path_ase_noise(int lambda, Edge **Path, size_t pathLen, unsigned int ci);
+		double path_ase_noise(long long int lambda, Edge **Path, size_t pathLen, unsigned int ci);
 
-		double path_fwm_noise(int lambda, Edge **Path, size_t pathLen, unsigned int ci);
+		double path_fwm_noise(long long int lambda, Edge **Path, size_t pathLen, unsigned int ci);
 
-		double path_xpm_noise(int lambda, Edge **Path, size_t pathLen, unsigned int ci);
+		double path_xpm_noise(long long int lambda, Edge **Path, size_t pathLen, unsigned int ci);
 		
 		int build_FWM_fs(double *inter_fs,int *inter_indecies, int lambda);
 		int wave_combines(double fc, double *fs,int fs_num, std::vector<int> &fs_coms);
@@ -87,22 +87,22 @@ class ResourceManager
 		double* sys_link_xpm_database;
 		int sys_fs_num;
 
-		int first_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
-		int first_fit_with_ordering(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
+		long long int first_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
+		long long int first_fit_with_ordering(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
 
-		int random_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available, size_t numberAvailableWaves);
+		long long int random_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available, size_t numberAvailableWaves);
 
-		int most_used(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
+		long long int most_used(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
 
-		int quality_first_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves);
-		int quality_first_fit_with_ordering(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves);
+		long long int quality_first_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves);
+		long long int quality_first_fit_with_ordering(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves);
 
-		int quality_random_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves);
+		long long int quality_random_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves);
 
-		int quality_most_used(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves);
+		long long int quality_most_used(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves);
 
-		int least_quality_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
-		int most_quality_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
+		long long int least_quality_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
+		long long int most_quality_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
 
 		void precompute_fwm_fs(std::vector<int> &fwm_nums);
 		void precompute_fwm_combinations();
@@ -119,12 +119,12 @@ class ResourceManager
 		void calc_min_spans();
 		unsigned int calculate_span_distance(size_t src_index, size_t dest_index);
 
-		int* wave_ordering;
+		long long int* wave_ordering;
 
 		void generateWaveOrdering();
 
-		size_t getLowerBound(int w, int n);
-		size_t getUpperBound(int w, int n);
+		long long int getLowerBound(int w, int n);
+		long long int getUpperBound(int w, int n);
 };
 
 struct Ant

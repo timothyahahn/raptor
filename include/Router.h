@@ -81,10 +81,10 @@ class Router
 
 		void addEdge(Edge* e);
 
-		inline int isAdjacentTo(unsigned int r)
+		inline long long int isAdjacentTo(size_t r)
 			{ return adjacencyList[r]; };
 
-		inline Edge* getEdgeByIndex(unsigned int e)
+		inline Edge* getEdgeByIndex(size_t e)
 			{ return edgeList[e]; };
 
 		Edge* getEdgeByDestination(size_t r);
@@ -198,7 +198,7 @@ class Router
 		unsigned int qualityFailures;
 		unsigned int waveFailures;
 
-		int *adjacencyList;
+		long long int *adjacencyList;
 
 #ifdef RUN_GUI
 		unsigned int connAttemptsFromThis;

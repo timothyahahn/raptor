@@ -95,9 +95,9 @@ void Router::addEdge(Edge* e)
 {
 	if(adjacencyList == 0)
 	{
-		adjacencyList = new int[threadZero->getNumberOfRouters()];
+		adjacencyList = new long long int[threadZero->getNumberOfRouters()];
 
-		for(unsigned int a = 0; a < threadZero->getNumberOfRouters(); ++a)
+		for(size_t a = 0; a < threadZero->getNumberOfRouters(); ++a)
 			adjacencyList[a] = -1;
 	}
 

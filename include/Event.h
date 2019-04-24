@@ -69,7 +69,7 @@ struct CreateConnectionProbeEvent
 	Edge **connectionPath;
 	size_t connectionLength;
 	size_t numberOfHops;
-	int wavelength;
+	long long int wavelength;
 	size_t session;
 	unsigned int sequence;
 	unsigned int max_sequence;

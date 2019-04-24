@@ -229,7 +229,7 @@ kShortestPathReturn* ResourceManager::calculate_LORA_path(size_t src_index, size
 
 		for(unsigned int b = 0; b < threadZero->getNumberOfRouters(); ++b)
 		{
-			int edgeID = routerA->isAdjacentTo(b);
+			size_t edgeID = routerA->isAdjacentTo(b);
 
 			if(edgeID >= 0)
 			{
@@ -282,7 +282,7 @@ kShortestPathReturn* ResourceManager::calculate_IA_path(size_t src_index, size_t
 
 		for(unsigned int b = 0; b < threadZero->getNumberOfRouters(); ++b)
 		{
-			int edgeID = routerA->isAdjacentTo(b);
+			long long int edgeID = routerA->isAdjacentTo(b);
 
 			if(edgeID >= 0)
 			{
@@ -557,7 +557,7 @@ kShortestPathReturn* ResourceManager::calculate_QM_path(size_t src_index, size_t
 
 		for(unsigned int b = 0; b < threadZero->getNumberOfRouters(); ++b)
 		{
-			int edgeID = routerA->isAdjacentTo(b);
+			long long int edgeID = routerA->isAdjacentTo(b);
 
 			if(edgeID >= 0)
 			{
@@ -1389,9 +1389,9 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(size_t src_index, size_t
 //					destination for the SP algorithm
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::choose_wavelength(CreateConnectionProbeEvent* ccpe, unsigned int ci)
+long long int ResourceManager::choose_wavelength(CreateConnectionProbeEvent* ccpe, unsigned int ci)
 {
-	int retval;
+	long long int retval;
 
 	bool* wave_available = new bool[threadZero->getNumberOfWavelengths()];
 	size_t numberAvailableWaves = threadZero->getNumberOfWavelengths();
@@ -1501,7 +1501,7 @@ int ResourceManager::choose_wavelength(CreateConnectionProbeEvent* ccpe, unsigne
 //					FWM noise, and ASE noise
 //
 ///////////////////////////////////////////////////////////////////
-double ResourceManager::estimate_Q(int lambda, Edge **Path, size_t pathLen, double *xpm, double *fwm, double *ase, unsigned int ci)
+double ResourceManager::estimate_Q(long long int lambda, Edge **Path, size_t pathLen, double *xpm, double *fwm, double *ase, unsigned int ci)
 {
 	double noise = 0.0;
 	double Q = 0.0;
@@ -1532,7 +1532,7 @@ double ResourceManager::estimate_Q(int lambda, Edge **Path, size_t pathLen, doub
 // Description:		Calculates the ASE noise created along the path.
 //
 ///////////////////////////////////////////////////////////////////
-double ResourceManager::path_ase_noise(int lambda, Edge **Path, size_t pathLen, unsigned int ci)
+double ResourceManager::path_ase_noise(long long int lambda, Edge **Path, size_t pathLen, unsigned int ci)
 {
 	double spans = 0.0;
 	
@@ -1550,7 +1550,7 @@ double ResourceManager::path_ase_noise(int lambda, Edge **Path, size_t pathLen, 
 // Description:		Calculates the ASE noise created along the path.
 //
 ///////////////////////////////////////////////////////////////////
-double ResourceManager::path_xpm_noise(int lambda, Edge **Path, size_t pathLen, unsigned int ci)
+double ResourceManager::path_xpm_noise(long long int lambda, Edge **Path, size_t pathLen, unsigned int ci)
 {
  	double noise = 0.0;  
 
@@ -1629,7 +1629,7 @@ double ResourceManager::path_xpm_term(size_t spans, size_t lambda, size_t wave)
 // Description:      Calculates the ASE noise created along the path.
 //
 ///////////////////////////////////////////////////////////////////
-double ResourceManager::path_fwm_noise(int lambda, Edge **Path, size_t pathLen, unsigned int ci)
+double ResourceManager::path_fwm_noise(long long int lambda, Edge **Path, size_t pathLen, unsigned int ci)
 {
     double noise = 0.0;
 
@@ -1893,9 +1893,9 @@ double ResourceManager::path_fwm_term(size_t spans,double fi,double fj, double f
 //					algorithm
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::first_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available)
+long long int ResourceManager::first_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available)
 {
-	for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+	for(long long int w = 0; w < static_cast<long long int>(threadZero->getNumberOfWavelengths()); ++w)
 	{
 		if(wave_available[w] == true)
 		{
@@ -1912,9 +1912,9 @@ int ResourceManager::first_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci
 //					with_ordering_algorithm
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::first_fit_with_ordering(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available)
+long long int ResourceManager::first_fit_with_ordering(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available)
 {
-	if(wave_ordering == 0)
+	if(wave_ordering == nullptr)
 	{
 		generateWaveOrdering();
 	}
@@ -1932,26 +1932,26 @@ int ResourceManager::first_fit_with_ordering(CreateConnectionProbeEvent* ccpe, u
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	most_used
-// Description:		Chooses a wavelength based upon the first fit
-//					with_ordering_algorithm
+// Description:		Chooses a wavelength based upon the most used
+//					algorithm
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::most_used(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available)
+long long int ResourceManager::most_used(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available)
 {
-	int *wave_counts = new int[threadZero->getNumberOfWavelengths()];
+	long long int *wave_counts = new long long int[threadZero->getNumberOfWavelengths()];
 
-	for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+	for(long long int w = 0; w < static_cast<long long int>(threadZero->getNumberOfWavelengths()); ++w)
 	{
 		wave_counts[w] = 0;
 	}
 
-	for(unsigned int r = 0; r < threadZero->getNumberOfRouters(); ++r)
+	for(long long int r = 0; r < static_cast<long long int>(threadZero->getNumberOfRouters()); ++r)
 	{
-		for(unsigned int e = 0; e < threads[ci]->getRouterAt(r)->getNumberOfEdges(); ++e)
+		for(long long int e = 0; e < static_cast<long long int>(threads[ci]->getRouterAt(r)->getNumberOfEdges()); ++e)
 		{
 			Edge *edge = threads[ci]->getRouterAt(r)->getEdgeByIndex(e);
 
-			for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+			for(long long int w = 0; w < static_cast<long long int>(threadZero->getNumberOfWavelengths()); ++w)
 			{
 				if(wave_available[w] == true)
 				{
@@ -1964,10 +1964,10 @@ int ResourceManager::most_used(CreateConnectionProbeEvent* ccpe, unsigned int ci
 		}
 	}
 
-	int return_val = NO_PATH_FAILURE;
-	int maxUsed = -1;
+	long long int return_val = NO_PATH_FAILURE;
+	long long int maxUsed = -1;
 
-	for(unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+	for(long long int w = 0; w < static_cast<long long int>(threadZero->getNumberOfWavelengths()); ++w)
 	{
 		if(wave_counts[w] > maxUsed && wave_available[w] == true)
 		{
@@ -1988,9 +1988,9 @@ int ResourceManager::most_used(CreateConnectionProbeEvent* ccpe, unsigned int ci
 //					algorithm
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::random_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available, size_t numberAvailableWaves)
+long long int ResourceManager::random_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available, size_t numberAvailableWaves)
 {
-	std::default_random_engine generator = std::default_random_engine(threadZero->getRandomSeed() * ccpe->sourceRouterIndex * ccpe->destinationRouterIndex * numberAvailableWaves);
+	std::default_random_engine generator = std::default_random_engine(static_cast<unsigned int>(threadZero->getRandomSeed() * ccpe->sourceRouterIndex * ccpe->destinationRouterIndex * numberAvailableWaves));
 	std::uniform_int_distribution<size_t> generateWavelength = std::uniform_int_distribution<size_t>(0, numberAvailableWaves - 1);
 
 	size_t waveToReturn = generateWavelength(generator);
@@ -2022,7 +2022,7 @@ int ResourceManager::random_fit(CreateConnectionProbeEvent* ccpe, unsigned int c
 //					algorithm using quality
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::quality_first_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves)
+long long int ResourceManager::quality_first_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves)
 {
 	while(numberAvailableWaves > 0)
 	{
@@ -2031,7 +2031,7 @@ int ResourceManager::quality_first_fit(CreateConnectionProbeEvent* ccpe, unsigne
 		double ase = 0.0; 
 		double Q_factor = 0.0;
 
-		int wave = first_fit(ccpe,ci,wave_available);
+		long long int wave = first_fit(ccpe,ci,wave_available);
 
 		Q_factor = threadZero->getResourceManager()->estimate_Q(wave,ccpe->connectionPath,ccpe->connectionLength,&xpm,&fwm,&ase,ci);
 
@@ -2067,7 +2067,7 @@ int ResourceManager::quality_first_fit(CreateConnectionProbeEvent* ccpe, unsigne
 //					algorithm using quality
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::quality_first_fit_with_ordering(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves)
+long long int ResourceManager::quality_first_fit_with_ordering(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves)
 {
 	while(numberAvailableWaves > 0)
 	{
@@ -2076,7 +2076,7 @@ int ResourceManager::quality_first_fit_with_ordering(CreateConnectionProbeEvent*
 		double ase = 0.0; 
 		double Q_factor = 0.0;
 
-		int wave = first_fit_with_ordering(ccpe,ci,wave_available);
+		long long int wave = first_fit_with_ordering(ccpe,ci,wave_available);
 
 		Q_factor = threadZero->getResourceManager()->estimate_Q(wave,ccpe->connectionPath,ccpe->connectionLength,&xpm,&fwm,&ase,ci);
 
@@ -2112,7 +2112,7 @@ int ResourceManager::quality_first_fit_with_ordering(CreateConnectionProbeEvent*
 //					fit algorithm using quality
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::least_quality_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available)
+long long int ResourceManager::least_quality_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available)
 {
 	int minQualityWave = -1;
 	double minQualityQFactor = std::numeric_limits<double>::infinity();
@@ -2170,7 +2170,7 @@ int ResourceManager::least_quality_fit(CreateConnectionProbeEvent* ccpe, unsigne
 //					fit algorithm using quality
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::most_quality_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available)
+long long int ResourceManager::most_quality_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available)
 {
 	int maxQualityWave = -1;
 	double maxQualityQFactor = 0.0;
@@ -2228,7 +2228,7 @@ int ResourceManager::most_quality_fit(CreateConnectionProbeEvent* ccpe, unsigned
 //					algorithm using quality
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::quality_random_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves)
+long long int ResourceManager::quality_random_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves)
 {
 	while(numberAvailableWaves > 0)
 	{
@@ -2237,7 +2237,7 @@ int ResourceManager::quality_random_fit(CreateConnectionProbeEvent* ccpe, unsign
 		double ase = 0.0;
 		double Q_factor = 0.0;
 
-		int wave = random_fit(ccpe,ci,wave_available,numberAvailableWaves);
+		long long int wave = random_fit(ccpe,ci,wave_available,numberAvailableWaves);
 
 		Q_factor = threadZero->getResourceManager()->estimate_Q(wave,ccpe->connectionPath,ccpe->connectionLength,&xpm,&fwm,&ase,ci);
 
@@ -2274,7 +2274,7 @@ int ResourceManager::quality_random_fit(CreateConnectionProbeEvent* ccpe, unsign
 //					algorithm using quality
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::quality_most_used(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves)
+long long int ResourceManager::quality_most_used(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves)
 {
 	while(numberAvailableWaves > 0)
 	{
@@ -2283,7 +2283,7 @@ int ResourceManager::quality_most_used(CreateConnectionProbeEvent* ccpe, unsigne
 		double ase = 0.0;
 		double Q_factor = 0.0;
 
-		int wave = most_used(ccpe,ci,wave_available);
+		long long int wave = most_used(ccpe,ci,wave_available);
 
 		Q_factor = threadZero->getResourceManager()->estimate_Q(wave,ccpe->connectionPath,ccpe->connectionLength,&xpm,&fwm,&ase,ci);
 
@@ -2421,14 +2421,14 @@ void ResourceManager::build_KSP_EdgeList()
 	{
 		for(size_t b = 0; b < threadZero->getNumberOfRouters(); ++b)
 		{
-			int edgeID = threadZero->getRouterAt(a)->isAdjacentTo(b);
+			size_t edgeID = threadZero->getRouterAt(a)->isAdjacentTo(b);
 
 			if(edgeID >= 0)
 			{
 				kSP_edgeList[num].src_node = a;
 				kSP_edgeList[num].dest_node = b;
-				kSP_edgeList[num].edge_cost = threadZero->getRouterAt(a)->
-					getEdgeByDestination(b)->getNumberOfSpans();
+				kSP_edgeList[num].edge_cost = static_cast<double>(threadZero->getRouterAt(a)->
+					getEdgeByDestination(b)->getNumberOfSpans());
 
 				++num;
 			}
@@ -2549,17 +2549,17 @@ void ResourceManager::calc_min_spans()
 ///////////////////////////////////////////////////////////////////
 void ResourceManager::generateWaveOrdering()
 {
-	wave_ordering = new int[threadZero->getNumberOfWavelengths()];
+	wave_ordering = new long long int[threadZero->getNumberOfWavelengths()];
 	wave_ordering[0] = 0;
 
 	if(threadZero->getNumberOfWavelengths() > 1)
 		wave_ordering[1] = threadZero->getNumberOfWavelengths() - 1;
 
-	std::list< std::pair<int,int>* > wavesList;
+	std::list< std::pair<int,long long int>* > wavesList;
 
-	for(unsigned int w = 1; w < threadZero->getNumberOfWavelengths() - 1; ++w)
+	for(int w = 1; w < threadZero->getNumberOfWavelengths() - 1; ++w)
 	{
-		std::pair<int, int> *p1 = new std::pair<int, int>;
+		std::pair<int, long long int> *p1 = new std::pair<int, long long int>;
 
 		p1->first = w;
 		p1->second = 0;
@@ -2570,16 +2570,16 @@ void ResourceManager::generateWaveOrdering()
 	while(wavesList.size() > 0)
 	{
 		//Calculate the min of the upper and lower bounds
-		for(std::list< std::pair<int,int>* >::iterator iter1 = wavesList.begin(); iter1 != wavesList.end(); ++iter1)
+		for(std::list< std::pair<int,long long int>* >::iterator iter1 = wavesList.begin(); iter1 != wavesList.end(); ++iter1)
 		{
 			(*iter1)->second = std::min(getLowerBound((*iter1)->first,static_cast<int>(threadZero->getNumberOfWavelengths()-wavesList.size())),
 				getUpperBound((*iter1)->first,static_cast<int>(threadZero->getNumberOfWavelengths()-wavesList.size())));
 		}
 
-		std::list< std::pair<int,int>* >::iterator maxPair = wavesList.begin();
+		std::list< std::pair<int,long long int>* >::iterator maxPair = wavesList.begin();
 
 		//Find the wave with the maximum distance
-		for(std::list< std::pair<int,int>* >::iterator iter2 = wavesList.begin(); iter2 != wavesList.end(); ++iter2)
+		for(std::list< std::pair<int,long long int>* >::iterator iter2 = wavesList.begin(); iter2 != wavesList.end(); ++iter2)
 		{
 			if((*iter2)->second > (*maxPair)->second)
 			{
@@ -2602,9 +2602,9 @@ void ResourceManager::generateWaveOrdering()
 //					w that has already been ordered
 //
 ///////////////////////////////////////////////////////////////////
-size_t ResourceManager::getLowerBound(int w, int n)
+long long int ResourceManager::getLowerBound(int w, int n)
 {
-	size_t retval = threadZero->getNumberOfWavelengths();
+	long long int retval = threadZero->getNumberOfWavelengths();
 
 	for(int a = 0; a < n; ++a)
 	{
@@ -2625,9 +2625,9 @@ size_t ResourceManager::getLowerBound(int w, int n)
 //					w that has already been ordered
 //
 ///////////////////////////////////////////////////////////////////
-size_t ResourceManager::getUpperBound(int w, int n)
+long long int ResourceManager::getUpperBound(int w, int n)
 {
-	size_t retval = threadZero->getNumberOfWavelengths();
+	long long int retval = threadZero->getNumberOfWavelengths();
 
 	for(int a = 0; a < n; ++a)
 	{
