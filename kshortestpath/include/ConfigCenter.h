@@ -31,6 +31,7 @@
 #ifndef _QYCONFIGCENTER_H_
 #define _QYCONFIGCENTER_H_
 
+#include <cstdio>
 #include <map>
 
 class ConfigCenter  

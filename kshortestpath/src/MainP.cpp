@@ -29,6 +29,8 @@
 #include "ShortestPath.h"
 #include "KShortestPaths.h"
 
+#include <limits>
+
 #ifdef __GNUC__ 
 	extern "C" void calc_k_shortest_paths(const kShortestPathParms &params, kShortestPathReturn* retVal);
 #else

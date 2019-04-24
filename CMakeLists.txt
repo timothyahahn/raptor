@@ -1,5 +1,15 @@
 cmake_minimum_required(VERSION 2.8.12.2)
 
+macro(use_cxx11)
+    if (CMAKE_VERSION VERSION_LESS "3.1")
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11")
+        endif()
+    else()
+        set(CMAKE_CXX_STANDARD 11)
+    endif()
+endmacro(use_cxx11)
+
 include(ProcessorCount)
 ProcessorCount(N)
 if(NOT N EQUAL 0)
@@ -10,8 +20,7 @@ endif()
 
 project(raptor CXX C)
 
-set(PROPERTIES CXX_STANDARD 11)
-set(PROPERTIES CXX_STANDARD_REQUIRED ON)
+use_cxx11()
 
 add_executable(raptor src/Edge.cpp src/EventQueue.cpp src/GUI.cpp src/Main.cpp src/MessageLogger.cpp src/OctaveWrapper.cpp src/ResourceManager.cpp src/Router.cpp src/Thread.cpp src/Workstation.cpp)
 
@@ -88,14 +97,14 @@ endif(UNIX)
 
 if(OCTAVE_LIB)
     target_link_libraries(raptor ${OCTAVE_LIB})
-elseif()
+else()
     message("OCTAVE_LIB not found, defining NO_OCTAVE")
     add_definitions(-DNO_OCTAVE)
 endif(OCTAVE_LIB)
 
 if(OCTINTERP_LIB)
     target_link_libraries(raptor ${OCTINTERP_LIB})
-elseif()
+else()
     message("OCTINTERP_LIB not found, defining NO_OCTAVE")
     add_definitions(-DNO_OCTAVE)
 endif(OCTINTERP_LIB)
