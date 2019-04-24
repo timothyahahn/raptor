@@ -292,9 +292,9 @@ void Router::generateProbabilities()
 					getEdgeByDestination(kPath->pathinfo[r2+1])->getNumberOfSpans();
 
 			if(threadZero->getQualityParams().dest_dist == DISTANCE)
-				destinationProbs[r1] = pathSpans;
+				destinationProbs[r1] = static_cast<double>(pathSpans);
 			else if(threadZero->getQualityParams().dest_dist == INVERSE_DISTANCE)
-				destinationProbs[r1] = 1.0 / pathSpans;
+				destinationProbs[r1] = static_cast<double>(1.0 / pathSpans);
 			else
 				destinationProbs[r1] = 1.0;
 
