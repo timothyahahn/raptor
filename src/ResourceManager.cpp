@@ -1137,7 +1137,7 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(size_t src_index, size_t
 
 		DP_node *dest_node = threads[ci]->getRouterAt(edge->getDestinationIndex())->dp_node;
 
-		unsigned int additionalSpans = span_distance[edge->getDestinationIndex() * threadZero->getNumberOfRouters() + dest_index];
+		size_t additionalSpans = span_distance[edge->getDestinationIndex() * threadZero->getNumberOfRouters() + dest_index];
 
 		if(current_item->pathSpans + additionalSpans < threadZero->getMaxSpans())
 		{
@@ -2509,13 +2509,13 @@ void ResourceManager::calc_min_spans()
 {
 	threadZero->recordEvent("Starting to calculate router distances", true, 0);
 
-	span_distance = new unsigned int[threadZero->getNumberOfRouters() * threadZero->getNumberOfRouters()];
+	span_distance = new size_t[threadZero->getNumberOfRouters() * threadZero->getNumberOfRouters()];
 
-	unsigned int maxMinDistance = 0;
+	size_t maxMinDistance = 0;
 
-	for(unsigned int r1 = 0; r1 < threadZero->getNumberOfRouters(); ++r1)
+	for(size_t r1 = 0; r1 < threadZero->getNumberOfRouters(); ++r1)
 	{
-		for(unsigned int r2 = 0; r2 < threadZero->getNumberOfRouters(); ++r2)
+		for(size_t r2 = 0; r2 < threadZero->getNumberOfRouters(); ++r2)
 		{
 			if(r1 != r2)
 			{

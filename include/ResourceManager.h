@@ -70,7 +70,7 @@ class ResourceManager
 		double* sys_fs;
 		std::vector<int>* fwm_combinations;
 
-		unsigned int* span_distance;
+		size_t* span_distance;
 
 	private:
 		double path_ase_noise(long long int lambda, Edge **Path, size_t pathLen, unsigned int ci);

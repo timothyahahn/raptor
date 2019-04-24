@@ -2693,7 +2693,7 @@ bool Thread::moreProbes(CreateConnectionProbeEvent* probe)
 //					two difference routers.
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::setMinDuration(unsigned int spans)
+void Thread::setMinDuration(size_t spans)
 {
 	//Routing algorithm should be a non centralized algorithm to ensure
 	//the delay is not zero.
@@ -2714,7 +2714,7 @@ void Thread::setMinDuration(unsigned int spans)
 //					within a specified factor of the max min
 //
 ///////////////////////////////////////////////////////////////////
-void Thread::setQFactorMin(unsigned int spans)
+void Thread::setQFactorMin(size_t spans)
 {
 	qualityParams.TH_Q = static_cast<double>(qualityParams.QFactor_factor * 10.0 * 
 		log10(qualityParams.channel_power / sqrt(qualityParams.ASE_perEDFA[qualityParams.halfwavelength] * double(spans))));

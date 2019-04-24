@@ -92,7 +92,7 @@ class Edge
 
 		inline double getPheremone()
 			{ return pheremone; };
-		 void resetPheremone(unsigned int ci, unsigned int spans);
+		 void resetPheremone(unsigned int ci, size_t spans);
 
 		void evaporatePheremone(unsigned int ci);
 		void addPheremone(size_t hops, unsigned int ci);

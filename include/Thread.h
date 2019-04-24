@@ -137,11 +137,11 @@ class Thread
 
 		inline double getMinDuration()
 			{ return minDuration; };
-		inline unsigned int getMaxSpans()
+		inline size_t getMaxSpans()
 			{ return maxSpans; };
 
-		void setMinDuration(unsigned int spans);
-		void setQFactorMin(unsigned int spans);
+		void setMinDuration(size_t spans);
+		void setQFactorMin(size_t spans);
 
 		inline const std::string getRoutingAlgorithmName(unsigned int a)
 			{ return RoutingAlgorithmNames[a]; };
@@ -379,7 +379,7 @@ class Thread
 
 		double minDuration;
 
-		unsigned int maxSpans;
+		size_t maxSpans;
 
 		kShortestPathReturn* getKShortestPaths(ConnectionRequestEvent *cre, size_t probesToSend);
 		CreateConnectionProbeEvent** calcProbesToSend(ConnectionRequestEvent *cre, kShortestPathReturn *kPath, 

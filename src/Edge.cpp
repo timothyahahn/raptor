@@ -152,7 +152,7 @@ void Edge::evaporatePheremone(unsigned int ci)
 // Description:		Resets the pheremone levels to the initial value
 //
 ///////////////////////////////////////////////////////////////////
-void Edge::resetPheremone(unsigned int ci, unsigned int spans)
+void Edge::resetPheremone(unsigned int ci, size_t spans)
 {
 	if(threads[ci]->getCurrentRoutingAlgorithm() == MAX_MIN_ACO)
 	{
