@@ -2507,7 +2507,7 @@ void ResourceManager::print_connection_info(CreateConnectionProbeEvent* ccpe, do
 ///////////////////////////////////////////////////////////////////
 void ResourceManager::calc_min_spans()
 {
-	printf("Calculating router distances...");
+	threadZero->recordEvent("Starting to calculate router distances", true, 0);
 
 	span_distance = new unsigned int[threadZero->getNumberOfRouters() * threadZero->getNumberOfRouters()];
 
@@ -2537,7 +2537,7 @@ void ResourceManager::calc_min_spans()
 
 	threadZero->setQFactorMin(maxMinDistance);
 
-	printf("done.\n");
+	threadZero->recordEvent("Completed calculation of router distances", true, 0);
 }
 
 ///////////////////////////////////////////////////////////////////
