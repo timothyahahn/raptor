@@ -24,8 +24,12 @@ use_cxx11()
 
 add_executable(raptor src/Edge.cpp src/EventQueue.cpp src/GUI.cpp src/Main.cpp src/MessageLogger.cpp src/OctaveWrapper.cpp src/ResourceManager.cpp src/Router.cpp src/Thread.cpp src/Workstation.cpp)
 
+target_include_directories(raptor PUBLIC allegro5/include)
 target_include_directories(raptor PUBLIC kshortestpath/include)
 target_include_directories(raptor PUBLIC include)
+
+add_subdirectory(allegro5)
+target_link_libraries(raptor allegro5)
 
 add_subdirectory(kshortestpath)
 target_link_libraries(raptor kshortestpath)
@@ -138,4 +142,3 @@ if(UNIX)
     endif()
 
 endif(UNIX)
-
