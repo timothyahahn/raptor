@@ -26,7 +26,7 @@
 
 #include <sstream>
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 
 #include "AllegroWrapper.h"
 extern BITMAP *mainbuf;
@@ -58,7 +58,7 @@ Thread::Thread() :
 	CurrentWavelengthAlgorithm(WavelengthAlgorithm::NUMBER_OF_WAVELENGTH_ALGORITHMS), globalTime(0.0), logger(nullptr),
 	maxRunCount(0), maxSpans(0), minDuration(0.0), numOfWavelengths(0), numberOfConnections(0), numberOfEdges(0), numberOfRouters(0),
 	numberOfWorkstations(0), order_init(false), qualityParams(), queue(nullptr), randomSeed(0), rm(nullptr), runCount(0), stats(),
-	workstationOrder(nullptr)
+	workstationOrder(nullptr), CurrentRoutingAlgorithm(RoutingAlgorithm::NUMBER_OF_ROUTING_ALGORITHMS)
 {
 	threadZero->recordEvent(std::string("Unable to initialize the controller without command line arguments.\n"),true,controllerIndex);
 	exit(ERROR_THREAD_INIT);
@@ -76,7 +76,7 @@ Thread::Thread(int ci, int argc, const char* argv[], bool isLPS) :
 	CurrentWavelengthAlgorithm(WavelengthAlgorithm::NUMBER_OF_WAVELENGTH_ALGORITHMS), globalTime(0.0), logger(nullptr),
 	maxRunCount(0), maxSpans(0), minDuration(0.0), numOfWavelengths(0), numberOfConnections(0), numberOfEdges(0), numberOfRouters(0),
 	numberOfWorkstations(0), order_init(false), qualityParams(), queue(nullptr), randomSeed(0), rm(nullptr), runCount(0), stats(), 
-	workstationOrder(nullptr)
+	workstationOrder(nullptr), CurrentRoutingAlgorithm(RoutingAlgorithm::NUMBER_OF_ROUTING_ALGORITHMS)
 {
 	isLoadPrevious = isLPS;
 
@@ -88,7 +88,7 @@ Thread::Thread(int ci, int argc, const char* argv[], bool isLPS) :
 	else
 		setMinDuration(static_cast<unsigned>(ceil(threadZero->maxSpans * threadZero->getQualityParams().QFactor_factor)));
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	sprintf(topology,"%s",argv[1]);
 	maxMaxUsage = 0.0;
 	paintDir = false;
@@ -232,7 +232,7 @@ void Thread::initPriorityQueue(unsigned int w)
 		delete event;
 	}
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	Event* event = new Event();
 
 	event->e_type = UPDATE_GUI;
@@ -283,7 +283,7 @@ void Thread::initThread(AlgorithmToRun* alg)
 	CurrentQualityAware = alg->qa;
 	CurrentActiveWorkstations = alg->workstations;
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	rectfill(mainbuf, 0, 50*controllerIndex+85-1, SCREEN_W, 50*(controllerIndex+1)+85-1, makecol(0,0,0));
 	char buffer[200];
 	sprintf(buffer,"THREAD %d: RA = %s, WA = %s, PS = %s, QA = %d, N = %d",controllerIndex,
@@ -310,13 +310,13 @@ int Thread::runThread(AlgorithmToRun* alg)
 {
 	initThread(alg);
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	rectfill(mainbuf, 49, controllerIndex * 50 + 99, 651, controllerIndex * 50 + 99 + 26, makecol(0,0,255));
 #endif
 
 	while(queue->getSize() > 0)
 	{
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 		if(terminateProgram == true)
 		{
 			threadZero->recordEvent("ERROR: User clicked on the close button, exiting simulation.",true,controllerIndex);
@@ -328,7 +328,7 @@ int Thread::runThread(AlgorithmToRun* alg)
 
 		setGlobalTime(event.e_time);
 
-#ifdef RUN_GUI //PROGRESS BAR
+#ifndef NO_ALLEGRO //PROGRESS BAR
 		
 		int prog = stats.ConnectionRequests * multFactor;
 		if(prog >= 1)
@@ -353,7 +353,7 @@ int Thread::runThread(AlgorithmToRun* alg)
 			case UPDATE_USAGE:
 				update_link_usage();
 				break;
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 			case UPDATE_GUI:
 				update_gui();
 				break;
@@ -393,7 +393,7 @@ int Thread::runThread(AlgorithmToRun* alg)
 ///////////////////////////////////////////////////////////////////
 void Thread::activate_workstations()
 {
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	ConnsPerPx = (threadZero->getNumberOfConnections() * getCurrentActiveWorkstations()) / progBarLengthpx;
 	multFactor = 600.0 / double(getCurrentActiveWorkstations() * threadZero->getNumberOfConnections());
 #endif
@@ -492,7 +492,7 @@ void Thread::activate_workstations()
 	for(unsigned int w = 0; w < getCurrentActiveWorkstations(); ++w)
 	{
 		getWorkstationAt(workstationOrder[w])->setActive(true);
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 		getRouterAt(getWorkstationAt(workstationOrder[w])->getParentRouterIndex())->incNumWorkstations();
 #endif
 		buffer.clear();
@@ -536,7 +536,7 @@ void Thread::deactivate_workstations()
 		<< ", WORKS = " << getCurrentActiveWorkstations() << ", PROBE = " << threadZero->getProbeStyleName(CurrentProbeStyle) << ", QA = " << getCurrentQualityAware();
 	threadZero->recordEvent(algorithm.str(),true,controllerIndex);
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	strcpy(routing,threadZero->getRoutingAlgorithmName(CurrentRoutingAlgorithm)->c_str());
 	strcpy(wavelength,threadZero->getWavelengthAlgorithmName(CurrentWavelengthAlgorithm)->c_str());
 	strcpy(probing,threadZero->getProbeStyleName(CurrentProbeStyle)->c_str());
@@ -775,9 +775,7 @@ void Thread::generateTrafficEvent(size_t session)
 			tr_data->destinationRouterIndex = getRouterAt(tr_data->sourceRouterIndex)->generateDestination(generateZeroToOne(generator));
 	}
 
-//ifdef RUN_GUI, increment the number of connection attempts FROM the source
-//and increment the number of connection attempts TO the destination
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	routers[tr_data->sourceRouterIndex]->incConnAttemptsFrom();
 	routers[tr_data->destinationRouterIndex]->incConnAttemptsTo();
 #endif
@@ -1093,7 +1091,7 @@ void Thread::destroy_connection_probe(DestroyConnectionProbeEvent* dcpe)
 ///////////////////////////////////////////////////////////////////
 void Thread::create_connection_confirmation(CreateConnectionConfirmationEvent* ccce)
 {
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	int indx;
 #endif
 
@@ -1203,7 +1201,7 @@ void Thread::create_connection_confirmation(CreateConnectionConfirmationEvent* c
 				stats.totalSetupDelay += getGlobalTime() - ccce->requestBeginTime;
 			}
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 			indx = ccce->destinationRouterIndex; //this code keeps track of how many times each router is the destination for a connection.
 			routers[indx]->incConnSuccessesTo();
 			indx = ccce->sourceRouterIndex;
@@ -1815,7 +1813,7 @@ void Thread::setTopologyParameters(const std::string& f)
 	buffer << "Reading Topology Parameters from " << f << " file.";
 	threadZero->recordEvent(buffer.str(),false,0);
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	strcpy(topoFile,f);
 #endif
 
@@ -1852,7 +1850,7 @@ void Thread::setTopologyParameters(const std::string& f)
 
 			r->setIndex(numberOfRouters);
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 			std::vector<std::string> coordinates = split(tokens[1], ',');
 
 			if (coordinates.size() != 2)
@@ -1926,7 +1924,7 @@ void Thread::setWorkstationParameters(const std::string& f)
 	reading << "Reading Workstation Parameters from " << f << " file.";
 	threadZero->recordEvent(reading.str(),false,0);
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	strcpy(wkstFile,f);
 #endif
 
@@ -2568,7 +2566,7 @@ void Thread::sendProbes(ConnectionRequestEvent *cre, kShortestPathReturn *kPath,
 	}
 }
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	update_gui
@@ -2836,7 +2834,7 @@ std::vector<std::string> Thread::split(const std::string& s, char delimiter)
 	return tokens;
 }
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	detailScreen()

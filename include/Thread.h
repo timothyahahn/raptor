@@ -150,7 +150,7 @@ class Thread
 		inline const std::string getProbeStyleName(unsigned int p)
 			{ return ProbeStyleNames[p]; };
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 		void setTerminate()
 			{ terminateProgram = true; };
 
@@ -294,7 +294,7 @@ class Thread
 
 		void update_link_usage();
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 		void update_gui();
 #endif
 		void connection_request(ConnectionRequestEvent* cre);
@@ -309,7 +309,7 @@ class Thread
 
 		size_t numOfWavelengths;
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 		double maxMaxUsage;
 		bool paintDir; //true if all edges must be repainted.
 		bool paintSpans;

@@ -26,7 +26,7 @@
 
 #include "Edge.h"
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 #include "AllegroWrapper.h"
 
 extern int realTopoWidthPx;
@@ -60,7 +60,7 @@ class Router
 		void generateProbabilities();
 		unsigned int generateDestination(double p);
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 		inline void incNumWorkstations()
 			{ ++numWorkstations; };
 		inline int getNumWorkstations()
@@ -111,7 +111,7 @@ class Router
 		void generateACOProbabilities(size_t dest);
 		Edge* chooseEdge(double p);
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 		void refreshedgebmps(bool useThread);
 		inline int getXPercent()
 			{ return xpercent; };
@@ -200,7 +200,7 @@ class Router
 
 		long long int *adjacencyList;
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 		unsigned int connAttemptsFromThis;
 		unsigned int connAttemptsToThis;
 		unsigned int connSuccessesFromThis;

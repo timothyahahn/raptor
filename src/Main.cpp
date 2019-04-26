@@ -27,7 +27,7 @@
 #include <sstream>
 #include <vector>
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 
 #include "AllegroWrapper.h"
 
@@ -100,7 +100,7 @@ int main( int argc, const char* argv[] )
 		return ERROR_INVALID_PARAMETERS;
 	}
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	allegro_init();
 	set_close_button_callback(close_button_handler);
 	set_color_depth(16);
@@ -160,7 +160,7 @@ int main( int argc, const char* argv[] )
 	return 0;
 }
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 END_OF_MAIN()
 #endif
 
@@ -176,7 +176,7 @@ void runSimulation(int argc, const char* argv[])
 
 	unsigned int iterationCount = atoi(argv[5]);
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	rectfill(screen, 0, 0, SCREEN_W, 40, color);
 	textprintf_ex(screen,font,20,15,color2,color,"Building XPM Database, please wait...");
 #endif
@@ -185,7 +185,7 @@ void runSimulation(int argc, const char* argv[])
 
 	threadZero->initResourceManager();
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	rectfill(screen, 0, 0, SCREEN_W, 40, color);
 #endif
 
@@ -218,7 +218,7 @@ void runSimulation(int argc, const char* argv[])
 	{
 		pthread_join(*pThreads[t-1],nullptr);
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 		textprintf_ex(screen,font,20,500,makecol(0,255,0),makecol(0,0,0),"Thread %5d",t-1);
 #endif
 	}
@@ -239,7 +239,7 @@ void runSimulation(int argc, const char* argv[])
 
 	delete threadZeroReturn;
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 
 	explore_time = 0;
 	while(!key[KEY_ESC])
@@ -265,7 +265,7 @@ void *runThread(void* n)
 
 		*retVal = threads[*t_id]->runThread(alg);
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 		textprintf_ex(screen,font,20,SCREEN_H-30,color2,color,"%s",folder); 
 		threads[*t_id]->saveThread(folder);
 #endif

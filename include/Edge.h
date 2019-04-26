@@ -27,7 +27,7 @@
 
 #include "Stats.h"
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 #include "AllegroWrapper.h"
 #endif
 
@@ -75,7 +75,7 @@ class Edge
 
 		std::list <void*> establishedConnections;
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 		void updateGUI();
 		void refreshbmps(bool useThread);
 		void initializetopobmps();
@@ -97,7 +97,7 @@ class Edge
 		void evaporatePheremone(unsigned int ci);
 		void addPheremone(size_t hops, unsigned int ci);
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 		inline int getMaxActualUsage()
 			{ return max_actual_usage; };
 		inline int getUsageNums()
@@ -137,7 +137,7 @@ private:
 
 		double* degredation;
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 		int r1x,r1y,r2x,r2y; //coordinates of routers
 		int r3x,r3y,r4x,r4y; //points to draw to for edge width (these change)
 		int putX,putY;

@@ -23,7 +23,7 @@
 #include "ErrorCodes.h"
 #include "Router.h"
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 extern BITMAP *routersbmp;
 extern BITMAP *popup;
 extern BITMAP *routerinfo;
@@ -44,7 +44,7 @@ Router::Router() :
 {
 	adjacencyList = 0;
 	
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	sprintf(name,"(no name)");
 	rcolor = makecol(0,255,0);
 	isSelected = false;
@@ -78,7 +78,7 @@ Router::~Router()
 	delete[] destinationProbs;
 	delete[] acoProbs;
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	destroy_bitmap(routerpic);
 #endif
 
@@ -225,7 +225,7 @@ Edge* Router::chooseEdge(double p)
 	return 0;
 }
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -385,7 +385,7 @@ void Router::resetQMDegredation()
 	}
 }
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	paintMaxUsage()

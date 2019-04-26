@@ -22,7 +22,7 @@
 #include "Edge.h"
 #include "Thread.h"
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 
 #include <cstdlib>
 
@@ -91,7 +91,7 @@ Edge::Edge(int src, int dest, int spans) :
 		activeSession[w] = -1;
 	}
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	max_actual_usage = 0;
 
 	for(int x = 0; x < 14; x++)
@@ -117,7 +117,7 @@ Edge::~Edge()
 
 	delete[] stats;
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	usageList.clear();
 
 	for(int i = 0; i < 14; i++)
@@ -184,7 +184,7 @@ void Edge::addPheremone(size_t hops, unsigned int ci)
 	}
 }
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	refreshtopobmps
@@ -369,7 +369,7 @@ void Edge::updateQMDegredation(unsigned int ci, long long int wavelength)
 {	
 	ResourceManager* rm = threadZero->getResourceManager();
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	thdIndx = ci; //TODO: put this in a location where it isn't repeated.
 #endif
 
@@ -458,7 +458,7 @@ void Edge::updateQFactorStats(unsigned int ci, long long int wavelength)
 {
 	ResourceManager* rm = threadZero->getResourceManager();
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 	thdIndx = ci; //TODO: put this in a location where it isn't repeated.
 #endif
 
@@ -585,7 +585,7 @@ void Edge::removeEstablishedConnection(void* dcpe_void)
 
 		ec->belowQFactor = double(timebelow / (ec->connectionEndTime - ec->connectionStartTime));
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 		int src = dcpe->connectionPath[0]->getSourceIndex();
 		threads[thdIndx]->getRouterAt(src)->addToAvgQFrom( ec->averageQFactor );
 		int dest = dcpe->connectionPath[dcpe->connectionLength - 1]->getDestinationIndex();
@@ -646,7 +646,7 @@ void Edge::resetEdgeStats()
 	stats->droppedConnections = 0;
 }
 
-#ifdef RUN_GUI
+#ifndef NO_ALLEGRO
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	updateGUI
