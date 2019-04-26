@@ -39,27 +39,27 @@ extern void switcher( int argc, const char* argv[] );
 
 extern int color,color2,white,explore_time;
 
-BITMAP *buffer;
-BITMAP *pointer;
-BITMAP *graph;
-BITMAP *graphbuttons;
-BITMAP *topbuttons;
-BITMAP *edgespans;
-BITMAP *routersbmp;
-BITMAP *routerinfo;
-BITMAP *editrouterinfo;
-BITMAP *editedgeinfo;
-BITMAP *edgesbmp;
-BITMAP *mainbuf;
-BITMAP *progbarbmp;
-BITMAP *routerpic;
-BITMAP *graphbackground;
-BITMAP *topobackground;
-BITMAP *topomenu;
-BITMAP *popup;
-BITMAP *detailinfo;
+ALLEGRO_BITMAP *buffer;
+ALLEGRO_BITMAP *pointer;
+ALLEGRO_BITMAP *graph;
+ALLEGRO_BITMAP *graphbuttons;
+ALLEGRO_BITMAP *topbuttons;
+ALLEGRO_BITMAP *edgespans;
+ALLEGRO_BITMAP *routersbmp;
+ALLEGRO_BITMAP *routerinfo;
+ALLEGRO_BITMAP *editrouterinfo;
+ALLEGRO_BITMAP *editedgeinfo;
+ALLEGRO_BITMAP *edgesbmp;
+ALLEGRO_BITMAP *mainbuf;
+ALLEGRO_BITMAP *progbarbmp;
+ALLEGRO_BITMAP *routerpic;
+ALLEGRO_BITMAP *graphbackground;
+ALLEGRO_BITMAP *topobackground;
+ALLEGRO_BITMAP *topomenu;
+ALLEGRO_BITMAP *popup;
+ALLEGRO_BITMAP *detailinfo;
 
-BITMAP *colorkey;
+ALLEGRO_BITMAP *colorkey;
 
 char foldName[25];
 char folder[50];

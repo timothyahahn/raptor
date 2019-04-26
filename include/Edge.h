@@ -145,7 +145,7 @@ private:
 		double invunitX, invunitY, currX, currY, oldX, oldY, average_usage, painted_usage;//inverse unit vectors
 		int painted_percent; 
 		int max_actual_usage;
-		vector<int> usageList;
+		std::vector<int> usageList;
 		BITMAP* edgeBmps[14];
 		BITMAP* edgeBmp;
 #endif

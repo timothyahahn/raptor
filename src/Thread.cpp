@@ -29,10 +29,10 @@
 #ifndef NO_ALLEGRO
 
 #include "AllegroWrapper.h"
-extern BITMAP *mainbuf;
-extern BITMAP *progbarbmp;
-extern BITMAP *detailinfo;
-extern BITMAP *popup;
+extern ALLEGRO_BITMAP *mainbuf;
+extern ALLEGRO_BITMAP *progbarbmp;
+extern ALLEGRO_BITMAP *detailinfo;
+extern ALLEGRO_BITMAP *popup;
 
 #endif
 

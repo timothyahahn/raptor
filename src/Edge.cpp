@@ -26,19 +26,19 @@
 
 #include <cstdlib>
 
-extern BITMAP *graph;
-extern BITMAP *graphbackground;
-extern BITMAP *popup;
-extern BITMAP *buffer;
-extern BITMAP *edgesbmp;
-extern BITMAP *edgespans;
-extern BITMAP *mainbuf;
+extern ALLEGRO_BITMAP *graph;
+extern ALLEGRO_BITMAP *graphbackground;
+extern ALLEGRO_BITMAP *popup;
+extern ALLEGRO_BITMAP *buffer;
+extern ALLEGRO_BITMAP *edgesbmp;
+extern ALLEGRO_BITMAP *edgespans;
+extern ALLEGRO_BITMAP *mainbuf;
 
-extern BITMAP *edgeOriginals[14];
-extern BITMAP *arrowOriginals[14];
-extern BITMAP *tailOriginals[14];
+extern ALLEGRO_BITMAP *edgeOriginals[14];
+extern ALLEGRO_BITMAP *arrowOriginals[14];
+extern ALLEGRO_BITMAP *tailOriginals[14];
 
-extern BITMAP *routersbmp;//take this out later.
+extern ALLEGRO_BITMAP *routersbmp;//take this out later.
 
 #define PI 3.14159265
 
@@ -281,8 +281,8 @@ void Edge::refreshbmps(bool useThread)
 		//for bitmap edges
 
 		int distInt = ceil(dist);
-		BITMAP *temp_bmp = create_bitmap(distInt,13);
-		BITMAP *temp_bmp2 = create_bitmap(distInt,distInt);
+		ALLEGRO_BITMAP *temp_bmp = create_bitmap(distInt,13);
+		ALLEGRO_BITMAP *temp_bmp2 = create_bitmap(distInt,distInt);
 
 		if(r1x < r2x)
 			putX = r1x;

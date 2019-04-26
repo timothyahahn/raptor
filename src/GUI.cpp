@@ -73,7 +73,7 @@ void paint_router_nums()
 		stretch_blit(graphbackground,mainbuf,0,0,graphbackground->w,graphbackground->h,graphX1,graphY1,graphX2-graphX1,graphY2-graphY1);
 	}
 	masked_blit(graphbuttons,mainbuf,0,0,0,graphY1-16,SCRNWID,SCRNHEI);
-	masked_blit(graph,mainbuf,graphX1,graphY1-topbuttons->h,graphX1,graphY1-topbuttons->h,SCRNWID,graphY2-(graphY1-topbuttons->h));//size of graph BITMAP should really be changed
+	masked_blit(graph,mainbuf,graphX1,graphY1-topbuttons->h,graphX1,graphY1-topbuttons->h,SCRNWID,graphY2-(graphY1-topbuttons->h));//size of graph ALLEGRO_BITMAP should really be changed
 	if(showcolorkey)
 	{	blit(colorkey,mainbuf,0,0,SCRNWID-colorkey->w - 10,graphY1-16-colorkey->h -10,colorkey->w,colorkey->h);	}
 	masked_blit(popup,mainbuf,0,0,0,0,SCRNWID,SCRNHEI);
@@ -2307,7 +2307,7 @@ void switcher( int argc, const char* argv[] )
 ///////////////////////////////////////////////////////////////////
 void menu()
 {
-	BITMAP* menu = create_bitmap(menubutton[0]->w,5 * menubutton[0]->h);
+	ALLEGRO_BITMAP* menu = create_bitmap(menubutton[0]->w,5 * menubutton[0]->h);
 	int mx, my, mb;
 	bool esc = false;
 	functionactive = -1;

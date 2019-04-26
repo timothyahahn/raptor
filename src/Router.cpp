@@ -24,9 +24,9 @@
 #include "Router.h"
 
 #ifndef NO_ALLEGRO
-extern BITMAP *routersbmp;
-extern BITMAP *popup;
-extern BITMAP *routerinfo;
+extern ALLEGRO_BITMAP *routersbmp;
+extern ALLEGRO_BITMAP *popup;
+extern ALLEGRO_BITMAP *routerinfo;
 #endif
 
 #include "Thread.h"
