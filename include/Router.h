@@ -27,7 +27,8 @@
 #include "Edge.h"
 
 #ifndef NO_ALLEGRO
-#include "AllegroWrapper.h"
+
+#include "allegro5/allegro.h"
 
 extern int realTopoWidthPx;
 extern int realTopoHeightPx;

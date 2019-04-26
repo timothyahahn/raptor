@@ -20,10 +20,12 @@
 #ifndef GUI_H
 #define GUI_H
 
-#include "AllegroWrapper.h"
 #include <cstdlib>
+
 #include "Edge.h"
 #include "Thread.h"
+
+#include "allegro5/allegro.h"
 
 extern Thread* threadZero;
 extern Thread** threads;
@@ -94,41 +96,41 @@ int graphfunction; //codes: 1 = pointer, 2 = zoomin 3 = zoomout 4 = zoomwindow, 
 int topofunction; //codes: 1 = addrouter, 2 = addedge, 3 = moverouter, 4 = editrouter, 5 = editedge
 bool is_exploring, showcolorkey,showmaximums,showaverages;//showindexes,showwks, showfailurefrom,showfailureto
 
-vector<Router*> topoRouters; //for building topology
+std::vector<Router*> topoRouters; //for building topology
 
 double clickdist,rx,ry,dmx,dmy,shrinkConstant;
 Edge* edge;
 
-BITMAP* flashscreen;
-BITMAP* edgeOriginals[14];
-BITMAP* arrowOriginals[14];
-BITMAP* tailOriginals[14];
-BITMAP* topbutton[10];
-BITMAP* topobutton[7];
-BITMAP* topobuttonover[5];
-BITMAP* topbuttonpress[9];
-BITMAP* graphbutton[8];
-BITMAP* graphbuttonpress[7];
-BITMAP* menubutton[5];
-BITMAP* menubuttonover[5];
-BITMAP* topomenuover[2];
+ALLEGRO_BITMAP* flashscreen;
+ALLEGRO_BITMAP* edgeOriginals[14];
+ALLEGRO_BITMAP* arrowOriginals[14];
+ALLEGRO_BITMAP* tailOriginals[14];
+ALLEGRO_BITMAP* topbutton[10];
+ALLEGRO_BITMAP* topobutton[7];
+ALLEGRO_BITMAP* topobuttonover[5];
+ALLEGRO_BITMAP* topbuttonpress[9];
+ALLEGRO_BITMAP* graphbutton[8];
+ALLEGRO_BITMAP* graphbuttonpress[7];
+ALLEGRO_BITMAP* menubutton[5];
+ALLEGRO_BITMAP* menubuttonover[5];
+ALLEGRO_BITMAP* topomenuover[2];
 
-extern BITMAP *buffer;
-extern BITMAP *pointer;
-extern BITMAP *edgespans;
-extern BITMAP *graph;
-extern BITMAP *graphbuttons;
-extern BITMAP *topbuttons;
-extern BITMAP *routersbmp;
-extern BITMAP *editrouterinfo;
-extern BITMAP *editedgeinfo;
-extern BITMAP *edgesbmp;
-extern BITMAP *mainbuf;
-extern BITMAP *popup;
-extern BITMAP *graphbackground;
-extern BITMAP *topobackground;
-extern BITMAP *colorkey;
-extern BITMAP *topomenu;
+extern ALLEGRO_BITMAP *buffer;
+extern ALLEGRO_BITMAP *pointer;
+extern ALLEGRO_BITMAP *edgespans;
+extern ALLEGRO_BITMAP *graph;
+extern ALLEGRO_BITMAP *graphbuttons;
+extern ALLEGRO_BITMAP *topbuttons;
+extern ALLEGRO_BITMAP *routersbmp;
+extern ALLEGRO_BITMAP *editrouterinfo;
+extern ALLEGRO_BITMAP *editedgeinfo;
+extern ALLEGRO_BITMAP *edgesbmp;
+extern ALLEGRO_BITMAP *mainbuf;
+extern ALLEGRO_BITMAP *popup;
+extern ALLEGRO_BITMAP *graphbackground;
+extern ALLEGRO_BITMAP *topobackground;
+extern ALLEGRO_BITMAP *colorkey;
+extern ALLEGRO_BITMAP *topomenu;
 
 #define SCRNHEI 700
 #define SCRNWID 1300

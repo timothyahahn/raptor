@@ -685,7 +685,7 @@ void Router::paintProgress(int x,int y,int h, double PaintTime,double TimePerPx,
 ///////////////////////////////////////////////////////////////////
 void Router::saveData(char* file)
 {
-	ofstream myFile;
+	std::ofstream myFile;
 	char buffer[7] = {' '};
 	myFile.open (file, std::ios::app | std::ios::binary);
 	myFile << numWorkstations << "|\n";

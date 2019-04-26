@@ -29,7 +29,7 @@
 
 #ifndef NO_ALLEGRO
 
-#include "AllegroWrapper.h"
+#include "allegro5/allegro.h"
 
 extern void close_button_handler();
 extern void flash();
@@ -101,33 +101,41 @@ int main( int argc, const char* argv[] )
 	}
 
 #ifndef NO_ALLEGRO
-	allegro_init();
+	al_install_system(ALLEGRO_VERSION_INT, nullptr);
+
 	set_close_button_callback(close_button_handler);
 	set_color_depth(16);
 
-	install_keyboard();
-	install_mouse();
+	if (!al_install_keyboard())
+		return ERROR_GUI;
+
+	if (!al_install_mouse())
+		return ERROR_GUI;
+
 	install_timer();
+
 	set_window_title("RAPTOR (Route Assignment Program for Transparent Optical Routes)");
-	graph = create_bitmap(SCRNWID,SCRNHEI);
-	graphbuttons = create_bitmap(SCRNWID,16);
-	topbuttons = create_bitmap(SCRNWID,31);
-	buffer = create_bitmap(SCRNWID,SCRNHEI);
-	mainbuf = create_bitmap(SCRNWID,SCRNHEI);
-	routersbmp = create_bitmap(SCRNWID,SCRNHEI);
-	edgesbmp = create_bitmap(SCRNWID,SCRNHEI);
-	edgespans = create_bitmap(SCRNWID,SCRNHEI);
-	popup = create_bitmap(SCRNWID,SCRNHEI);
-	graphbackground = load_bitmap("bitmaps/graphbackground.bmp",nullptr);
-	topobackground = load_bitmap("bitmaps/topobackground2.bmp",nullptr);
-	progbarbmp = load_bitmap("bitmaps/progressbar.bmp",nullptr);
-	routerinfo = load_bitmap("bitmaps/routerinfo.bmp",nullptr);
-	editrouterinfo = load_bitmap("bitmaps/editrouterinfo.bmp",nullptr);
-	editedgeinfo = load_bitmap("bitmaps/editedgeinfo.bmp",nullptr);
-	detailinfo = load_bitmap("bitmaps/configurationinfo.bmp",nullptr);
-	colorkey = load_bitmap("bitmaps/colorkey.bmp",nullptr);
-	pointer = load_bitmap("bitmaps/pointer2.bmp",nullptr);
-	topomenu = load_bitmap("bitmaps/topomenu.bmp",nullptr);
+
+	graph = al_create_bitmap(SCRNWID,SCRNHEI);
+	graphbuttons = al_create_bitmap(SCRNWID,16);
+	topbuttons = al_create_bitmap(SCRNWID,31);
+	buffer = al_create_bitmap(SCRNWID,SCRNHEI);
+	mainbuf = al_create_bitmap(SCRNWID,SCRNHEI);
+	routersbmp = al_create_bitmap(SCRNWID,SCRNHEI);
+	edgesbmp = al_create_bitmap(SCRNWID,SCRNHEI);
+	edgespans = al_create_bitmap(SCRNWID,SCRNHEI);
+	popup = al_create_bitmap(SCRNWID,SCRNHEI);
+	
+	graphbackground = al_load_bitmap("bitmaps/graphbackground.bmp");
+	topobackground = al_load_bitmap("bitmaps/topobackground2.bmp");
+	progbarbmp = al_load_bitmap("bitmaps/progressbar.bmp");
+	routerinfo = al_load_bitmap("bitmaps/routerinfo.bmp");
+	editrouterinfo = al_load_bitmap("bitmaps/editrouterinfo.bmp");
+	editedgeinfo = al_load_bitmap("bitmaps/editedgeinfo.bmp");
+	detailinfo = al_load_bitmap("bitmaps/configurationinfo.bmp");
+	colorkey = al_load_bitmap("bitmaps/colorkey.bmp");
+	pointer = al_load_bitmap("bitmaps/pointer2.bmp");
+	topomenu = al_load_bitmap("bitmaps/topomenu.bmp");
 
 	flash();
 
@@ -136,33 +144,32 @@ int main( int argc, const char* argv[] )
 	color = makecol(0,0,0);
 	color2 = makecol(0,255,0);
 	white = makecol(255,255,255);
+
 	set_mouse_sprite(pointer);
 	set_mouse_sprite_focus(15,15);
+
 	show_mouse(screen);
+
 	set_display_switch_mode(SWITCH_BACKGROUND);
 
-	bool doMenu = true;
-	//flash();
 	switcher(argc, argv);
 
 	set_mouse_sprite(nullptr);
-	destroy_bitmap(buffer);
-	destroy_bitmap(graph);
-	destroy_bitmap(pointer);
-	destroy_bitmap(topobackground);
-	destroy_bitmap(popup);
-	destroy_bitmap(routerinfo);
-	allegro_exit();
+
+	al_destroy_bitmap(buffer);
+	al_destroy_bitmap(graph);
+	al_destroy_bitmap(pointer);
+	al_destroy_bitmap(topobackground);
+	al_destroy_bitmap(popup);
+	al_destroy_bitmap(routerinfo);
+
+	al_uninstall_system();
 #else
 	runSimulation(argc,argv);
 #endif
 
 	return 0;
 }
-
-#ifndef NO_ALLEGRO
-END_OF_MAIN()
-#endif
 
 void runSimulation(int argc, const char* argv[])
 {

@@ -24,6 +24,7 @@
 
 #ifndef NO_ALLEGRO
 
+#include <cmath>
 #include <cstdlib>
 
 extern ALLEGRO_BITMAP *graph;
@@ -38,9 +39,7 @@ extern ALLEGRO_BITMAP *edgeOriginals[14];
 extern ALLEGRO_BITMAP *arrowOriginals[14];
 extern ALLEGRO_BITMAP *tailOriginals[14];
 
-extern ALLEGRO_BITMAP *routersbmp;//take this out later.
-
-#define PI 3.14159265
+extern ALLEGRO_BITMAP* routersbmp;
 
 #endif
 
@@ -259,7 +258,7 @@ void Edge::refreshbmps(bool useThread)
 			invunitY = (r2x - r1x) / dist ;			
 		}
 
-		double angle = atan((double)(r2y - r1y) / (double)(r2x - r1x)) * (256)/(2*PI);
+		double angle = atan((double)(r2y - r1y) / (double)(r2x - r1x)) * (256)/(2*M_PI);
 
 		if( (r1x == r2x || r1y == r2y) && sourceIndex > destinationIndex)
 		{
@@ -806,7 +805,7 @@ void Edge::paintUsageHistory(int x1,int y1, int x2,int y2,int t)
 		al_masked_blit(popup,screen,0,0,0,0,SCREEN_W,SCREEN_H);
 	}
 	else{
-		clear_to_color(graph,makecol(255,0,255));//clear graph because we're making a new one.
+		ai_clear_to_color(graph,makecol(255,0,255));//clear graph because we're making a new one.
 		int timeUnitModder = 0;
 		int truegreen = makecol(0,255,0);
 		if(threadZero->getNumUsagesToDisplay() < 100)

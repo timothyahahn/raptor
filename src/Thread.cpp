@@ -28,7 +28,8 @@
 
 #ifndef NO_ALLEGRO
 
-#include "AllegroWrapper.h"
+#include "allegro5/allegro.h"
+
 extern ALLEGRO_BITMAP *mainbuf;
 extern ALLEGRO_BITMAP *progbarbmp;
 extern ALLEGRO_BITMAP *detailinfo;
@@ -2889,7 +2890,7 @@ void Thread::saveThread(char* dir)
 {
 	char allName[75];
 	char fileName[40];
-	ofstream myFile;
+	std::ofstream myFile;
 
 	//routing algorithm - wavelength algorithm - probe style - num workstations - quality aware (1 if true) - maxprobes
 	sprintf(fileName,"%s-%s-%s-%d-%d-%d",threadZero->getRoutingAlgorithmName(CurrentRoutingAlgorithm)->c_str(),

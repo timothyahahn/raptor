@@ -28,7 +28,7 @@
 #include "Stats.h"
 
 #ifndef NO_ALLEGRO
-#include "AllegroWrapper.h"
+#include "allegro5/allegro.h"
 #endif
 
 enum EdgeStatus {
