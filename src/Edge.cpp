@@ -710,7 +710,7 @@ void Edge::paintSpans()
 {
 	int x = ((r1x + r2x)/2);//+invunitX*15;
 	int y = ((r1y + r2y)/2);//+invunitY*15;
-	textprintf_centre_ex(edgespans,font,x,y,makecol(255,255,255),makecol(0,0,0),"%d",numberOfSpans);
+	textprintf_centre_ex(edgespans,font,x,y,al_makecol(255,255,255),al_makecol(0,0,0),"%d",numberOfSpans);
 }
 
 ///////////////////////////////////////////////////////////////////

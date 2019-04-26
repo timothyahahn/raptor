@@ -198,10 +198,10 @@ if(UNIX)
         target_link_libraries(raptor ${ALLEGRO_LIB})
     endif()
 
-    file(GLOB CANDIDATE_ALLEGRO_HEADER_DIRS /usr/include/allegro5)
+    file(GLOB CANDIDATE_ALLEGRO_HEADER_DIRS /usr/include/allegro5 /usr/include)
 
     find_path( ALLEGRO_HEADERS
-               NAMES allegro.h
+               NAMES allegro5/allegro.h
                HINTS ${CANDIDATE_ALLEGRO_HEADER_DIRS}
 	     )
 

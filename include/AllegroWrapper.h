@@ -20,7 +20,7 @@
 #ifndef ALLEGROWRAPPER_H_INCLUDED
 #define ALLEGROWRAPPER_H_INCLUDED
 
-#include <allegro.h>
+#include <allegro5/allegro.h>
 
 #ifndef __GNUC__ 
 #include <winalleg.h>
