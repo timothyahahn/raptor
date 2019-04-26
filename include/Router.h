@@ -209,7 +209,7 @@ class Router
 		double avgQTo;
 		double avgQFrom;
 
-		BITMAP *routerpic;
+		ALLEGRO_BITMAP *routerpic;
 		char name[20];
 		int radius;
 		int rcolor;

@@ -146,8 +146,8 @@ private:
 		int painted_percent; 
 		int max_actual_usage;
 		std::vector<int> usageList;
-		BITMAP* edgeBmps[14];
-		BITMAP* edgeBmp;
+		ALLEGRO_BITMAP* edgeBmps[14];
+		ALLEGRO_BITMAP* edgeBmp;
 #endif
 		EdgeStats *stats;
 

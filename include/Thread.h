@@ -206,8 +206,6 @@ class Thread
 
 		inline void setRouting(const char* rout)
 		{	sprintf(routing,"%s",rout);	};
-		inline void setTopology(const char* topo)
-		{	sprintf(topology,"%s",topo);	};
 		inline void setWavelength(const char* wave)
 		{	sprintf(wavelength,"%s",wave);	};
 		inline void setProbing(const char* prob)
@@ -324,7 +322,6 @@ class Thread
 		char wkstFile[100];//TODO: do I ever use these?
 
 		//SUMMARY variables to be saved to file
-		char topology[20];//TODO: for this group of variables,
 		char routing[20];//there may be other variables already 
 		char wavelength[20];//fulfilled which serve the same purpose.
 		char probing[20];//if possible, use those instead and
