@@ -156,17 +156,17 @@ if(WIN32)
                 )
 
     if(NOT ALLEGRO_LIB)
-        message("Warning: Allegro libraries not found in: ${CANDIDATE_ALLEGRO_LIB_DIRS}")
-        message("Defining NO_ALLEGRO")
-        add_definitions(-DNO_ALLEGRO)
+#        message("Warning: Allegro libraries not found in: ${CANDIDATE_ALLEGRO_LIB_DIRS}")
+#        message("Defining NO_ALLEGRO")
+#        add_definitions(-DNO_ALLEGRO)
     else()
         target_link_libraries(raptor ${ALLEGRO_LIB})
     endif()
 
-    file(GLOB CANDIDATE_ALLEGRO_HEADER_DIRS "C:/Octave/Octave-5.1.0.0/mingw32/include/octave-5.1.0")
+    file(GLOB CANDIDATE_ALLEGRO_HEADER_DIRS "C:/allegro5/include")
 
     find_path( ALLEGRO_HEADERS
-               NAMES allegro.h
+               NAMES allegro5/allegro.h
                HINTS ${CANDIDATE_ALLEGRO_HEADER_DIRS}
 	     )
 
