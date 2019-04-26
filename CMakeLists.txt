@@ -24,12 +24,8 @@ use_cxx11()
 
 add_executable(raptor src/Edge.cpp src/EventQueue.cpp src/GUI.cpp src/Main.cpp src/MessageLogger.cpp src/OctaveWrapper.cpp src/ResourceManager.cpp src/Router.cpp src/Thread.cpp src/Workstation.cpp)
 
-target_include_directories(raptor PUBLIC allegro5/include)
 target_include_directories(raptor PUBLIC kshortestpath/include)
 target_include_directories(raptor PUBLIC include)
-
-add_subdirectory(allegro5)
-target_link_libraries(raptor allegro5)
 
 add_subdirectory(kshortestpath)
 target_link_libraries(raptor kshortestpath)
@@ -140,5 +136,75 @@ if(UNIX)
     else()
         include_directories(${OCTAVE_HEADERS})
     endif()
-
 endif(UNIX)
+
+if(WIN32)
+    set(CMAKE_FIND_LIBRARY_PREFIXES "")
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib" ".dll")
+
+    file(GLOB CANDIDATE_ALLEGRO_LIB_DIRS "C:/Octave/Octave-5.1.0.0/bin")
+
+    find_library( ALLEGRO_LIB
+                  NAMES allegro
+                  HINTS CANDIDATE_ALLEGRO_LIB_DIRS
+                )
+
+    if(NOT ALLEGRO_LIB)
+        message("Warning: Allegro libraries not found in: ${CANDIDATE_ALLEGRO_LIB_DIRS}")
+        message("Defining NO_ALLEGRO")
+        add_definitions(-DNO_ALLEGRO)
+    else()
+        target_link_libraries(raptor ${ALLEGRO_LIB})
+    endif()
+
+    file(GLOB CANDIDATE_ALLEGRO_HEADER_DIRS "C:/Octave/Octave-5.1.0.0/mingw32/include/octave-5.1.0")
+
+    find_path( ALLEGRO_HEADERS
+               NAMES allegro.h
+               HINTS ${CANDIDATE_ALLEGRO_HEADER_DIRS}
+	     )
+
+    if(NOT ALLEGRO_HEADERS)
+        message("Warning: Allegro headers not found in: ${CANDIDATE_ALLEGRO_HEADER_DIRS}")
+        message("Defining NO_ALLEGRO")
+        add_definitions(-DNO_ALLEGRO)
+    else()
+        include_directories(${ALLEGRO_HEADERS})
+    endif()
+endif(WIN32)
+
+if(UNIX)
+    SET(CMAKE_FIND_LIBRARY_PREFIXES "lib")
+    SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a")
+
+    file(GLOB CANDIDATE_ALLEGRO_LIB_DIRS /usr/lib64/octave/* /usr/lib64)
+
+    find_library( ALLEGRO_LIB
+                  NAMES allegro
+                  HINTS ${CANDIDATE_ALLEGRO_LIB_DIRS}
+                )
+
+    if(NOT ALLEGRO_LIB)
+        message("Warning: Allegro libraries not found in: ${CANDIDATE_ALLEGRO_LIB_DIRS}")
+        message("Defining NO_ALLEGRO")
+        add_definitions(-DNO_ALLEGRO)
+    else()
+        target_link_libraries(raptor ${ALLEGRO_LIB})
+    endif()
+
+    file(GLOB CANDIDATE_ALLEGRO_HEADER_DIRS /usr/include/octave* /usr/include)
+
+    find_path( ALLEGRO_HEADERS
+               NAMES allegro.h
+               HINTS ${CANDIDATE_ALLEGRO_HEADER_DIRS}
+	     )
+
+    if(NOT ALLEGRO_HEADERS)
+        message("Warning: Allegro headers not found in: ${CANDIDATE_ALLEGRO_HEADER_DIRS}")
+        message("Defining NO_ALLEGRO")
+        add_definitions(-DNO_ALLEGRO)
+    else()
+        include_directories(${ALLEGRO_HEADERS})
+    endif()
+endif(UNIX)
+
