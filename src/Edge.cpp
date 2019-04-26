@@ -304,16 +304,16 @@ void Edge::refreshbmps(bool useThread)
 
 		for(int b = 0; b < 14; b++)
 		{
-			al_clear_to_color(temp_bmp,makecol(255,0,255));
-			stretch_blit(tailOriginals[b], temp_bmp, 0, 0, tailOriginals[b]->w, tailOriginals[b]->h, 15, 0, tailOriginals[b]->w, temp_bmp->h);
-			stretch_blit(arrowOriginals[b], temp_bmp, 0, 0, arrowOriginals[b]->w, arrowOriginals[b]->h, distInt - 15 - arrowOriginals[b]->w, 0, arrowOriginals[b]->w, temp_bmp->h);
-			stretch_blit(edgeOriginals[b], temp_bmp, 0, 0, edgeOriginals[b]->w, edgeOriginals[b]->h, 15+tailOriginals[b]->w, 0, distInt - 30 - arrowOriginals[b]->w - tailOriginals[b]->w, temp_bmp->h);
+			al_clear_to_color(temp_bmp,al_makecol(255,0,255));
+			al_stretch_blit(tailOriginals[b], temp_bmp, 0, 0, tailOriginals[b]->w, tailOriginals[b]->h, 15, 0, tailOriginals[b]->w, temp_bmp->h);
+			al_stretch_blit(arrowOriginals[b], temp_bmp, 0, 0, arrowOriginals[b]->w, arrowOriginals[b]->h, distInt - 15 - arrowOriginals[b]->w, 0, arrowOriginals[b]->w, temp_bmp->h);
+			al_stretch_blit(edgeOriginals[b], temp_bmp, 0, 0, edgeOriginals[b]->w, edgeOriginals[b]->h, 15+tailOriginals[b]->w, 0, distInt - 30 - arrowOriginals[b]->w - tailOriginals[b]->w, temp_bmp->h);
 			al_clear_to_color(temp_bmp2,makecol(255,0,255));	
-			rotate_sprite(temp_bmp2,temp_bmp,0,(temp_bmp2->h)/2,itofix(angle));
+			al_rotate_sprite(temp_bmp2,temp_bmp,0,(temp_bmp2->h)/2,itofix(angle));
 			al_destroy_bitmap(edgeBmps[b]);
 			edgeBmps[b] = create_bitmap(abs(r2x - r1x)+14,abs(r2y - r1y)+14);
 			al_clear_to_color(edgeBmps[b],makecol(255,0,255));
-			blit(temp_bmp2, edgeBmps[b],copyX,copyY,0,0,edgeBmps[0]->w,edgeBmps[0]->h);
+			al_blit(temp_bmp2, edgeBmps[b],copyX,copyY,0,0,edgeBmps[0]->w,edgeBmps[0]->h);
 		}
 		al_destroy_bitmap(temp_bmp);
 		al_destroy_bitmap(temp_bmp2);
@@ -657,7 +657,7 @@ void Edge::updateGUI()
 {
 	if(threadZero->getQualityParams().q_factor_stats == true)
 	{
-		actualUsage = unsigned int(establishedConnections.size());
+		actualUsage = static_cast<int>(establishedConnections.size()));
 	}
 	else
 	{
@@ -771,7 +771,7 @@ void Edge::paintUsage(int p)
 			percent = 13;
 	}
 	if(percent != painted_percent || p == -5) //p == -4,-3,or-2 will be sign that we are painting over again.
-	{	masked_blit(edgeBmps[percent],edgesbmp,0,0,putX-7,putY-7,edgeBmps[0]->w,edgeBmps[0]->h);
+	{	al_masked_blit(edgeBmps[percent],edgesbmp,0,0,putX-7,putY-7,edgeBmps[0]->w,edgeBmps[0]->h);
 		painted_percent = percent;	}
 }
 
@@ -798,12 +798,12 @@ void Edge::paintUsageHistory(int x1,int y1, int x2,int y2,int t)
 		col = makecol(255,255,255);
 		x = ceil(x + (t - threadZero->getUsageHistStartTime()) * bwidth);
 		al_clear_to_color(buffer,pink);
-		masked_blit(graph, buffer, 0,0,0,0,SCREEN_W,SCREEN_H);
+		al_masked_blit(graph, buffer, 0,0,0,0,SCREEN_W,SCREEN_H);
 		rectfill(buffer, x, y1+10, x, y2 - 20,col);//time scroller line
 		textprintf_right_ex(buffer,font,x,y1+10,col,bla,"%d",usageList[t]);
 		textprintf_ex(buffer,font,x+4,y1+10,col,bla,"t:%d",t * timeFact);
-		masked_blit(buffer, popup, 0,0,0,0,SCREEN_W,SCREEN_H);
-		masked_blit(popup,screen,0,0,0,0,SCREEN_W,SCREEN_H);
+		al_masked_blit(buffer, popup, 0,0,0,0,SCREEN_W,SCREEN_H);
+		al_masked_blit(popup,screen,0,0,0,0,SCREEN_W,SCREEN_H);
 	}
 	else{
 		clear_to_color(graph,makecol(255,0,255));//clear graph because we're making a new one.
@@ -831,9 +831,9 @@ void Edge::paintUsageHistory(int x1,int y1, int x2,int y2,int t)
 		double realIncrement = (y2 - 20 - y1 - 10)/(threadZero->getMaxMaxUsage() + 0.5);
 		increment = ceil(realIncrement); 
 		unit = 0;
-		rectfill(graph, x1, y1, x2, y2, bla); //paint graph black first
+		al_rectfill(graph, x1, y1, x2, y2, bla); //paint graph black first
 		//blit(graphbackground,graph,0,20,0,SCREEN_H-150,SCREEN_W,150);
-		stretch_blit(graphbackground,graph,0,0,graphbackground->w,graphbackground->h,0,y1,x2-x1,y2-y1);
+		al_stretch_blit(graphbackground,graph,0,0,graphbackground->w,graphbackground->h,0,y1,x2-x1,y2-y1);
 		realBH = y2 - 20.0;
 		int drawnUnitPx = y2;
 		bheight = ceil(realBH);//temporarily set to place unit markers
@@ -842,7 +842,7 @@ void Edge::paintUsageHistory(int x1,int y1, int x2,int y2,int t)
 		while(bheight > y1 + 10) //add ten px just to make it cleaner
 		{
 			if(bheight < (drawnUnitPx - 15.0) ){//10 px used as safe distance to put between numbers
-				rectfill(graph, x - 5, bheight+1, x, bheight, col); //unit mark (10 px by 1 px)
+				al_rectfill(graph, x - 5, bheight+1, x, bheight, col); //unit mark (10 px by 1 px)
 				textprintf_right_ex(graph,font,x-6,bheight-5,col,pink,"%d", unit);
 				drawnUnitPx = bheight;
 			}
