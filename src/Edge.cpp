@@ -122,7 +122,7 @@ Edge::~Edge()
 
 	for(int i = 0; i < 14; i++)
 	{
-		destroy_bitmap(edgeBmps[i]);
+		al_destroy_bitmap(edgeBmps[i]);
 	}
 #endif
 }
@@ -281,8 +281,8 @@ void Edge::refreshbmps(bool useThread)
 		//for bitmap edges
 
 		int distInt = ceil(dist);
-		ALLEGRO_BITMAP *temp_bmp = create_bitmap(distInt,13);
-		ALLEGRO_BITMAP *temp_bmp2 = create_bitmap(distInt,distInt);
+		ALLEGRO_BITMAP *temp_bmp = al_create_bitmap(distInt,13);
+		ALLEGRO_BITMAP *temp_bmp2 = al_create_bitmap(distInt,distInt);
 
 		if(r1x < r2x)
 			putX = r1x;
@@ -304,19 +304,19 @@ void Edge::refreshbmps(bool useThread)
 
 		for(int b = 0; b < 14; b++)
 		{
-			clear_to_color(temp_bmp,makecol(255,0,255));
+			al_clear_to_color(temp_bmp,makecol(255,0,255));
 			stretch_blit(tailOriginals[b], temp_bmp, 0, 0, tailOriginals[b]->w, tailOriginals[b]->h, 15, 0, tailOriginals[b]->w, temp_bmp->h);
 			stretch_blit(arrowOriginals[b], temp_bmp, 0, 0, arrowOriginals[b]->w, arrowOriginals[b]->h, distInt - 15 - arrowOriginals[b]->w, 0, arrowOriginals[b]->w, temp_bmp->h);
 			stretch_blit(edgeOriginals[b], temp_bmp, 0, 0, edgeOriginals[b]->w, edgeOriginals[b]->h, 15+tailOriginals[b]->w, 0, distInt - 30 - arrowOriginals[b]->w - tailOriginals[b]->w, temp_bmp->h);
-			clear_to_color(temp_bmp2,makecol(255,0,255));	
+			al_clear_to_color(temp_bmp2,makecol(255,0,255));	
 			rotate_sprite(temp_bmp2,temp_bmp,0,(temp_bmp2->h)/2,itofix(angle));
-			destroy_bitmap(edgeBmps[b]);
+			al_destroy_bitmap(edgeBmps[b]);
 			edgeBmps[b] = create_bitmap(abs(r2x - r1x)+14,abs(r2y - r1y)+14);
-			clear_to_color(edgeBmps[b],makecol(255,0,255));
+			al_clear_to_color(edgeBmps[b],makecol(255,0,255));
 			blit(temp_bmp2, edgeBmps[b],copyX,copyY,0,0,edgeBmps[0]->w,edgeBmps[0]->h);
 		}
-		destroy_bitmap(temp_bmp);
-		destroy_bitmap(temp_bmp2);
+		al_destroy_bitmap(temp_bmp);
+		al_destroy_bitmap(temp_bmp2);
 		//end for bitmap edges
 	}
 }
@@ -797,7 +797,7 @@ void Edge::paintUsageHistory(int x1,int y1, int x2,int y2,int t)
 	if(t > 0){	
 		col = makecol(255,255,255);
 		x = ceil(x + (t - threadZero->getUsageHistStartTime()) * bwidth);
-		clear_to_color(buffer,pink);
+		al_clear_to_color(buffer,pink);
 		masked_blit(graph, buffer, 0,0,0,0,SCREEN_W,SCREEN_H);
 		rectfill(buffer, x, y1+10, x, y2 - 20,col);//time scroller line
 		textprintf_right_ex(buffer,font,x,y1+10,col,bla,"%d",usageList[t]);
@@ -903,7 +903,7 @@ void Edge::paintUsageHistory(int x1,int y1, int x2,int y2,int t)
 ///////////////////////////////////////////////////////////////////
 void Edge::saveData(char* file)
 {
-	ofstream myFile;
+	std::ofstream myFile;
 	char buffer[12] = {' '};
 	myFile.open (file, std::ios::app | std::ios::binary);
 	for(unsigned int u = 0; u < usageList.size(); u++ )
