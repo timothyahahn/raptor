@@ -122,19 +122,25 @@ if(UNIX)
         target_link_libraries(raptor ${OCTINTERP_LIB})
     endif()
 
-    file(GLOB CANDIDATE_OCTAVE_HEADER_DIRS /usr/include/octave* /usr/include)
+    file(GLOB CANDIDATE_OCTAVE_HEADER_DIRS /usr/include/octave* /usr/include/octave*/octave /usr/include)
 
     find_path( OCTAVE_HEADERS
                NAMES octave/octave.h
                HINTS ${CANDIDATE_OCTAVE_HEADER_DIRS}
 	     )
 
-    if(NOT OCTAVE_HEADERS)
+    find_path( OCTAVE_SUB_HEADERS
+	       NAMES str-vec.h
+	       HINTS ${CANDIDATE_OCTAVE_HEADER_DIRS}
+	     )
+
+     if(NOT OCTAVE_HEADERS OR NOT OCTAVE_SUB_HEADERS)
         message("Warning: Octave headers not found in: ${CANDIDATE_OCTAVE_HEADER_DIRS}")
         message("Defining NO_OCTAVE")
         add_definitions(-DNO_OCTAVE)
     else()
         include_directories(${OCTAVE_HEADERS})
+	include_directories(${OCTAVE_SUB_HEADERS})
     endif()
 endif(UNIX)
 
