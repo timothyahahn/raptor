@@ -183,7 +183,7 @@ if(UNIX)
     SET(CMAKE_FIND_LIBRARY_PREFIXES "lib")
     SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a")
 
-    file(GLOB CANDIDATE_ALLEGRO_LIB_DIRS /usr/lib64/octave/* /usr/lib64)
+    file(GLOB CANDIDATE_ALLEGRO_LIB_DIRS /usr/lib64)
 
     find_library( ALLEGRO_LIB
                   NAMES allegro
@@ -198,7 +198,7 @@ if(UNIX)
         target_link_libraries(raptor ${ALLEGRO_LIB})
     endif()
 
-    file(GLOB CANDIDATE_ALLEGRO_HEADER_DIRS /usr/include/octave* /usr/include)
+    file(GLOB CANDIDATE_ALLEGRO_HEADER_DIRS /usr/include/allegro5)
 
     find_path( ALLEGRO_HEADERS
                NAMES allegro.h
