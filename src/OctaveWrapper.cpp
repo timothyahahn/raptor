@@ -23,7 +23,7 @@
 #include <octave/oct.h>
 #include <octave/octave.h>
 #include <octave/parse.h>
-#include <octave/toplev.h>
+#include <octave/interpreter.h>
 #endif  // NO_OCTAVE
 
 #include "Thread.h"
@@ -85,9 +85,9 @@ void OctaveWrapper::helloWorld()
 	octave_main(2, argvv.c_str_vec(), true);
 	source_file("hello_world.m");
 	octave_value_list inputs;
-	const octave_value_list_result = feval("print_hello_world", inputs, 0);
+	const octave_value_list result = feval("print_hello_world", inputs, 0);
 	result(0).print_raw(std::cout, true);
-	clean_up_and_exit(0):
+	clean_up_and_exit(0);
 }
 
 ///////////////////////////////////////////////////////////////////
