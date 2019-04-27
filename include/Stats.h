@@ -6,8 +6,10 @@
 //  Author:         Timothy Hahn, PhD
 //  Project:        raptor
 //
-//  Description:    The file contains datatypes that are important for determining
-//					the performance of the various algorithms.
+//  Description:    The file contains datatypes that are important for
+//  determining
+//					the performance of the various
+//algorithms.
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
@@ -25,45 +27,42 @@
 
 #include "Edge.h"
 
-struct GlobalStats
-{
-	size_t ConnectionRequests;
-	size_t ConnectionSuccesses;
-	size_t CollisionFailures;
-	size_t QualityFailures;
-	size_t NoPathFailures;
-	size_t DroppedFailures;
-	size_t ProbeSentCount;
-	size_t totalHopCount;
-	size_t totalSpanCount;
-	double aseNoiseTotal;
-	double xpmNoiseTotal;
-	double fwmNoiseTotal;
-	double totalSetupDelay;
-	double raRunTime;
+struct GlobalStats {
+  size_t ConnectionRequests;
+  size_t ConnectionSuccesses;
+  size_t CollisionFailures;
+  size_t QualityFailures;
+  size_t NoPathFailures;
+  size_t DroppedFailures;
+  size_t ProbeSentCount;
+  size_t totalHopCount;
+  size_t totalSpanCount;
+  double aseNoiseTotal;
+  double xpmNoiseTotal;
+  double fwmNoiseTotal;
+  double totalSetupDelay;
+  double raRunTime;
 };
 
-struct EdgeStats
-{
-	size_t droppedConnections;
-	double minInitalQFactor;
-	double minAverageQFactor;
-	double minPercentQFactor;
-	double maxInitalQFactor;
-	double maxAverageQFactor;
-	double maxPercentQFactor;
-	double totalInitalQFactor;
-	double totalAverageQFactor;
-	double totalPercentQFactor;
-	double totalTime;
-	double count;
+struct EdgeStats {
+  size_t droppedConnections;
+  double minInitalQFactor;
+  double minAverageQFactor;
+  double minPercentQFactor;
+  double maxInitalQFactor;
+  double maxAverageQFactor;
+  double maxPercentQFactor;
+  double totalInitalQFactor;
+  double totalAverageQFactor;
+  double totalPercentQFactor;
+  double totalTime;
+  double count;
 };
 
-enum FailureTypes
-{
-	COLLISION_FAILURE = -1,
-	QUALITY_FAILURE = -2,
-	NO_PATH_FAILURE = -3
+enum FailureTypes {
+  COLLISION_FAILURE = -1,
+  QUALITY_FAILURE = -2,
+  NO_PATH_FAILURE = -3
 };
 
 #endif

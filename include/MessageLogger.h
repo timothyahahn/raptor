@@ -6,7 +6,8 @@
 //  Author:         Timothy Hahn, PhD
 //  Project:        raptor
 //
-//  Description:    The file contains the declaration of the MessageLogger class,
+//  Description:    The file contains the declaration of the MessageLogger
+//  class,
 //					used to record events to a file.
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -28,28 +29,26 @@
 #include <iostream>
 #include <string>
 
-class MessageLogger
-{
-	public:
-		MessageLogger(const std::string&, const std::string&, const std::string&, const std::string&);
-		~MessageLogger();
+class MessageLogger {
+ public:
+  MessageLogger(const std::string &, const std::string &, const std::string &,
+                const std::string &);
+  ~MessageLogger();
 
-		void recordEvent(const std::string &e, bool print, size_t ci);
+  void recordEvent(const std::string &e, bool print, size_t ci);
 
-		void flushLog(bool print);
+  void flushLog(bool print);
 
-		inline void LockResultsMutex()
-			{ pthread_mutex_lock(&ResultsMutex); };
+  inline void LockResultsMutex() { pthread_mutex_lock(&ResultsMutex); };
 
-		inline void UnlockResultsMutex()
-			{ pthread_mutex_unlock(&ResultsMutex); };
+  inline void UnlockResultsMutex() { pthread_mutex_unlock(&ResultsMutex); };
 
-	private:
-		std::ofstream eventLogger;
+ private:
+  std::ofstream eventLogger;
 
-		pthread_mutex_t LogMutex;
-		pthread_mutex_t PrintMutex;
-		pthread_mutex_t ResultsMutex;
+  pthread_mutex_t LogMutex;
+  pthread_mutex_t PrintMutex;
+  pthread_mutex_t ResultsMutex;
 };
 
 #endif

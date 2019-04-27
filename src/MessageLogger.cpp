@@ -6,7 +6,8 @@
 //  Author:         Timothy Hahn, PhD
 //  Project:        raptor
 //
-//  Description:    The file contains the implementation of the MessageLogger class,
+//  Description:    The file contains the implementation of the MessageLogger
+//  class,
 //					used to record events to a file.
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -33,16 +34,17 @@ extern Thread** threads;
 // Description:		Default constructor
 //
 ///////////////////////////////////////////////////////////////////
-MessageLogger::MessageLogger(const std::string& topo, const std::string& lambda, const std::string& seed, const std::string& k)
-{
-	pthread_mutex_init(&LogMutex,nullptr);
-	pthread_mutex_init(&PrintMutex,nullptr);
-	pthread_mutex_init(&ResultsMutex,nullptr);
+MessageLogger::MessageLogger(const std::string& topo, const std::string& lambda,
+                             const std::string& seed, const std::string& k) {
+  pthread_mutex_init(&LogMutex, nullptr);
+  pthread_mutex_init(&PrintMutex, nullptr);
+  pthread_mutex_init(&ResultsMutex, nullptr);
 
-	std::ostringstream buffer;
-	buffer << "output/EventLog-" << topo << "-" << lambda << "-" << seed << "-" << k << ".txt";
+  std::ostringstream buffer;
+  buffer << "output/EventLog-" << topo << "-" << lambda << "-" << seed << "-"
+         << k << ".txt";
 
-	eventLogger.open(buffer.str());
+  eventLogger.open(buffer.str());
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -51,63 +53,59 @@ MessageLogger::MessageLogger(const std::string& topo, const std::string& lambda,
 // Description:		Default destructor
 //
 ///////////////////////////////////////////////////////////////////
-MessageLogger::~MessageLogger()
-{
-	pthread_mutex_destroy(&LogMutex);
-	pthread_mutex_destroy(&PrintMutex);
-	pthread_mutex_destroy(&ResultsMutex);
+MessageLogger::~MessageLogger() {
+  pthread_mutex_destroy(&LogMutex);
+  pthread_mutex_destroy(&PrintMutex);
+  pthread_mutex_destroy(&ResultsMutex);
 
-	eventLogger.close();
+  eventLogger.close();
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	recordEvent
 // Description:		Writes the event to the log file with a timestamp.
-//					Also prints the file to the console if the print
-//					value is set to true (that is the default)
+//					Also prints the file to the console if the
+//print 					value is set to true (that is the default)
 //
 ///////////////////////////////////////////////////////////////////
-void MessageLogger::recordEvent(const std::string &e, bool print, size_t ci)
-{
-	if(threadZero->getQualityParams().detailed_log == false && print == false)
-	{
-		return;
-	}
+void MessageLogger::recordEvent(const std::string& e, bool print, size_t ci) {
+  if (threadZero->getQualityParams().detailed_log == false && print == false) {
+    return;
+  }
 
-	pthread_mutex_lock(&LogMutex);
+  pthread_mutex_lock(&LogMutex);
 
-	struct tm *current = nullptr;
-	time_t now;
+  struct tm* current = nullptr;
+  time_t now;
 
-	time(&now);
+  time(&now);
 #ifdef _MSC_VER
-	current = new tm;
-	localtime_s(current,&now);
+  current = new tm;
+  localtime_s(current, &now);
 #else
-	current = localtime(&now);
-#endif //_MSC_VER
+  current = localtime(&now);
+#endif  //_MSC_VER
 
-	std::ostringstream message;
+  std::ostringstream message;
 
-	char buff[25];
+  char buff[25];
 
-	strftime(buff, sizeof(buff), "%H:%M:%S", current);
+  strftime(buff, sizeof(buff), "%H:%M:%S", current);
 
-	message << buff << " [] " << e << std::endl;
+  message << buff << " [] " << e << std::endl;
 
-	eventLogger << message.str();
+  eventLogger << message.str();
 
-	pthread_mutex_unlock(&LogMutex);
+  pthread_mutex_unlock(&LogMutex);
 
-	if(print == true)
-	{
-		pthread_mutex_lock(&PrintMutex);
+  if (print == true) {
+    pthread_mutex_lock(&PrintMutex);
 
-		std::cout << message.str();
+    std::cout << message.str();
 
-		pthread_mutex_unlock(&PrintMutex);
-	}
+    pthread_mutex_unlock(&PrintMutex);
+  }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -116,14 +114,12 @@ void MessageLogger::recordEvent(const std::string &e, bool print, size_t ci)
 // Description:		Flushes the log
 //
 ///////////////////////////////////////////////////////////////////
-void MessageLogger::flushLog(bool print)
-{
-	if (print == true)
-	{
-		pthread_mutex_lock(&PrintMutex);
+void MessageLogger::flushLog(bool print) {
+  if (print == true) {
+    pthread_mutex_lock(&PrintMutex);
 
-		std::cout << std::flush;
+    std::cout << std::flush;
 
-		pthread_mutex_unlock(&PrintMutex);
-	}
+    pthread_mutex_unlock(&PrintMutex);
+  }
 }

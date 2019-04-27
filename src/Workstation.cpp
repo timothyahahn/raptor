@@ -6,9 +6,10 @@
 //  Author:         Timothy Hahn, PhD
 //  Project:        raptor
 //
-//  Description:    The file contains the implementation of the Workstation class.
-//					The purpose of the Workstations are to generate traffic for
-//					the optical network.
+//  Description:    The file contains the implementation of the Workstation
+//  class.
+//					The purpose of the Workstations are to generate
+//traffic for 					the optical network.
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
@@ -26,10 +27,8 @@
 // Description:		Default constructor with no arguments.
 //
 ///////////////////////////////////////////////////////////////////
-Workstation::Workstation() :
-	parentRouterIndex(0), active(false)
-{
-	active = false;
+Workstation::Workstation() : parentRouterIndex(0), active(false) {
+  active = false;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -38,7 +37,4 @@ Workstation::Workstation() :
 // Description:		Default destructor with no arguments.
 //
 ///////////////////////////////////////////////////////////////////
-Workstation::~Workstation()
-{
-
-}
+Workstation::~Workstation() {}

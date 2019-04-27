@@ -7,8 +7,8 @@
 //  Project:        raptor
 //
 //  Description:    The file contains the declaration of the EventQueue.h, which
-//					is intended to store the events in ascending order so that
-//					they can be handled in the appropriate order.
+//					is intended to store the events in ascending
+//order so that 					they can be handled in the appropriate order.
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
@@ -26,9 +26,7 @@
 // Description:		Default constructor
 //
 ///////////////////////////////////////////////////////////////////
-EventQueue::EventQueue()
-{
-}
+EventQueue::EventQueue() {}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -36,9 +34,7 @@ EventQueue::EventQueue()
 // Description:		Default destructor
 //
 ///////////////////////////////////////////////////////////////////
-EventQueue::~EventQueue()
-{
-}
+EventQueue::~EventQueue() {}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -47,11 +43,10 @@ EventQueue::~EventQueue()
 //					and returns it.
 //
 ///////////////////////////////////////////////////////////////////
-Event EventQueue::getNextEvent()
-{
-	Event retVal = pq.top();
+Event EventQueue::getNextEvent() {
+  Event retVal = pq.top();
 
-	pq.pop();
+  pq.pop();
 
-	return retVal;
+  return retVal;
 }

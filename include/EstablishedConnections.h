@@ -6,8 +6,10 @@
 //  Author:         Timothy Hahn, PhD
 //  Project:        raptor
 //
-//  Description:    The file contains data types that are important for determining
-//					the performance of the various algorithms.
+//  Description:    The file contains data types that are important for
+//  determining
+//					the performance of the various
+//algorithms.
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
@@ -22,18 +24,17 @@
 
 #include "Edge.h"
 
-struct EstablishedConnection
-{
-	Edge **connectionPath;
-	size_t connectionLength;
-	long long int wavelength;
-	double connectionStartTime;
-	double connectionEndTime;
-	double initQFactor;
-	double belowQFactor;
-	double averageQFactor;
-	std::vector<double> *QFactors;
-	std::vector<double> *QTimes;
+struct EstablishedConnection {
+  Edge **connectionPath;
+  size_t connectionLength;
+  long long int wavelength;
+  double connectionStartTime;
+  double connectionEndTime;
+  double initQFactor;
+  double belowQFactor;
+  double averageQFactor;
+  std::vector<double> *QFactors;
+  std::vector<double> *QTimes;
 };
 
 #endif

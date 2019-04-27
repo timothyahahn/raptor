@@ -6,8 +6,8 @@
 //  Author:         Yan Qi
 //  Project:        K-ShortestPath
 //
-//  Description:    The file defines the class ConfigCenter, which defines 
-//	basic functions and handles parameters inputted by the user.  
+//  Description:    The file defines the class ConfigCenter, which defines
+//	basic functions and handles parameters inputted by the user.
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
@@ -20,10 +20,10 @@
 //
 //  Copyright (c) 2006.
 //
-//  Warning: This computer program is protected by copyright law and 
+//  Warning: This computer program is protected by copyright law and
 //  international treaties.  Unauthorized reproduction or distribution
 //  of this program, or any portion of it, may result in severe civil and
-//  criminal penalties, and will be prosecuted to the maximum extent 
+//  criminal penalties, and will be prosecuted to the maximum extent
 //  possible under the law.
 //
 // ____________________________________________________________________________
@@ -34,13 +34,12 @@
 #include <cstdio>
 #include <map>
 
-class ConfigCenter  
-{
-public:
-	typedef std::pair<size_t, size_t> SizeT_Pair;
-	typedef SizeT_Pair Edge_Type;
-	typedef std::map<SizeT_Pair, double> SizeT_Pair_Double_Map;
-	typedef std::map<SizeT_Pair, double>::iterator SizeT_Pair_Double_Map_Iterator;
+class ConfigCenter {
+ public:
+  typedef std::pair<size_t, size_t> SizeT_Pair;
+  typedef SizeT_Pair Edge_Type;
+  typedef std::map<SizeT_Pair, double> SizeT_Pair_Double_Map;
+  typedef std::map<SizeT_Pair, double>::iterator SizeT_Pair_Double_Map_Iterator;
 };
 
-#endif //_QYCONFIGCENTER_H_
+#endif  //_QYCONFIGCENTER_H_
