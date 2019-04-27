@@ -83,9 +83,9 @@ void OctaveWrapper::helloWorld()
 	argvv(0) = "embedded";
 	argvv(1) = "-q";
 	octave_main(2, argvv.c_str_vec(), true);
-	source_file("hello_world.m");
+	source_file("octave/hello_world.m");
 	octave_value_list inputs;
-	const octave_value_list result = feval("print_hello_world", inputs, 0);
+	const octave_value_list result = feval("hello_world", inputs, 0);
 	result(0).print_raw(std::cout, true);
 	clean_up_and_exit(0);
 }
