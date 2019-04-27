@@ -73,14 +73,14 @@ if(WIN32)
                   HINTS ${CANDIDATE_OCTAVE_LIB_DIRS}
                 )
 
-    if(NOT OCTAVE_LIB OR NOT OCTINTERP_LIB)
-        message("Warning: Octave libraries not found in: ${CANDIDATE_OCTAVE_LIB_DIRS}")
-        message("Defining NO_OCTAVE")
-        add_definitions(-DNO_OCTAVE)
-    else()
-        target_link_libraries(raptor ${OCTAVE_LIB})
-        target_link_libraries(raptor ${OCTINTERP_LIB})
-    endif()
+    #if(NOT OCTAVE_LIB OR NOT OCTINTERP_LIB)
+    #    message("Warning: Octave libraries not found in: ${CANDIDATE_OCTAVE_LIB_DIRS}")
+    #    message("Defining NO_OCTAVE")
+    #    add_definitions(-DNO_OCTAVE)
+    #else()
+    #    target_link_libraries(raptor ${OCTAVE_LIB})
+    #    target_link_libraries(raptor ${OCTINTERP_LIB})
+    #endif()
 
     file(GLOB CANDIDATE_OCTAVE_HEADER_DIRS "C:/Octave/Octave-5.1.0.0/mingw32/include/octave-5.1.0")
 
