@@ -40,28 +40,28 @@ class Edge
 {
 	public:
 		Edge();
-		Edge(int src, int dest, int spans);
+		Edge(size_t src, size_t dest, size_t spans);
 
 		~Edge();
 
-		inline size_t getSourceIndex() 
-			{ return sourceIndex; };
-		inline size_t getDestinationIndex() 
-			{ return destinationIndex; };
-		inline void setSourceIndex(size_t s)
-			{	sourceIndex = s;	};
-		inline void setDestinationIndex(size_t d)
-			{	destinationIndex = d;	};
-
-		inline size_t getNumberOfSpans() 
-			{ return numberOfSpans; };
-		inline void setNumberOfSpans(int s) 
-			{ numberOfSpans = s; };
-
-		inline EdgeStatus getStatus(size_t w)
-			{ return status[w]; };
-		inline size_t getActiveSession(int w)
-			{ return activeSession[w]; };
+		inline size_t getSourceIndex() const
+			{ return sourceIndex; }
+		inline size_t getDestinationIndex() const
+			{ return destinationIndex; }
+		inline size_t getNumberOfSpans() const
+			{ return numberOfSpans; }
+		inline EdgeStatus getStatus(size_t w) const
+			{ return status[w]; }
+		inline size_t getActiveSession(int w) const
+			{ return activeSession[w]; }
+		inline double getAlgorithmUsage() const
+			{ return algorithmUsage; }
+		inline double getQMDegredation() const
+			{ return QMDegredation; }
+		inline double getPheremone() const
+			{ return pheremone; }
+		inline EdgeStats* getEdgeStats() const
+			{ return stats; }
 
 		inline void setUsed(size_t session, size_t w)
 			{ status[w] = EDGE_USED; activeSession[w] = session; };
@@ -73,31 +73,19 @@ class Edge
 		void updateQMDegredation(unsigned int ci, long long int wavelength);
 		void updateQFactorStats(unsigned int ci, long long int wavelength);
 
-		std::list <void*> establishedConnections;
-
-#ifndef NO_ALLEGRO
-		void updateGUI();
-		void refreshbmps(bool useThread);
-		void initializetopobmps();
-#endif
-
-		inline double getAlgorithmUsage()
-			{ return algorithmUsage; };
 		inline void resetAlgorithmUsage()
 			{ algorithmUsage = 0.0; };
 		void resetQMDegredation();
 
-		inline double getQMDegredation()
-			{ return QMDegredation; };
-
-		inline double getPheremone()
-			{ return pheremone; };
 		 void resetPheremone(unsigned int ci, size_t spans);
 
 		void evaporatePheremone(unsigned int ci);
 		void addPheremone(size_t hops, unsigned int ci);
 
 #ifndef NO_ALLEGRO
+		void updateGUI();
+		void refreshbmps(bool useThread);
+		void initializetopobmps();
 		inline int getMaxActualUsage()
 			{ return max_actual_usage; };
 		inline int getUsageNums()
@@ -113,9 +101,6 @@ class Edge
 		void calculateAverageUsage();
 		void saveData(char* file);
 #endif	
-		inline EdgeStats* getEdgeStats()
-			{ return stats; };
-
 		void resetEdgeStats();
 
 		inline void insertEstablishedConnection(void* ec_void)
@@ -136,6 +121,8 @@ private:
 		double QMDegredation;
 
 		double* degredation;
+
+		std::list <void*> establishedConnections;
 
 #ifndef NO_ALLEGRO
 		int r1x,r1y,r2x,r2y; //coordinates of routers

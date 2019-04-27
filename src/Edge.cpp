@@ -59,7 +59,6 @@ Edge::Edge() :
 	QMDegredation(0.0), activeSession(0), actualUsage(0), algorithmUsage(0.0), degredation(nullptr), destinationIndex(0), 
 	numberOfSpans(0), pheremone(0.0), sourceIndex(0), stats(nullptr), status(nullptr)
 {
-
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -69,7 +68,7 @@ Edge::Edge() :
 //					destination, and number of spans.
 //
 ///////////////////////////////////////////////////////////////////
-Edge::Edge(int src, int dest, int spans) :
+Edge::Edge(size_t src, size_t dest, size_t spans) :
 	QMDegredation(0.0), activeSession(0), actualUsage(0), algorithmUsage(0.0), degredation(nullptr), destinationIndex(dest),
 	numberOfSpans(spans), pheremone(0.0), sourceIndex(src), stats(nullptr), status(nullptr)
 {
@@ -111,9 +110,7 @@ Edge::~Edge()
 {
 	delete[] status;
 	delete[] activeSession;
-
 	delete[] degredation;
-
 	delete[] stats;
 
 #ifndef NO_ALLEGRO
@@ -332,6 +329,7 @@ void Edge::scaleEdgesTo(int spns, int px)
 	numberOfSpans = newspans;
 }
 #endif
+
 ///////////////////////////////////////////////////////////////////
 //
 // Function Name:	updateUsage
@@ -369,7 +367,7 @@ void Edge::updateQMDegredation(unsigned int ci, long long int wavelength)
 	ResourceManager* rm = threadZero->getResourceManager();
 
 #ifndef NO_ALLEGRO
-	thdIndx = ci; //TODO: put this in a location where it isn't repeated.
+	thdIndx = ci;
 #endif
 
 	double time = threads[ci]->getGlobalTime();
@@ -379,7 +377,7 @@ void Edge::updateQMDegredation(unsigned int ci, long long int wavelength)
 	{
 		EstablishedConnection* ec = static_cast<EstablishedConnection*>(*iter);
 
-		for(unsigned int p = 0; p < ec->connectionLength; ++p)
+		for(size_t p = 0; p < ec->connectionLength; ++p)
 		{
 			if(ec->connectionPath[p] == this &&
 				abs(ec->wavelength - int(wavelength)) <= threadZero->getQualityParams().nonlinear_halfwin)
@@ -540,7 +538,7 @@ void Edge::removeEstablishedConnection(void* dcpe_void)
 	if(this != dcpe->connectionPath[dcpe->connectionLength - 1])
 		return;
 
-	if(threadZero->getQualityParams().q_factor_stats == true)
+	if(ec && threadZero->getQualityParams().q_factor_stats == true)
 	{
 		if(ec->QFactors->size() !=	ec->QTimes->size())
 		{
@@ -553,7 +551,7 @@ void Edge::removeEstablishedConnection(void* dcpe_void)
 		double weight = 0.0;
 		double timebelow = 0.0;
 		
-		unsigned int s = 0;
+		size_t s;
 
 		for(s = 0; s < ec->QFactors->size() - 1; ++s)
 		{
