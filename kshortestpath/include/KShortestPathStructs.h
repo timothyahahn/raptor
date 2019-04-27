@@ -2,12 +2,11 @@
 //
 //  General Information:
 //
-//  File Name:      CQYShortestPath.h
+//  File Name:      KShortestPathStructs.h
 //  Author:         Timothy Hahn
 //  Project:        KShortestPath
 //
-//  Description:    Declaration of class CQYShortestPath, which implements
-//  Dijkstra algorithm for the shortest path in the directed graph.
+//  Description:    Declaration of structs used in the KShortestPath library
 //
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
@@ -27,8 +26,8 @@
 //
 // ____________________________________________________________________________
 
-#ifndef _QYINCLUDE_H_
-#define _QYINCLUDE_H_
+#ifndef _KSHORTESTPATHSTRUCTS_H_
+#define _KSHORTESTPATHSTRUCTS_H_
 
 struct kShortestPathEdges {
   size_t src_node;
