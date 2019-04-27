@@ -50,11 +50,12 @@ class Router {
   Router();
   ~Router();
 
-  inline void setIndex(size_t i) { routerIndex = i; };
-  inline size_t getIndex() { return routerIndex; };
+  inline void setIndex(size_t i) { routerIndex = i; }
+  inline size_t getIndex() const { return routerIndex; }
 
   void generateProbabilities();
-  unsigned int generateDestination(double p);
+
+  size_t generateDestination(double p);
 
 #ifndef NO_ALLEGRO
   inline void incNumWorkstations() { ++numWorkstations; };
@@ -74,11 +75,11 @@ class Router {
 
   void addEdge(Edge* e);
 
-  inline long long int isAdjacentTo(size_t r) { return adjacencyList[r]; };
+  inline long long int isAdjacentTo(size_t r) const { return adjacencyList[r]; }
 
-  inline Edge* getEdgeByIndex(size_t e) { return edgeList[e]; };
+  inline Edge* getEdgeByIndex(size_t e) const { return edgeList[e]; }
 
-  Edge* getEdgeByDestination(size_t r);
+  Edge* getEdgeByDestination(size_t r) const;
 
   void updateUsage();
   void resetUsage();
@@ -86,18 +87,17 @@ class Router {
   void resetQMDegredation();
   void resetFailures();
 
-  inline unsigned int getQualityFailures() { return qualityFailures; };
-  inline unsigned int getWaveFailures() { return waveFailures; };
+  inline size_t getQualityFailures() const { return qualityFailures; }
+  inline size_t getWaveFailures() const { return waveFailures; }
 
-  inline void incrementQualityFailures() { ++qualityFailures; };
-  inline void incrementWaveFailures() { ++waveFailures; };
+  inline void incrementQualityFailures() { ++qualityFailures; }
+  inline void incrementWaveFailures() { ++waveFailures; }
 
-  inline unsigned int getNumberOfEdges() {
-    return static_cast<unsigned int>(edgeList.size());
-  };
+  inline size_t getNumberOfEdges() const { return edgeList.size(); }
 
   void generateACOProbabilities(size_t dest);
-  Edge* chooseEdge(double p);
+
+  Edge* chooseEdge(double p) const;
 
 #ifndef NO_ALLEGRO
   void refreshedgebmps(bool useThread);
@@ -160,8 +160,8 @@ class Router {
  private:
   size_t routerIndex;
 
-  unsigned int qualityFailures;
-  unsigned int waveFailures;
+  size_t qualityFailures;
+  size_t waveFailures;
 
   long long int* adjacencyList;
 

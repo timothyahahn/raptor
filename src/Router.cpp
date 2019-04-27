@@ -39,8 +39,7 @@ extern Thread *threadZero;
 //
 ///////////////////////////////////////////////////////////////////
 Router::Router()
-    : dp_node(nullptr), qualityFailures(0), routerIndex(0), waveFailures(0) {
-  adjacencyList = 0;
+    : dp_node(nullptr), qualityFailures(0), routerIndex(0), waveFailures(0), adjacencyList(nullptr), destinationProbs(nullptr), acoProbs(nullptr) {
 
 #ifndef NO_ALLEGRO
   sprintf(name, "(no name)");
@@ -55,9 +54,6 @@ Router::Router()
   avgQTo = 0.0;
   avgQFrom = 0.0;
 #endif
-
-  destinationProbs = 0;
-  acoProbs = 0;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -67,7 +63,7 @@ Router::Router()
 //
 ///////////////////////////////////////////////////////////////////
 Router::~Router() {
-  for (unsigned int a = 0; a < edgeList.size(); ++a) delete edgeList[a];
+  for (size_t a = 0; a < edgeList.size(); ++a) delete edgeList[a];
 
   edgeList.clear();
 
@@ -89,14 +85,14 @@ Router::~Router() {
 //
 ///////////////////////////////////////////////////////////////////
 void Router::addEdge(Edge *e) {
-  if (adjacencyList == 0) {
+  if (adjacencyList == nullptr) {
     adjacencyList = new long long int[threadZero->getNumberOfRouters()];
 
     for (size_t a = 0; a < threadZero->getNumberOfRouters(); ++a)
       adjacencyList[a] = -1;
   }
 
-  adjacencyList[e->getDestinationIndex()] = (int)edgeList.size();
+  adjacencyList[e->getDestinationIndex()] = (long long)edgeList.size();
 
   edgeList.push_back(e);
 }
@@ -108,12 +104,12 @@ void Router::addEdge(Edge *e) {
 //					specific router.
 //
 ///////////////////////////////////////////////////////////////////
-Edge *Router::getEdgeByDestination(size_t r) {
-  for (unsigned int e = 0; e < edgeList.size(); ++e) {
+Edge *Router::getEdgeByDestination(size_t r) const {
+  for (size_t e = 0; e < edgeList.size(); ++e) {
     if (edgeList[e]->getDestinationIndex() == r) return edgeList[e];
   }
 
-  return 0;
+  return nullptr;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -123,7 +119,7 @@ Edge *Router::getEdgeByDestination(size_t r) {
 //
 ///////////////////////////////////////////////////////////////////
 void Router::updateUsage() {
-  for (unsigned int e = 0; e < edgeList.size(); ++e) {
+  for (size_t e = 0; e < edgeList.size(); ++e) {
     edgeList[e]->updateUsage();
   }
 }
@@ -139,11 +135,11 @@ void Router::generateACOProbabilities(size_t dest) {
   double *destinationTaus = new double[getNumberOfEdges()];
   double *destinationEtas = new double[getNumberOfEdges()];
 
-  if (acoProbs == 0) {
+  if (acoProbs == nullptr) {
     acoProbs = new double[getNumberOfEdges()];
   }
 
-  for (unsigned int e = 0; e < getNumberOfEdges(); ++e) {
+  for (size_t e = 0; e < getNumberOfEdges(); ++e) {
     if (getEdgeByIndex(e)->getSourceIndex() == getIndex()) {
       destinationTaus[e] = getEdgeByIndex(e)->getPheremone();
 
@@ -166,20 +162,20 @@ void Router::generateACOProbabilities(size_t dest) {
 
   double cumulativeProduct = 0.0;
 
-  for (unsigned int e2 = 0; e2 < getNumberOfEdges(); ++e2) {
-    destinationTaus[e2] = pow(destinationTaus[e2],
+  for (size_t e = 0; e < getNumberOfEdges(); ++e) {
+    destinationTaus[e] = pow(destinationTaus[e],
                               double(threadZero->getQualityParams().ACO_alpha));
-    destinationEtas[e2] = pow(destinationEtas[e2],
+    destinationEtas[e] = pow(destinationEtas[e],
                               double(threadZero->getQualityParams().ACO_beta));
 
-    cumulativeProduct += destinationTaus[e2] * destinationEtas[e2];
+    cumulativeProduct += destinationTaus[e] * destinationEtas[e];
   }
 
-  for (unsigned int e3 = 0; e3 < getNumberOfEdges(); ++e3) {
-    acoProbs[e3] =
-        (destinationTaus[e3] * destinationEtas[e3]) / cumulativeProduct;
+  for (size_t e = 0; e < getNumberOfEdges(); ++e) {
+    acoProbs[e] =
+        (destinationTaus[e] * destinationEtas[e]) / cumulativeProduct;
 
-    if (e3 > 0) acoProbs[e3] += acoProbs[e3 - 1];
+    if (e > 0) acoProbs[e] += acoProbs[e - 1];
   }
 
   acoProbs[getNumberOfEdges() - 1] = 1.0;
@@ -195,16 +191,16 @@ void Router::generateACOProbabilities(size_t dest) {
 //					probabilities.
 //
 ///////////////////////////////////////////////////////////////////
-Edge *Router::chooseEdge(double p) {
+Edge *Router::chooseEdge(double p) const {
   if (p <= acoProbs[0]) return getEdgeByIndex(0);
 
-  for (unsigned int r = 0; r < getNumberOfEdges(); ++r) {
+  for (size_t r = 0; r < getNumberOfEdges(); ++r) {
     if (p > acoProbs[r] && p <= acoProbs[r + 1]) {
       return getEdgeByIndex(r + 1);
     }
   }
 
-  return 0;
+  return nullptr;
 }
 
 #ifndef NO_ALLEGRO
@@ -256,7 +252,7 @@ void Router::generateProbabilities() {
 
   destinationProbs = new double[threadZero->getNumberOfRouters()];
 
-  for (unsigned int r1 = 0; r1 < threadZero->getNumberOfRouters(); ++r1) {
+  for (size_t r1 = 0; r1 < threadZero->getNumberOfRouters(); ++r1) {
     if (r1 != getIndex()) {
       pathSpans = 0;
 
@@ -288,7 +284,7 @@ void Router::generateProbabilities() {
     }
   }
 
-  for (unsigned int r2 = 0; r2 < threadZero->getNumberOfRouters(); ++r2) {
+  for (size_t r2 = 0; r2 < threadZero->getNumberOfRouters(); ++r2) {
     destinationProbs[r2] = destinationProbs[r2] / totalProbs;
 
     cumulativeProbs += destinationProbs[r2];
@@ -303,10 +299,10 @@ void Router::generateProbabilities() {
 //					probability distribution.
 //
 ///////////////////////////////////////////////////////////////////
-unsigned int Router::generateDestination(double p) {
+size_t Router::generateDestination(double p) {
   if (p < destinationProbs[0]) return 0;
 
-  for (unsigned int r = 0; r < threadZero->getNumberOfRouters() - 1; ++r) {
+  for (size_t r = 0; r < threadZero->getNumberOfRouters() - 1; ++r) {
     if (p > destinationProbs[r] && p < destinationProbs[r + 1]) {
       return r + 1;
     }
@@ -322,7 +318,7 @@ unsigned int Router::generateDestination(double p) {
 //
 ///////////////////////////////////////////////////////////////////
 void Router::resetUsage() {
-  for (unsigned int e = 0; e < edgeList.size(); ++e) {
+  for (size_t e = 0; e < edgeList.size(); ++e) {
     edgeList[e]->resetAlgorithmUsage();
   }
 }
@@ -345,7 +341,7 @@ void Router::resetFailures() {
 //
 ///////////////////////////////////////////////////////////////////
 void Router::resetQMDegredation() {
-  for (unsigned int e = 0; e < edgeList.size(); ++e) {
+  for (size_t e = 0; e < edgeList.size(); ++e) {
     edgeList[e]->resetQMDegredation();
   }
 }
