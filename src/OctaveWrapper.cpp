@@ -95,7 +95,7 @@ void OctaveWrapper::helloWorld()
 	try
 	{
 		octave::interpreter interp;
-		interp.initialize();
+		/*interp.initialize();
 		if (!interp.initialized())
 		{
 			std::cerr << "ERROR: Interpreter initialization failed" << std::endl;
@@ -116,7 +116,8 @@ void OctaveWrapper::helloWorld()
 		else
 		{
 			std::cerr << "ERROR: result.length() is 0" << std::endl;
-		}
+		}*/
+		interp.execute_command_line_file("octave/hello_world.m");
 	}
 	catch (const octave::exit_exception & ex)
 	{
