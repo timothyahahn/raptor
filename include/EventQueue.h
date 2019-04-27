@@ -39,8 +39,8 @@ class EventQueue
 		inline void addEvent(const Event &e)
 			{ pq.push(e); };
 
-		inline unsigned int getSize()
-			{ return static_cast<unsigned int>(pq.size()); };
+		inline size_t getSize() const
+			{ return pq.size(); }
 
 	private:
 		std::priority_queue<Event, std::vector<Event>,std::less<std::vector<Event>::value_type> > pq;
