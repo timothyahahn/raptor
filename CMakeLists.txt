@@ -20,6 +20,8 @@ endif()
 
 project(raptor CXX C)
 
+set(CMKAE_BUILD_TYPE RelWithDebInfo)
+
 use_cxx11()
 
 add_executable(raptor src/Edge.cpp src/EventQueue.cpp src/GUI.cpp src/Main.cpp src/MessageLogger.cpp src/OctaveWrapper.cpp src/ResourceManager.cpp src/Router.cpp src/Thread.cpp)
