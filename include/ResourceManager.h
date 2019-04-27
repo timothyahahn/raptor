@@ -35,7 +35,7 @@
 
 struct DP_item {
   Edge** path;
-  unsigned int pathLength;
+  size_t pathLength;
   size_t pathSpans;
   bool* waveAvailability;
 };
@@ -89,19 +89,19 @@ class ResourceManager {
                         size_t ci) const;
 
   double path_fwm_term(size_t spans, double fi, double fj, double fk, double fc,
-	  int dgen) const;
+	  long long int dgen) const;
   double path_xpm_term(size_t spans, size_t lambda, size_t wave) const;
 
   size_t calculate_span_distance(size_t src_index, size_t dest_index);
 
-  int build_FWM_fs(double* inter_fs, int* inter_indecies, int lambda);
-  int wave_combines(double fc, double* fs, int fs_num,
-                    std::vector<int>& fs_coms);
-  bool can_find(int fi, int fj, int fk, std::vector<int>& fs_coms, int com_num);
-  int degeneracy(int fi, int fj, int fk);
+  long long int build_FWM_fs(double* inter_fs, long long int* inter_indecies, size_t lambda);
+  long long int wave_combines(double fc, double* fs, long long int fs_num,
+                    std::vector<long long int>& fs_coms);
+  bool can_find(long long int fi, long long int fj, long long int fk, std::vector<long long int>& fs_coms, long long int com_num);
+  long long int degeneracy(long long int fi, long long int fj, long long int fk);
 
   double* sys_link_xpm_database;
-  int sys_fs_num;
+  long long int sys_fs_num;
 
   long long int first_fit(CreateConnectionProbeEvent* ccpe, size_t ci,
                           bool* wave_available);
@@ -134,11 +134,11 @@ class ResourceManager {
   long long int most_quality_fit(CreateConnectionProbeEvent* ccpe, size_t ci,
                                  bool* wave_available);
 
-  void precompute_fwm_fs(std::vector<int>& fwm_nums);
+  void precompute_fwm_fs(std::vector<long long int>& fwm_nums);
   void precompute_fwm_combinations();
 
   std::vector<double*>* fwm_fs;
-  std::vector<int*>* inter_indecies;
+  std::vector<long long int*>* inter_indecies;
 
   kShortestPathReturn** SP_paths;
 
@@ -153,7 +153,7 @@ class ResourceManager {
   void generateWaveOrdering();
 
   double* sys_fs;
-  std::vector<int>* fwm_combinations;
+  std::vector<long long int>* fwm_combinations;
 
   long long int getLowerBound(int w, int n);
   long long int getUpperBound(int w, int n);

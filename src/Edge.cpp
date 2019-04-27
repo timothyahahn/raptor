@@ -340,7 +340,7 @@ void Edge::updateUsage() {
   if (threadZero->getQualityParams().q_factor_stats == true) {
     newUsage = double(establishedConnections.size());
   } else {
-    for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
+    for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
       if (status[w] == EDGE_USED) ++newUsage;
     }
   }
@@ -417,10 +417,10 @@ void Edge::updateQMDegredation(size_t ci, long long int wavelength) {
     }
   }
 
-  unsigned int activeLightpaths = 0;
+  size_t activeLightpaths = 0;
   double cumulativeDegradation = 0.0;
 
-  for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
+  for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
     if (degredation[w] != 0.0) {
       cumulativeDegradation += degredation[w];
       ++activeLightpaths;
@@ -490,7 +490,7 @@ void Edge::updateQFactorStats(size_t ci, long long int wavelength) {
 //
 ///////////////////////////////////////////////////////////////////
 void Edge::resetQMDegredation() {
-  for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+  for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
     degredation[w] = 0.0;
 }
 
@@ -633,7 +633,7 @@ void Edge::updateGUI() {
   } else {
     actualUsage = 0.0;
 
-    for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
+    for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
       if (status[w] == EDGE_USED) ++actualUsage;
     }
   }
@@ -893,13 +893,13 @@ void Edge::saveData(char *file) {
   std::ofstream myFile;
   char buffer[12] = {' '};
   myFile.open(file, std::ios::app | std::ios::binary);
-  for (unsigned int u = 0; u < usageList.size(); u++) {
+  for (size_t u = 0; u < usageList.size(); u++) {
     myFile << usageList.at(u) << "|\n";
   }
   myFile << max_actual_usage << "|\n";
   myFile.close();
 
-  for (unsigned int u = 0; u < usageList.size(); ++u)
+  for (size_t u = 0; u < usageList.size(); ++u)
     usageList.erase(usageList.begin());
   usageList.clear();
   max_actual_usage = 0;

@@ -38,9 +38,9 @@ extern int realTopoHeightPx;
 struct DP_node {
   Edge** paths;
   bool* waveAvailability;
-  unsigned int* pathLength;
+  size_t* pathLength;
   size_t* pathSpans;
-  unsigned int* optimalWave;
+  double* optimalWave;
   double* pathQuality;
   double* pathWeight;
 };
@@ -63,8 +63,8 @@ class Router {
   void setRadius(double pct);
   inline void addTopoEdge(Edge* e) { edgeList.push_back(e); };
   void scaleEdgesTo(int spns, int px);
-  inline Edge* getTopoEdgeByDest(unsigned int e) {
-    for (int x = 0; x < edgeList.size(); x++) {
+  inline Edge* getTopoEdgeByDest(size_t e) {
+    for (size_t x = 0; x < edgeList.size(); x++) {
       if (edgeList[x]->getDestinationIndex() == e) {
         return edgeList[x];
       }
@@ -133,19 +133,19 @@ class Router {
   void saveData(char* file);
 
   inline void incConnAttemptsFrom() { connAttemptsFromThis++; };
-  inline void setConnAttemptsFrom(unsigned int a) { connAttemptsFromThis = a; };
-  inline unsigned int getConnAttemptsFrom() { return connAttemptsFromThis; };
+  inline void setConnAttemptsFrom(size_t a) { connAttemptsFromThis = a; };
+  inline size_t getConnAttemptsFrom() { return connAttemptsFromThis; };
   inline void incConnAttemptsTo() { connAttemptsToThis++; };
-  inline void setConnAttemptsTo(unsigned int a) { connAttemptsToThis = a; };
-  inline unsigned int getConnAttemptsTo() { return connAttemptsToThis; };
+  inline void setConnAttemptsTo(size_t a) { connAttemptsToThis = a; };
+  inline size_t getConnAttemptsTo() { return connAttemptsToThis; };
   inline void incConnSuccessesFrom() { connSuccessesFromThis++; };
-  inline void setConnSuccessesFrom(unsigned int a) {
+  inline void setConnSuccessesFrom(size_t a) {
     connSuccessesFromThis = a;
   };
-  inline unsigned int getConnSuccessesFrom() { return connSuccessesFromThis; };
+  inline size_t getConnSuccessesFrom() { return connSuccessesFromThis; };
   inline void incConnSuccessesTo() { connSuccessesToThis++; };
-  inline void setConnSuccessesTo(unsigned int a) { connSuccessesToThis = a; };
-  inline unsigned int getConnSuccessesTo() { return connSuccessesToThis; };
+  inline void setConnSuccessesTo(size_t a) { connSuccessesToThis = a; };
+  inline size_t getConnSuccessesTo() { return connSuccessesToThis; };
   inline void addToAvgQTo(double q) { avgQTo += q; };
   inline void addToAvgQFrom(double q) { avgQFrom += q; };
 
@@ -166,10 +166,10 @@ class Router {
   long long int* adjacencyList;
 
 #ifndef NO_ALLEGRO
-  unsigned int connAttemptsFromThis;
-  unsigned int connAttemptsToThis;
-  unsigned int connSuccessesFromThis;
-  unsigned int connSuccessesToThis;
+  size_t connAttemptsFromThis;
+  size_t connAttemptsToThis;
+  size_t connSuccessesFromThis;
+  size_t connSuccessesToThis;
 
   double avgQTo;
   double avgQFrom;

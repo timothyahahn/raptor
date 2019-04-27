@@ -44,7 +44,7 @@ class Edge {
   inline size_t getDestinationIndex() const { return destinationIndex; }
   inline size_t getNumberOfSpans() const { return numberOfSpans; }
   inline EdgeStatus getStatus(size_t w) const { return status[w]; }
-  inline size_t getActiveSession(int w) const { return activeSession[w]; }
+  inline size_t getActiveSession(long long int w) const { return activeSession[w]; }
   inline double getAlgorithmUsage() const { return algorithmUsage; }
   inline double getQMDegredation() const { return QMDegredation; }
   inline double getPheremone() const { return pheremone; }

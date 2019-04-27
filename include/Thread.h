@@ -114,7 +114,7 @@ class Thread {
   inline const std::string& getWavelengthAlgorithmName(size_t w) const {
     return WavelengthAlgorithmNames[w];
   }
-  inline const std::string& getProbeStyleName(unsigned int p) const {
+  inline const std::string& getProbeStyleName(size_t p) const {
     return ProbeStyleNames[p];
   }
 

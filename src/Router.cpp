@@ -214,13 +214,13 @@ Edge *Router::chooseEdge(double p) const {
 //
 ///////////////////////////////////////////////////////////////////
 void Router::refreshedgebmps(bool useThread) {
-  for (unsigned int e = 0; e < edgeList.size(); ++e) {
+  for (size_t e = 0; e < edgeList.size(); ++e) {
     edgeList[e]->refreshbmps(useThread);
   }
 }
 
 void Router::scaleEdgesTo(int spns, int px) {
-  for (unsigned int e = 0; e < edgeList.size(); ++e) {
+  for (size_t e = 0; e < edgeList.size(); ++e) {
     edgeList[e]->scaleEdgesTo(spns, px);
   }
 }
@@ -232,7 +232,7 @@ void Router::scaleEdgesTo(int spns, int px) {
 //
 ///////////////////////////////////////////////////////////////////
 void Router::updateGUI() {
-  for (unsigned int e = 0; e < edgeList.size(); ++e) {
+  for (size_t e = 0; e < edgeList.size(); ++e) {
     edgeList[e]->updateGUI();
   }
 }
@@ -354,7 +354,7 @@ void Router::resetQMDegredation() {
 //
 ///////////////////////////////////////////////////////////////////
 void Router::paintUsage(int p) {
-  for (unsigned int e = 0; e < edgeList.size(); ++e) {
+  for (size_t e = 0; e < edgeList.size(); ++e) {
     edgeList[e]->paintUsage(p);
   }
 }
@@ -366,7 +366,7 @@ void Router::paintUsage(int p) {
 //
 ///////////////////////////////////////////////////////////////////
 void Router::paintEdgeSpans() {
-  for (unsigned int e = 0; e < edgeList.size(); ++e) {
+  for (size_t e = 0; e < edgeList.size(); ++e) {
     if (edgeList[e]->getSourceIndex() > edgeList[e]->getDestinationIndex())
       edgeList[e]->paintSpans();
   }
@@ -677,7 +677,7 @@ void Router::saveData(char *file) {
   myFile << avgQFrom << "\n";
 
   myFile.close();
-  for (unsigned int i = 0; i < edgeList.size(); i++) {
+  for (size_t i = 0; i < edgeList.size(); i++) {
     edgeList[i]->saveData(file);
   }
   numWorkstations = 0;

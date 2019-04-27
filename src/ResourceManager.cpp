@@ -16,7 +16,6 @@
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Revision History:
 //
-//  05/20/2009	v1.0	Initial Version.
 //  06/02/2009	v1.02	Minor optimizations and bug fixes.
 //  04/14/2019  v2.0    Reworked version based upon cmake and octave
 //
@@ -81,10 +80,10 @@ ResourceManager::~ResourceManager() {
 
   delete[] span_distance;
 
-  for (unsigned int s = 0; s < fwm_combinations->size(); ++s)
+  for (size_t s = 0; s < fwm_combinations->size(); ++s)
     fwm_combinations[s].clear();
 
-  for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
+  for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
     delete[](*fwm_fs)[w];
     delete[](*inter_indecies)[w];
   }
@@ -134,9 +133,7 @@ kShortestPathReturn* ResourceManager::calculate_SP_path(size_t src_index,
   memcpy(kSP_params.edge_list, kSP_edgeList,
          sizeof(kShortestPathEdges) * kSP_params.total_edges);
 
-  unsigned int num = 0;
-
-  for (unsigned int a = 0; a < kSP_params.total_edges; ++a) {
+  for (size_t a = 0; a < kSP_params.total_edges; ++a) {
     kSP_params.edge_list[a].edge_cost = 1;
   }
 
@@ -231,12 +228,12 @@ kShortestPathReturn* ResourceManager::calculate_LORA_path(size_t src_index,
   memcpy(kSP_params.edge_list, kSP_edgeList,
          sizeof(kShortestPathEdges) * kSP_params.total_edges);
 
-  unsigned int num = 0;
+  size_t num = 0;
 
-  for (unsigned int a = 0; a < threadZero->getNumberOfRouters(); ++a) {
+  for (size_t a = 0; a < threadZero->getNumberOfRouters(); ++a) {
     Router* routerA = threads[ci]->getRouterAt(a);
 
-    for (unsigned int b = 0; b < threadZero->getNumberOfRouters(); ++b) {
+    for (size_t b = 0; b < threadZero->getNumberOfRouters(); ++b) {
       size_t edgeID = routerA->isAdjacentTo(b);
 
       if (edgeID >= 0) {
@@ -276,7 +273,7 @@ kShortestPathReturn* ResourceManager::calculate_IA_path(size_t src_index,
   kShortestPathParms* kSP_params =
       new kShortestPathParms[threadZero->getNumberOfWavelengths()];
 
-  for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
+  for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
     kSP_params[w].src_node = src_index;
     kSP_params[w].dest_node = dest_index;
     kSP_params[w].k_paths = 1;
@@ -287,16 +284,16 @@ kShortestPathReturn* ResourceManager::calculate_IA_path(size_t src_index,
         new kShortestPathEdges[threadZero->getNumberOfEdges()];
   }
 
-  for (unsigned int a = 0; a < threadZero->getNumberOfRouters(); ++a) {
+  for (size_t a = 0; a < threadZero->getNumberOfRouters(); ++a) {
     Router* routerA = threads[ci]->getRouterAt(a);
 
-    for (unsigned int b = 0; b < threadZero->getNumberOfRouters(); ++b) {
+    for (size_t b = 0; b < threadZero->getNumberOfRouters(); ++b) {
       long long int edgeID = routerA->isAdjacentTo(b);
 
       if (edgeID >= 0) {
         Edge* edge = routerA->getEdgeByDestination(b);
 
-        for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths();
+        for (size_t w = 0; w < threadZero->getNumberOfWavelengths();
              ++w) {
           if (edge->getStatus(w) == EDGE_FREE) {
             kSP_params[w].edge_list[kSP_params[w].total_edges].src_node = a;
@@ -325,14 +322,14 @@ kShortestPathReturn* ResourceManager::calculate_IA_path(size_t src_index,
   kSP_return->pathcost = new double[threadZero->getNumberOfWavelengths()];
   kSP_return->pathlen = new size_t[threadZero->getNumberOfWavelengths()];
 
-  for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
+  for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
     calc_k_shortest_paths(kSP_params[w], kSP_temp);
 
     kSP_return->pathcost[w] = kSP_temp->pathcost[0];
     kSP_return->pathlen[w] = kSP_temp->pathlen[0];
 
     if (kSP_return->pathlen[w] != std::numeric_limits<int>::infinity())
-      for (unsigned int p = 0; p < kSP_return->pathlen[w]; ++p)
+      for (size_t p = 0; p < kSP_return->pathlen[w]; ++p)
         kSP_return->pathinfo[w * (kSP_params[0].total_nodes - 1) + p] =
             kSP_temp->pathinfo[p];
 
@@ -360,33 +357,32 @@ kShortestPathReturn* ResourceManager::calculate_IA_path(size_t src_index,
 kShortestPathReturn* ResourceManager::calculate_PAR_path(size_t src_index,
                                                          size_t dest_index,
                                                          size_t k, size_t ci) {
-  unsigned int iterationCount = 1;
-  unsigned int kPathsFound = 0;
-  unsigned int* kPathsStatus;
+  size_t iterationCount = 1;
+  size_t kPathsFound = 0;
+  size_t* kPathsStatus = nullptr;
 
-  const unsigned int PATH_VALID = 1;
-  const unsigned int PATH_TOO_LONG = 2;
-  const unsigned int PATH_INFINITY = 3;
-
-  const unsigned int MAX_ITERATIONS = 4;
+  static const size_t PATH_VALID = 1;
+  static const size_t PATH_TOO_LONG = 2;
+  static const size_t PATH_INFINITY = 3;
+  static const size_t MAX_ITERATIONS = 4;
 
   while (kPathsFound < k && iterationCount <= MAX_ITERATIONS) {
-    unsigned int kProduct = 0;
+    size_t kProduct = 0;
 
     if (k == 1) {
       kProduct =
-          static_cast<unsigned int>(pow(double(k + 1), iterationCount - 1));
+          static_cast<size_t>(pow(double(k + 1), iterationCount - 1));
     } else {
-      kProduct = static_cast<unsigned int>(pow(double(k), iterationCount));
+      kProduct = static_cast<size_t>(pow(double(k), iterationCount));
     }
 
     kShortestPathReturn* lora_ksp =
         calculate_LORA_path(src_index, dest_index, kProduct, ci);
 
     kPathsFound = 0;
-    kPathsStatus = new unsigned int[kProduct];
+    kPathsStatus = new size_t[kProduct];
 
-    for (unsigned int a = 0; a < kProduct; ++a) {
+    for (size_t a = 0; a < kProduct; ++a) {
       if (lora_ksp->pathcost[a] == std::numeric_limits<double>::infinity()) {
         kPathsStatus[a] = PATH_INFINITY;
       } else {
@@ -425,15 +421,15 @@ kShortestPathReturn* ResourceManager::calculate_PAR_path(size_t src_index,
       kSP_return->pathcost = new double[k];
       kSP_return->pathlen = new size_t[k];
 
-      unsigned int kIndex = 0;
+      size_t kIndex = 0;
 
-      for (unsigned int a = 0; a < k; ++a) {
+      for (size_t a = 0; a < k; ++a) {
         while (kPathsStatus[kIndex] != PATH_VALID) ++kIndex;
 
         kSP_return->pathcost[a] = lora_ksp->pathcost[kIndex];
         kSP_return->pathlen[a] = lora_ksp->pathlen[kIndex];
 
-        for (unsigned int b = 0; b < kSP_return->pathlen[a]; ++b) {
+        for (size_t b = 0; b < kSP_return->pathlen[a]; ++b) {
           kSP_return->pathinfo[a * (threadZero->getNumberOfRouters() - 1) + b] =
               lora_ksp
                   ->pathinfo[kIndex * (threadZero->getNumberOfRouters() - 1) +
@@ -465,16 +461,16 @@ kShortestPathReturn* ResourceManager::calculate_PAR_path(size_t src_index,
       kSP_return->pathcost = new double[k];
       kSP_return->pathlen = new size_t[k];
 
-      unsigned int kIndex = 0;
+      size_t kIndex = 0;
 
       // Return the c paths that satisify the constraints
-      for (unsigned int a = 0; a < kPathsFound; ++a) {
+      for (size_t a = 0; a < kPathsFound; ++a) {
         while (kPathsStatus[kIndex] != PATH_VALID) ++kIndex;
 
         kSP_return->pathcost[a] = lora_ksp->pathcost[kIndex];
         kSP_return->pathlen[a] = lora_ksp->pathlen[kIndex];
 
-        for (unsigned int b = 0; b < kSP_return->pathlen[a]; ++b) {
+        for (size_t b = 0; b < kSP_return->pathlen[a]; ++b) {
           kSP_return->pathinfo[a * (threadZero->getNumberOfRouters() - 1) + b] =
               lora_ksp
                   ->pathinfo[kIndex * (threadZero->getNumberOfRouters() - 1) +
@@ -487,13 +483,13 @@ kShortestPathReturn* ResourceManager::calculate_PAR_path(size_t src_index,
       kIndex = 0;
 
       // Return the first k - c paths that do not satisfy the constraints
-      for (unsigned int c = kPathsFound; c < k; ++c) {
+      for (size_t c = kPathsFound; c < k; ++c) {
         while (kPathsStatus[kIndex] != PATH_TOO_LONG) ++kIndex;
 
         kSP_return->pathcost[c] = lora_ksp->pathcost[kIndex];
         kSP_return->pathlen[c] = lora_ksp->pathlen[kIndex];
 
-        for (unsigned int d = 0; d < kSP_return->pathlen[c]; ++d) {
+        for (size_t d = 0; d < kSP_return->pathlen[c]; ++d) {
           kSP_return->pathinfo[c * (threadZero->getNumberOfRouters() - 1) + d] =
               lora_ksp
                   ->pathinfo[kIndex * (threadZero->getNumberOfRouters() - 1) +
@@ -552,12 +548,12 @@ kShortestPathReturn* ResourceManager::calculate_QM_path(size_t src_index,
   memcpy(kSP_params.edge_list, kSP_edgeList,
          sizeof(kShortestPathEdges) * kSP_params.total_edges);
 
-  unsigned int num = 0;
+  size_t num = 0;
 
-  for (unsigned int a = 0; a < threadZero->getNumberOfRouters(); ++a) {
+  for (size_t a = 0; a < threadZero->getNumberOfRouters(); ++a) {
     Router* routerA = threads[ci]->getRouterAt(a);
 
-    for (unsigned int b = 0; b < threadZero->getNumberOfRouters(); ++b) {
+    for (size_t b = 0; b < threadZero->getNumberOfRouters(); ++b) {
       long long int edgeID = routerA->isAdjacentTo(b);
 
       if (edgeID >= 0) {
@@ -599,7 +595,7 @@ kShortestPathReturn* ResourceManager::calculate_AQoS_path(size_t src_index,
   size_t* QM_paths_availability = new size_t[k * 2];
 
   // Determine the amount of wavelengths available on each edge.
-  for (unsigned int p = 0; p < k * 2; ++p) {
+  for (size_t p = 0; p < k * 2; ++p) {
     if (QM_paths->pathcost[p] == std::numeric_limits<double>::infinity()) {
       QM_paths_availability[p] = 0;
     } else {
@@ -649,7 +645,7 @@ kShortestPathReturn* ResourceManager::calculate_AQoS_path(size_t src_index,
       kSP_return->pathcost[a] = QM_paths->pathcost[maxIndex];
       kSP_return->pathlen[a] = QM_paths->pathlen[maxIndex];
 
-      for (unsigned int c = 0; c < threadZero->getNumberOfRouters() - 1; ++c) {
+      for (size_t c = 0; c < threadZero->getNumberOfRouters() - 1; ++c) {
         kSP_return->pathinfo[a * (threadZero->getNumberOfRouters() - 1) + c] =
             QM_paths
                 ->pathinfo[maxIndex * (threadZero->getNumberOfRouters() - 1) +
@@ -661,7 +657,7 @@ kShortestPathReturn* ResourceManager::calculate_AQoS_path(size_t src_index,
       kSP_return->pathcost[a] = std::numeric_limits<double>::infinity();
       kSP_return->pathlen[a] = std::numeric_limits<int>::infinity();
 
-      for (unsigned int c = 0; c < threadZero->getNumberOfRouters() - 1; ++c) {
+      for (size_t c = 0; c < threadZero->getNumberOfRouters() - 1; ++c) {
         kSP_return->pathinfo[a * (threadZero->getNumberOfRouters() - 1) + c] =
             std::numeric_limits<int>::infinity();
       }
@@ -712,13 +708,13 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(size_t src_index,
   kSP_return->pathlen = new size_t[k];
   kSP_return->pathinfo = new size_t[k * threadZero->getNumberOfRouters() - 1];
 
-  for (unsigned int k1 = 0; k1 < k; ++k1) {
+  for (size_t k1 = 0; k1 < k; ++k1) {
     kSP_return->pathcost[k1] = 0.0;
     kSP_return->pathlen[k1] = 0;
   }
 
   for (unsigned n = 0; n < threadZero->getNumberOfRouters(); ++n) {
-    for (unsigned int e = 0;
+    for (size_t e = 0;
          e < threads[ci]->getRouterAt(n)->getNumberOfEdges(); ++e) {
       threads[ci]->getRouterAt(n)->getEdgeByIndex(e)->resetPheremone(
           ci, span_distance[src_index * threadZero->getNumberOfRouters() +
@@ -728,11 +724,11 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(size_t src_index,
     threads[ci]->getRouterAt(n)->generateACOProbabilities(dest_index);
   }
 
-  for (unsigned int i = 0; i < threadZero->getQualityParams().MM_ACO_N_iter;
+  for (size_t i = 0; i < threadZero->getQualityParams().MM_ACO_N_iter;
        ++i) {
     Ant* ants = new Ant[threadZero->getQualityParams().ACO_ants];
 
-    for (unsigned int a = 0; a < threadZero->getQualityParams().ACO_ants; ++a) {
+    for (size_t a = 0; a < threadZero->getQualityParams().ACO_ants; ++a) {
       ants[a].location = threads[ci]->getRouterAt(src_index);
       ants[a].pathlen = 0;
       ants[a].path = new Edge*[threadZero->getNumberOfRouters() - 1];
@@ -760,7 +756,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(size_t src_index,
 
       bool* free = new bool[threadZero->getNumberOfWavelengths()];
 
-      for (unsigned int w1 = 0; w1 < threadZero->getNumberOfWavelengths();
+      for (size_t w1 = 0; w1 < threadZero->getNumberOfWavelengths();
            ++w1) {
         free[w1] = true;
       }
@@ -768,7 +764,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(size_t src_index,
       size_t spans = 0;
 
       for (int e = 0; e < ants[a].pathlen; ++e) {
-        for (unsigned int w2 = 0; w2 < threadZero->getNumberOfWavelengths();
+        for (size_t w2 = 0; w2 < threadZero->getNumberOfWavelengths();
              ++w2) {
           if (ants[a].path[e]->getStatus(w2) != EDGE_FREE) free[w2] = false;
         }
@@ -779,7 +775,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(size_t src_index,
       double bestQ = 0.0;
       double pathWeight = 0.0;
 
-      for (unsigned int w3 = 0; w3 < threadZero->getNumberOfWavelengths();
+      for (size_t w3 = 0; w3 < threadZero->getNumberOfWavelengths();
            ++w3) {
         double ase;
         double fwm;
@@ -806,7 +802,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(size_t src_index,
         // Check for duplicates....we need to keep k distinct paths!
         bool uniqueK = false;
 
-        for (unsigned int k0 = 0; k0 < k; ++k0) {
+        for (size_t k0 = 0; k0 < k; ++k0) {
           uniqueK = false;
 
           for (int r = 0; r < ants[a].pathlen; ++r) {
@@ -841,7 +837,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(size_t src_index,
           k2 = k - 1;
 
           while (k2 > k1) {
-            for (unsigned int n = 0; n < threadZero->getNumberOfRouters() - 1;
+            for (size_t n = 0; n < threadZero->getNumberOfRouters() - 1;
                  ++n) {
               kSP_return
                   ->pathinfo[k2 * (threadZero->getNumberOfRouters() - 1) + n] =
@@ -873,13 +869,13 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(size_t src_index,
     }
 
     for (unsigned n = 0; n < threadZero->getNumberOfRouters(); ++n) {
-      for (unsigned int e = 0;
+      for (size_t e = 0;
            e < threads[ci]->getRouterAt(n)->getNumberOfEdges(); ++e) {
         threads[ci]->getRouterAt(n)->getEdgeByIndex(e)->evaporatePheremone(ci);
       }
     }
 
-    for (unsigned int a2 = 0; a2 < threadZero->getQualityParams().ACO_ants;
+    for (size_t a2 = 0; a2 < threadZero->getQualityParams().ACO_ants;
          ++a2) {
       if (threads[ci]->getCurrentRoutingAlgorithm() == ACO) {
         if (ants[a2].pathlen > 0) {
@@ -901,13 +897,13 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(size_t src_index,
       if (kSP_return->pathlen[0] > 0) {
         size_t spans = 0;
 
-        for (unsigned int n1 = 0; n1 < kSP_return->pathlen[0] - 1; ++n1) {
+        for (size_t n1 = 0; n1 < kSP_return->pathlen[0] - 1; ++n1) {
           spans += threads[ci]
                        ->getRouterAt(kSP_return->pathinfo[n1])
                        ->getEdgeByDestination(kSP_return->pathinfo[n1 + 1])
                        ->getNumberOfSpans();
         }
-        for (unsigned int n2 = 0; n2 < kSP_return->pathlen[0] - 1; ++n2) {
+        for (size_t n2 = 0; n2 < kSP_return->pathlen[0] - 1; ++n2) {
           threads[ci]
               ->getRouterAt(kSP_return->pathinfo[n2])
               ->getEdgeByDestination(kSP_return->pathinfo[n2 + 1])
@@ -923,7 +919,7 @@ kShortestPathReturn* ResourceManager::calculate_ACO_path(size_t src_index,
     delete[] ants;
   }
 
-  for (unsigned int k1 = 0; k1 < k; ++k1) {
+  for (size_t k1 = 0; k1 < k; ++k1) {
     if (kSP_return->pathlen[k1] == 0 &&
         threads[ci]->getCurrentRoutingAlgorithm() == ACO) {
       kSP_return->pathcost[k1] = std::numeric_limits<double>::infinity();
@@ -955,16 +951,16 @@ kShortestPathReturn* ResourceManager::calculate_MM_ACO_path(size_t src_index,
   kSP_return->pathlen = new size_t[k];
   kSP_return->pathinfo = new size_t[k * threadZero->getNumberOfRouters() - 1];
 
-  for (unsigned int k1 = 0; k1 < k; ++k1) {
+  for (size_t k1 = 0; k1 < k; ++k1) {
     kSP_return->pathcost[k1] = 0.0;
     kSP_return->pathlen[k1] = 0;
   }
 
-  for (unsigned int r = 0; r <= threadZero->getQualityParams().MM_ACO_N_reset;
+  for (size_t r = 0; r <= threadZero->getQualityParams().MM_ACO_N_reset;
        ++r) {
     mmACO_iters[r] = this->calculate_ACO_path(src_index, dest_index, k, ci);
 
-    for (unsigned int k2 = 0; k2 < k; ++k2) {
+    for (size_t k2 = 0; k2 < k; ++k2) {
       if (mmACO_iters[r]->pathcost[k2] > kSP_return->pathcost[k - 1]) {
         // Calculate where to insert into the dest_node structure
         size_t k3 = k - 1;
@@ -978,7 +974,7 @@ kShortestPathReturn* ResourceManager::calculate_MM_ACO_path(size_t src_index,
         k4 = k - 1;
 
         while (k4 > k3) {
-          for (unsigned int n = 0; n < threadZero->getNumberOfRouters() - 1;
+          for (size_t n = 0; n < threadZero->getNumberOfRouters() - 1;
                ++n) {
             kSP_return
                 ->pathinfo[k4 * (threadZero->getNumberOfRouters() - 1) + n] =
@@ -993,7 +989,7 @@ kShortestPathReturn* ResourceManager::calculate_MM_ACO_path(size_t src_index,
         }
 
         // Insert where appropriate
-        for (unsigned int n = 0; n < mmACO_iters[r]->pathlen[k2]; ++n) {
+        for (size_t n = 0; n < mmACO_iters[r]->pathlen[k2]; ++n) {
           kSP_return
               ->pathinfo[k3 * (threadZero->getNumberOfRouters() - 1) + n] =
               mmACO_iters[r]
@@ -1006,14 +1002,14 @@ kShortestPathReturn* ResourceManager::calculate_MM_ACO_path(size_t src_index,
     }
   }
 
-  for (unsigned int k5 = 0; k5 < k; ++k5) {
+  for (size_t k5 = 0; k5 < k; ++k5) {
     if (kSP_return->pathlen[k5] == 0) {
       kSP_return->pathcost[k5] = std::numeric_limits<double>::infinity();
       kSP_return->pathlen[k5] = std::numeric_limits<int>::infinity();
     }
   }
 
-  for (unsigned int r = 0; r <= threadZero->getQualityParams().MM_ACO_N_reset;
+  for (size_t r = 0; r <= threadZero->getQualityParams().MM_ACO_N_reset;
        ++r) {
     delete[] mmACO_iters[r]->pathcost;
     delete[] mmACO_iters[r]->pathinfo;
@@ -1064,28 +1060,28 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(size_t src_index,
               threadZero->getQualityParams()
                   .ASE_perEDFA[threadZero->getQualityParams().halfwavelength]));
 
-  for (unsigned int r1 = 0; r1 < threadZero->getNumberOfRouters(); ++r1) {
+  for (size_t r1 = 0; r1 < threadZero->getNumberOfRouters(); ++r1) {
     DP_node* node = new DP_node();
 
     node->paths = new Edge*[k * (threadZero->getNumberOfRouters() - 1)];
     node->waveAvailability = new bool[k * threadZero->getNumberOfWavelengths()];
-    node->pathLength = new unsigned int[k];
+    node->pathLength = new size_t[k];
     node->pathSpans = new size_t[k];
-    node->optimalWave = new unsigned int[k];
+    node->optimalWave = new double[k];
     node->pathQuality = new double[k];
     node->pathWeight = new double[k];
 
-    for (unsigned int t = 0; t < k * (threadZero->getNumberOfRouters() - 1);
+    for (size_t t = 0; t < k * (threadZero->getNumberOfRouters() - 1);
          ++t) {
       node->paths[t] = 0;
     }
 
-    for (unsigned int w = 0; w < k * threadZero->getNumberOfWavelengths();
+    for (size_t w = 0; w < k * threadZero->getNumberOfWavelengths();
          ++w) {
       node->waveAvailability[w] = true;
     }
 
-    for (unsigned int k1 = 0; k1 < k; ++k1) {
+    for (size_t k1 = 0; k1 < k; ++k1) {
       node->pathLength[k1] = 0;
       node->pathSpans[k1] = 0;
       node->pathQuality[k1] = 0.0;
@@ -1097,7 +1093,7 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(size_t src_index,
 
   std::queue<DP_item*> Q;
 
-  for (unsigned int e = 0;
+  for (size_t e = 0;
        e < threads[ci]->getRouterAt(src_index)->getNumberOfEdges(); ++e) {
     bool addEdge = false;
     DP_item* item = new DP_item;
@@ -1110,10 +1106,10 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(size_t src_index,
     item->pathLength = 1;
     item->pathSpans = item->path[0]->getNumberOfSpans();
 
-    for (unsigned int n = 1; n < threadZero->getNumberOfRouters() - 1; ++n)
+    for (size_t n = 1; n < threadZero->getNumberOfRouters() - 1; ++n)
       item->path[n] = 0;
 
-    for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
+    for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
       item->waveAvailability[w] = item->path[0]->getStatus(w) == EDGE_FREE;
 
       if (item->waveAvailability[w] == true) addEdge = true;
@@ -1148,9 +1144,9 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(size_t src_index,
       double bestQ = 0.0;
       double pathWeight = 0.0;
       double waveWeight = 0.0;
-      unsigned int bestW = 0;
+      size_t bestW = 0;
 
-      for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
+      for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
         double ase = 0.0;
         double xpm = 0.0;
         double fwm = 0.0;
@@ -1195,10 +1191,10 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(size_t src_index,
         // Check for duplicates....we need to keep k distinct paths!
         bool uniqueK = false;
 
-        for (unsigned int k0 = 0; k0 < k; ++k0) {
+        for (size_t k0 = 0; k0 < k; ++k0) {
           uniqueK = false;
 
-          for (unsigned int r = 0; r < current_item->pathLength; ++r) {
+          for (size_t r = 0; r < current_item->pathLength; ++r) {
             if (current_item->path[r] !=
                 dest_node
                     ->paths[k0 * (threadZero->getNumberOfRouters() - 1) + r]) {
@@ -1264,10 +1260,10 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(size_t src_index,
           dest_node->pathLength[k1] = current_item->pathLength;
           dest_node->pathSpans[k1] = current_item->pathSpans;
           dest_node->pathQuality[k1] = bestQ;
-          dest_node->optimalWave[k1] = bestW;
+          dest_node->optimalWave[k1] = static_cast<double>(bestW);
           dest_node->pathWeight[k1] = pathWeight;
 
-          for (unsigned int e = 0;
+          for (size_t e = 0;
                e < threads[ci]
                        ->getRouterAt(edge->getDestinationIndex())
                        ->getNumberOfEdges();
@@ -1284,7 +1280,7 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(size_t src_index,
 
             bool cycle = false;
 
-            for (unsigned int r = 0; r < current_item->pathLength; ++r) {
+            for (size_t r = 0; r < current_item->pathLength; ++r) {
               if (current_item->path[r]->getSourceIndex() ==
                   tmp_edge->getDestinationIndex()) {
                 cycle = true;
@@ -1325,7 +1321,7 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(size_t src_index,
 
             item->path[item->pathLength - 1] = tmp_edge;
 
-            for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths();
+            for (size_t w = 0; w < threadZero->getNumberOfWavelengths();
                  ++w) {
               item->waveAvailability[w] = current_item->waveAvailability[w] &&
                                           (tmp_edge->getStatus(w) == EDGE_FREE);
@@ -1363,12 +1359,12 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(size_t src_index,
 
   DP_node* final_dp_node = threads[ci]->getRouterAt(dest_index)->dp_node;
 
-  for (unsigned int k1 = 0; k1 < k; ++k1) {
+  for (size_t k1 = 0; k1 < k; ++k1) {
     if (final_dp_node->pathLength[k1] > 0) {
       kSP_return->pathcost[k1] = final_dp_node->optimalWave[k1];
       kSP_return->pathlen[k1] = final_dp_node->pathLength[k1] + 1;
 
-      for (unsigned int r = 0; r < kSP_return->pathlen[k1] - 1; ++r) {
+      for (size_t r = 0; r < kSP_return->pathlen[k1] - 1; ++r) {
         kSP_return->pathinfo[k1 * (threadZero->getNumberOfRouters() - 1) + r] =
             final_dp_node
                 ->paths[k1 * (threadZero->getNumberOfRouters() - 1) + r]
@@ -1387,7 +1383,7 @@ kShortestPathReturn* ResourceManager::calculate_DP_path(size_t src_index,
     }
   }
 
-  for (unsigned int r1 = 0; r1 < threadZero->getNumberOfRouters(); ++r1) {
+  for (size_t r1 = 0; r1 < threadZero->getNumberOfRouters(); ++r1) {
     DP_node* node = threads[ci]->getRouterAt(r1)->dp_node;
 
     delete[] node->paths;
@@ -1418,10 +1414,10 @@ long long int ResourceManager::choose_wavelength(
   bool* wave_available = new bool[threadZero->getNumberOfWavelengths()];
   size_t numberAvailableWaves = threadZero->getNumberOfWavelengths();
 
-  for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
+  for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w)
     wave_available[w] = true;
 
-  for (unsigned int r = 0; r < ccpe->connectionLength; ++r) {
+  for (size_t r = 0; r < ccpe->connectionLength; ++r) {
     Edge* edge = ccpe->connectionPath[r];
 
     for (size_t k = 0; k < threadZero->getNumberOfWavelengths(); ++k) {
@@ -1533,7 +1529,7 @@ double ResourceManager::path_ase_noise(long long int lambda, Edge** Path,
                                        size_t pathLen, size_t ci) const {
   double spans = 0.0;
 
-  for (unsigned int r = 0; r < pathLen; ++r) {
+  for (size_t r = 0; r < pathLen; ++r) {
     spans += Path[r]->getNumberOfSpans();
   }
 
@@ -1560,11 +1556,11 @@ double ResourceManager::path_xpm_noise(long long int lambda, Edge** Path,
         wave == lambda)
       continue;
 
-    unsigned int index = 0;
+    size_t index = 0;
     size_t path_len = 0;
 
     while (index < pathLen) {
-      unsigned int j = 0;
+      size_t j = 0;
 
       for (j = index; j < pathLen; ++j) {
         if (Path[j]->getStatus(wave) == EDGE_USED) {
@@ -1627,23 +1623,23 @@ double ResourceManager::path_fwm_noise(long long int lambda, Edge** Path,
                                        size_t pathLen, size_t ci) const {
   double noise = 0.0;
 
-  for (int r = 0; r < static_cast<int>(fwm_combinations[lambda].size() / 4);
+  for (long long int r = 0; r < static_cast<long long int>(fwm_combinations[lambda].size() / 4);
        r++) {
-    int i_id = fwm_combinations[lambda][r * 4 + 0];
-    int j_id = fwm_combinations[lambda][r * 4 + 1];
-    int k_id = fwm_combinations[lambda][r * 4 + 2];
-    int d = fwm_combinations[lambda][r * 4 + 3];
+    long long int i_id = fwm_combinations[lambda][r * 4 + 0];
+    long long int j_id = fwm_combinations[lambda][r * 4 + 1];
+    long long int k_id = fwm_combinations[lambda][r * 4 + 2];
+    long long int d = fwm_combinations[lambda][r * 4 + 3];
 
-    int i_wave = (*inter_indecies)[lambda][i_id];
-    int j_wave = (*inter_indecies)[lambda][j_id];
-    int k_wave = (*inter_indecies)[lambda][k_id];
+    long long int i_wave = (*inter_indecies)[lambda][i_id];
+    long long int j_wave = (*inter_indecies)[lambda][j_id];
+    long long int k_wave = (*inter_indecies)[lambda][k_id];
     double fi = (*fwm_fs)[lambda][i_id];
     double fj = (*fwm_fs)[lambda][j_id];
     double fk = (*fwm_fs)[lambda][k_id];
 
-    unsigned int index = 0;
+    size_t index = 0;
     size_t plen = 0;
-    unsigned int j = 0;
+    size_t j = 0;
 
     while (index < pathLen) {
       for (j = index; j < pathLen; ++j) {
@@ -1698,14 +1694,14 @@ double ResourceManager::path_fwm_noise(long long int lambda, Edge** Path,
 //					the number.
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::build_FWM_fs(double* inter_fs, int* inter_indecies,
-                                  int lambda) {
-  int num = 0;
+long long int ResourceManager::build_FWM_fs(double* inter_fs, long long int* inter_indecies,
+                                  size_t lambda) {
+  long long int num = 0;
 
-  for (unsigned int i = 0; i < threadZero->getNumberOfWavelengths(); ++i)
+  for (size_t i = 0; i < threadZero->getNumberOfWavelengths(); ++i)
     if (abs(static_cast<int>(i - lambda)) <=
         threadZero->getQualityParams().nonlinear_halfwin) {
-      inter_indecies[num] = i;
+      inter_indecies[num] = static_cast<long long int>(i);
       inter_fs[num] = sys_fs[i];
       num++;
     }
@@ -1721,17 +1717,17 @@ int ResourceManager::build_FWM_fs(double* inter_fs, int* inter_indecies,
 //sorted. 				Incicies are relative to fs.
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::wave_combines(double fc, double* fs, int fs_num,
-                                   std::vector<int>& fs_coms) {
-  int num = 0;
+long long int ResourceManager::wave_combines(double fc, double* fs, long long int fs_num,
+                                   std::vector<long long int>& fs_coms) {
+  long long int num = 0;
 
-  for (int i = 0; i < fs_num; i++)
-    for (int j = 0; j < fs_num; j++)
-      for (int k = 0; k < fs_num; k++) {
-        int fi = -1;
-        int fj = -1;
-        int fk = -1;
-        int d = -1;
+  for (long long int i = 0; i < fs_num; i++)
+    for (long long int j = 0; j < fs_num; j++)
+      for (long long int k = 0; k < fs_num; k++) {
+        long long int fi = -1;
+        long long int fj = -1;
+        long long int fk = -1;
+        long long int d = -1;
 
         if (-fs[i] + fs[j] + fs[k] == fc) {
           fi = j;
@@ -1756,8 +1752,8 @@ int ResourceManager::wave_combines(double fc, double* fs, int fs_num,
           continue;
         }
 
-        int tmp1 = fi;
-        int tmp2 = fj;
+        long long int tmp1 = fi;
+        long long int tmp2 = fj;
 
         if (tmp1 > tmp2) {
           fi = tmp2;
@@ -1785,8 +1781,8 @@ int ResourceManager::wave_combines(double fc, double* fs, int fs_num,
 // Description: Decide whether a combination exists in the database.
 //
 ///////////////////////////////////////////////////////////////////
-bool ResourceManager::can_find(int fi, int fj, int fk,
-                               std::vector<int>& fs_coms, int com_num) {
+bool ResourceManager::can_find(long long int fi, long long int fj, long long int fk,
+                               std::vector<long long int>& fs_coms, long long int com_num) {
   for (int i = 0; i < com_num; i++)
     if (fi == fs_coms[i * 4 + 0] && fj == fs_coms[i * 4 + 1] &&
         fk == fs_coms[i * 4 + 2])
@@ -1801,7 +1797,7 @@ bool ResourceManager::can_find(int fi, int fj, int fk,
 // Description: Decide the degeneracy factor of the FWM terms.
 //
 ///////////////////////////////////////////////////////////////////
-int ResourceManager::degeneracy(int fi, int fj, int fk) {
+long long int ResourceManager::degeneracy(long long int fi, long long int fj, long long int fk) {
   if (fi == fk || fj == fk)
     return -1;  // excluding spm and xpm terms
   else if (fi == fj)
@@ -1817,7 +1813,7 @@ int ResourceManager::degeneracy(int fi, int fj, int fk) {
 //
 ///////////////////////////////////////////////////////////////////
 double ResourceManager::path_fwm_term(size_t spans, double fi, double fj,
-                                      double fk, double fc, int dgen) const {
+                                      double fk, double fc, long long int dgen) const {
   double c = 2.99792457778e+8;
   double pi = 3.14159265358979323846;
   double lambdac = c / fc;
@@ -1900,7 +1896,7 @@ long long int ResourceManager::first_fit_with_ordering(
     generateWaveOrdering();
   }
 
-  for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
+  for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
     if (wave_available[wave_ordering[w]] == true) {
       return wave_ordering[w];
     }
@@ -1974,9 +1970,8 @@ long long int ResourceManager::random_fit(CreateConnectionProbeEvent* ccpe,
                                           size_t ci, bool* wave_available,
                                           size_t numberAvailableWaves) {
   std::default_random_engine generator =
-      std::default_random_engine(static_cast<unsigned int>(
-          threadZero->getRandomSeed() * ccpe->sourceRouterIndex *
-          ccpe->destinationRouterIndex * numberAvailableWaves));
+    std::default_random_engine(static_cast<unsigned int>(threadZero->getRandomSeed() * ccpe->sourceRouterIndex *
+	  ccpe->destinationRouterIndex * numberAvailableWaves));
   std::uniform_int_distribution<size_t> generateWavelength =
       std::uniform_int_distribution<size_t>(0, numberAvailableWaves - 1);
 
@@ -2095,14 +2090,14 @@ long long int ResourceManager::quality_first_fit_with_ordering(
 ///////////////////////////////////////////////////////////////////
 long long int ResourceManager::least_quality_fit(
     CreateConnectionProbeEvent* ccpe, size_t ci, bool* wave_available) {
-  int minQualityWave = -1;
+  long long int minQualityWave = -1;
   double minQualityQFactor = std::numeric_limits<double>::infinity();
 
   double minXPM = 0.0;
   double minFWM = 0.0;
   double minASE = 0.0;
 
-  for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
+  for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
     if (wave_available[w] == true) {
       double qfactor = 0.0;
 
@@ -2150,14 +2145,14 @@ long long int ResourceManager::least_quality_fit(
 ///////////////////////////////////////////////////////////////////
 long long int ResourceManager::most_quality_fit(
     CreateConnectionProbeEvent* ccpe, size_t ci, bool* wave_available) {
-  int maxQualityWave = -1;
+  long long int maxQualityWave = -1;
   double maxQualityQFactor = 0.0;
 
   double maxXPM = 0.0;
   double maxFWM = 0.0;
   double maxASE = 0.0;
 
-  for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
+  for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
     if (wave_available[w] == true) {
       double qfactor = 0.0;
 
@@ -2296,13 +2291,13 @@ long long int ResourceManager::quality_most_used(
 //running.
 //
 ///////////////////////////////////////////////////////////////////
-void ResourceManager::precompute_fwm_fs(std::vector<int>& fwm_nums) {
+void ResourceManager::precompute_fwm_fs(std::vector<long long int>& fwm_nums) {
   fwm_fs = new std::vector<double*>[threadZero->getNumberOfWavelengths()];
-  inter_indecies = new std::vector<int*>[threadZero->getNumberOfWavelengths()];
+  inter_indecies = new std::vector<long long int*>[threadZero->getNumberOfWavelengths()];
 
-  for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
+  for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
     fwm_fs->push_back(new double[threadZero->getNumberOfWavelengths()]);
-    inter_indecies->push_back(new int[threadZero->getNumberOfWavelengths()]);
+    inter_indecies->push_back(new long long int[threadZero->getNumberOfWavelengths()]);
 
     fwm_nums.push_back(build_FWM_fs((*fwm_fs)[w], (*inter_indecies)[w], w));
   }
@@ -2317,13 +2312,13 @@ void ResourceManager::precompute_fwm_fs(std::vector<int>& fwm_nums) {
 //
 ///////////////////////////////////////////////////////////////////
 void ResourceManager::precompute_fwm_combinations() {
-  std::vector<int> fwm_nums;
+  std::vector<long long int> fwm_nums;
 
   precompute_fwm_fs(fwm_nums);
 
-  fwm_combinations = new std::vector<int>[threadZero->getNumberOfWavelengths()];
+  fwm_combinations = new std::vector<long long int>[threadZero->getNumberOfWavelengths()];
 
-  for (unsigned int w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
+  for (size_t w = 0; w < threadZero->getNumberOfWavelengths(); ++w) {
     wave_combines(sys_fs[w], (*fwm_fs)[w], fwm_nums[w], fwm_combinations[w]);
   }
 }
@@ -2358,7 +2353,7 @@ void ResourceManager::initSPMatrix() {
 void ResourceManager::freeSPMatrix() {
   if (SP_paths == 0) return;
 
-  for (unsigned int p = 0;
+  for (size_t p = 0;
        p < threadZero->getNumberOfRouters() * threadZero->getNumberOfRouters();
        ++p) {
     if (SP_paths[p] != 0) {
@@ -2425,7 +2420,7 @@ void ResourceManager::print_connection_info(CreateConnectionProbeEvent* ccpe,
   line.append("SETUP CONNECTION: Routers[" +
               std::to_string(ccpe->connectionLength) + "]:");
 
-  for (unsigned int r = 0; r < ccpe->connectionLength; ++r) {
+  for (size_t r = 0; r < ccpe->connectionLength; ++r) {
     line.append(std::to_string(ccpe->connectionPath[r]->getSourceIndex()));
 
     if (r < ccpe->connectionLength) line.append(",");
@@ -2460,7 +2455,7 @@ void ResourceManager::print_connection_info(CreateConnectionProbeEvent* ccpe,
 
     size_t spans = 0;
 
-    for (unsigned int r = 0; r < ccpe->connectionLength; ++r) {
+    for (size_t r = 0; r < ccpe->connectionLength; ++r) {
       spans += ccpe->connectionPath[r]->getNumberOfSpans();
     }
   }

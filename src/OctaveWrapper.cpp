@@ -46,8 +46,8 @@ void OctaveWrapper::build_nonlinear_datastructure(
                          threadZero->getQualityParams().halfwavelength,
                          threadZero->getQualityParams().halfwavelength, 1);
 
-  for (unsigned int i = 0; i < threadZero->getNumberOfWavelengths(); i++)
-    for (unsigned int j = 0; j < threadZero->getNumberOfWavelengths(); j++)
+  for (size_t i = 0; i < threadZero->getNumberOfWavelengths(); i++)
+    for (size_t j = 0; j < threadZero->getNumberOfWavelengths(); j++)
       sys_link_xpm_database[i * threadZero->getNumberOfWavelengths() + j] = 0.0;
 
 #ifdef NO_OCTAVE

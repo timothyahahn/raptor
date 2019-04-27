@@ -1194,7 +1194,7 @@ void Thread::create_connection_confirmation(
     cne->finalFailure = true;
 
     if (CurrentProbeStyle == PARALLEL) {
-      for (unsigned int p = 0; p < ccce->probes[ccce->sequence]->max_sequence;
+      for (long long int p = 0; p < ccce->probes[ccce->sequence]->max_sequence;
            ++p) {
         if (p != ccce->sequence) {
           if (ccce->probes[p]->atDestination == false) {
@@ -2192,11 +2192,11 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(
         }
       }
     } else if (CurrentRoutingAlgorithm == DYNAMIC_PROGRAMMING) {
-      unsigned int max_probes = threadZero->getQualityParams().max_probes;
+      size_t max_probes = threadZero->getQualityParams().max_probes;
 
       if (CurrentProbeStyle == SINGLE) max_probes = 1;
 
-      for (long long int w = probesSkipped; w < max_probes; ++w) {
+      for (size_t w = probesSkipped; w < max_probes; ++w) {
         if (kPath->pathcost[w] != std::numeric_limits<double>::infinity()) {
           ++probesTotal;
 
@@ -2259,7 +2259,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(
   } else if (CurrentProbeStyle == SERIAL) {
     probesToSend = 0;
 
-    for (long long int a = probesSkipped;
+    for (size_t a = static_cast<size_t>(probesSkipped);
          a < threadZero->getQualityParams().max_probes; ++a) {
       if (kPath->pathcost[a] != std::numeric_limits<double>::infinity()) {
         probeStart = a;
@@ -2271,7 +2271,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(
     probeStart = 0;
     probesToSend = 0;
 
-    for (unsigned int p = 0; p < threadZero->getQualityParams().max_probes;
+    for (size_t p = 0; p < threadZero->getQualityParams().max_probes;
          ++p) {
       if (kPath->pathcost[p] != std::numeric_limits<double>::infinity())
         ++probesToSend;
@@ -2352,7 +2352,7 @@ void Thread::sendProbes(ConnectionRequestEvent* cre, kShortestPathReturn* kPath,
         if (cre->max_sequence == 0) {
           if (CurrentRoutingAlgorithm != IMPAIRMENT_AWARE &&
               CurrentRoutingAlgorithm != DYNAMIC_PROGRAMMING) {
-            for (unsigned int a = 0;
+            for (size_t a = 0;
                  a < threadZero->getQualityParams().max_probes; ++a) {
               if (kPath->pathcost[a] != std::numeric_limits<double>::infinity())
                 ++cre->max_sequence;
@@ -2441,7 +2441,7 @@ void Thread::update_gui() {
     return;
   }
 
-  for (unsigned int r = 0; r < getNumberOfRouters(); ++r) {
+  for (size_t r = 0; r < getNumberOfRouters(); ++r) {
     getRouterAt(r)->updateGUI();
   }
 
@@ -2777,7 +2777,7 @@ void Thread::saveThread(char* dir) {
   myFile << getCurrentActiveWorkstations() << "|\n";
   myFile.close();
 
-  for (unsigned int r = 0; r < routers.size(); ++r)
+  for (size_t r = 0; r < routers.size(); ++r)
     routers[r]->saveData(allName);
 }
 #endif

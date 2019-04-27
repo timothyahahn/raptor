@@ -51,22 +51,20 @@ struct QualityParameters {
                                  // LORA
   double beta;              // beta value for PABR and LORA
   int gui_update_interval;  // interval for updating the gui
-  unsigned int max_probes;  // max number of probes per connection request
+  size_t max_probes;  // max number of probes per connection request
   double refractive_index;  // refractive index of the optical links
   bool q_factor_stats;      // should the program calculate the Q-factor stats
                         // (1=yes,0=no)
   bool detailed_log;  // should the program keep a detailed log (1=yes,0=no)
   DestinationDistribution dest_dist;  // distribution of the destination
   double DP_alpha;                    // Alpha value for Dynamic Programming
-  unsigned int ACO_ants;              // number of ants in each ACO iteration
+  size_t ACO_ants;              // number of ants in each ACO iteration
   double ACO_alpha;                   // the pheromone power index for ACO
   double ACO_beta;      // the heuristic information power index for ACO
   double ACO_rho;       // the pheromone evaporation rate for ACO
   double MM_ACO_gamma;  // the min-max pheromone ratio for MM ACO
-  unsigned int
-      MM_ACO_N_iter;  // the number of iterations for stagnation for MM ACO
-  unsigned int
-      MM_ACO_N_reset;  // the number of reinitialization times for MM ACO
+  size_t MM_ACO_N_iter;  // the number of iterations for stagnation for MM ACO
+  size_t MM_ACO_N_reset;  // the number of reinitialization times for MM ACO
 };
 
 #endif
