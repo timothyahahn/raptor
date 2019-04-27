@@ -243,12 +243,12 @@ void Thread::initPriorityQueue() {
   Event* activate = new Event;
   activate->e_type = ACTIVATE_WORKSTATIONS;
   activate->e_time = 0.0;
-  activate->e_data = 0;
+  activate->e_data = nullptr;
 
   Event* deactivate = new Event;
   deactivate->e_type = DEACTIVATE_WORKSTATIONS;
   deactivate->e_time = std::numeric_limits<double>::infinity();
-  deactivate->e_data = 0;
+  deactivate->e_data = nullptr;
 
   queue->addEvent(*deactivate);
   queue->addEvent(*activate);
@@ -261,7 +261,7 @@ void Thread::initPriorityQueue() {
 
     event->e_type = UPDATE_USAGE;
     event->e_time = 0.0;
-    event->e_data = 0;
+    event->e_data = nullptr;
 
     queue->addEvent(*event);
 
@@ -273,7 +273,7 @@ void Thread::initPriorityQueue() {
 
   event->e_type = UPDATE_GUI;
   event->e_time = 0.0;
-  event->e_data = 0;
+  event->e_data = nullptr;
 
   queue->addEvent(*event);
 
@@ -2076,7 +2076,7 @@ void Thread::update_link_usage() {
   event->e_type = UPDATE_USAGE;
   event->e_time =
       getGlobalTime() + threadZero->getQualityParams().usage_update_interval;
-  event->e_data = 0;
+  event->e_data = nullptr;
 
   queue->addEvent(*event);
 
@@ -2172,7 +2172,7 @@ CreateConnectionProbeEvent** Thread::calcProbesToSend(
     ConnectionRequestEvent* cre, kShortestPathReturn* kPath,
     long long int& probesToSend, long long int& probeStart,
     long long int& probesSkipped) {
-  CreateConnectionProbeEvent** probesList = 0;
+  CreateConnectionProbeEvent** probesList = nullptr;
 
   // We have to handle some algorithms differently because it uses a forward
   // reservation scheme, while the others use a backward reservation scheme.
@@ -2450,7 +2450,7 @@ void Thread::update_gui() {
   event->e_type = UPDATE_GUI;
   event->e_time =
       getGlobalTime() + threadZero->getQualityParams().gui_update_interval;
-  event->e_data = 0;
+  event->e_data = nullptr;
 
   queue->addEvent(*event);
 
