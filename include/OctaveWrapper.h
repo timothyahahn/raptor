@@ -24,6 +24,7 @@ class OctaveWrapper {
  public:
   static void build_nonlinear_datastructure(double *sys_fs,
                                             double *sys_link_xpm_database);
+  static void helloWorld();
 
  private:
   static void build_xpm_database(double *fs, int fs_num, double channel_power,

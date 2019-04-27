@@ -22,9 +22,13 @@
 #ifndef NO_OCTAVE
 #include <octave/oct.h>
 #include <octave/octave.h>
+#include <octave/parse.h>
+#include <octave/toplev.h>
 #endif  // NO_OCTAVE
 
 #include "Thread.h"
+
+#include <string>
 
 extern Thread* threadZero;
 
@@ -64,6 +68,26 @@ void OctaveWrapper::build_nonlinear_datastructure(
   load_xpm_database(sys_link_xpm_database, sys_fs_num);
 
   return;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// Function Name:	helloWorld
+// Description:		Simple function to test octave
+//
+//
+///////////////////////////////////////////////////////////////////
+void OctaveWrapper::helloWorld()
+{
+	string_vector argvv(2);
+	argvv(0) = "embedded";
+	argvv(1) = "-q";
+	octave_main(2, argvv.c_str_vec(), true);
+	source_file("hello_world.m");
+	octave_value_list inputs;
+	const octave_value_list_result = feval("print_hello_world", inputs, 0);
+	result(0).print_raw(std::cout, true);
+	clean_up_and_exit(0):
 }
 
 ///////////////////////////////////////////////////////////////////

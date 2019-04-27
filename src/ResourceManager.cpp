@@ -61,7 +61,8 @@ ResourceManager::ResourceManager()
                                        threadZero->getNumberOfWavelengths()]) {
   calc_min_spans();
 
-  OctaveWrapper::build_nonlinear_datastructure(sys_fs, sys_link_xpm_database);
+  //OctaveWrapper::build_nonlinear_datastructure(sys_fs, sys_link_xpm_database);
+  OctaveWrapper::helloWorld();
 
   precompute_fwm_combinations();
 }
