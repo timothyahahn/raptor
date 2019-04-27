@@ -79,7 +79,7 @@ void OctaveWrapper::build_nonlinear_datastructure(
 ///////////////////////////////////////////////////////////////////
 void OctaveWrapper::helloWorld()
 {
-	string_vector argvv(2);
+	/*string_vector argvv(2);
 	argvv(0) = "embedded";
 	argvv(1) = "-q";
 	octave_main(2, argvv.c_str_vec(), true);
@@ -91,7 +91,43 @@ void OctaveWrapper::helloWorld()
 	octave_value_list inputs;
 	const octave_value_list result = feval("hello_world", inputs, 0);
 	result(0).print_raw(std::cout, true);
-	clean_up_and_exit(0);
+	clean_up_and_exit(0);*/
+	try
+	{
+		octave::interpreter interpreter;
+		interpreter.initialize_load_path("octave");
+		interpreter.initialize();
+		if (!interpreter.initialized())
+		{
+			std::cerr << "ERROR: Interpreter initialization failed" << std::endl;
+			return;
+		}
+		int status = interpreter.execute();
+		if (status != 0)
+		{
+			std::cerr << "ERROR: Creating embedded interpreter failed" << std::endl;
+			return;
+		}
+		octave_value_list inputs;
+		const octave_value_list result = octave::feval("hello_world", inputs, 0);
+		if (result.length() > 0)
+		{
+			std::cout << "hello_world returned" << result(0).int_value();
+		}
+		else
+		{
+			std::cerr << "ERROR: result.length() is 0" << std::endl;
+		}
+	}
+	catch (const octave::exit_exception & ex)
+	{
+		std::cerr << "Octave interpreter exited with status = "
+			<< ex.exit_status() << std::endl;
+	}
+	catch (const octave::execution_exception&)
+	{
+		std::cerr << "error encountered in Octave evaluator!" << std::endl;
+	}
 }
 
 ///////////////////////////////////////////////////////////////////
