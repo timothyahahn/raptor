@@ -68,32 +68,31 @@ class ResourceManager {
   long long int choose_wavelength(CreateConnectionProbeEvent* ccpe, size_t ci);
 
   double estimate_Q(long long int lambda, Edge** Path, size_t pathLen,
-                    double* xpm, double* fwm, double* ase, size_t ci);
+                    double* xpm, double* fwm, double* ase, size_t ci) const;
 
   void initSPMatrix();
   void freeSPMatrix();
 
-  double path_fwm_term(size_t spans, double fi, double fj, double fk, double fc,
-                       int dgen);
-  double path_xpm_term(size_t spans, size_t lambda, size_t wave);
-
   void print_connection_info(CreateConnectionProbeEvent* ccpe, double Q_factor,
-                             double ase, double fwm, double xpm, size_t ci);
-
-  double* sys_fs;
-  std::vector<int>* fwm_combinations;
+                             double ase, double fwm, double xpm, size_t ci) const;
 
   size_t* span_distance;
 
  private:
   double path_ase_noise(long long int lambda, Edge** Path, size_t pathLen,
-                        size_t ci);
+                        size_t ci) const;
 
   double path_fwm_noise(long long int lambda, Edge** Path, size_t pathLen,
-                        size_t ci);
+                        size_t ci) const;
 
   double path_xpm_noise(long long int lambda, Edge** Path, size_t pathLen,
-                        size_t ci);
+                        size_t ci) const;
+
+  double path_fwm_term(size_t spans, double fi, double fj, double fk, double fc,
+	  int dgen) const;
+  double path_xpm_term(size_t spans, size_t lambda, size_t wave) const;
+
+  size_t calculate_span_distance(size_t src_index, size_t dest_index);
 
   int build_FWM_fs(double* inter_fs, int* inter_indecies, int lambda);
   int wave_combines(double fc, double* fs, int fs_num,
@@ -148,11 +147,13 @@ class ResourceManager {
   kShortestPathEdges* kSP_edgeList;
 
   void calc_min_spans();
-  unsigned int calculate_span_distance(size_t src_index, size_t dest_index);
 
   long long int* wave_ordering;
 
   void generateWaveOrdering();
+
+  double* sys_fs;
+  std::vector<int>* fwm_combinations;
 
   long long int getLowerBound(int w, int n);
   long long int getUpperBound(int w, int n);

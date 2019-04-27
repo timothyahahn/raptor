@@ -168,9 +168,9 @@ kShortestPathReturn* ResourceManager::calculate_SP_path(size_t src_index,
 //algorithm.
 //
 ///////////////////////////////////////////////////////////////////
-unsigned int ResourceManager::calculate_span_distance(size_t src_index,
+size_t ResourceManager::calculate_span_distance(size_t src_index,
                                                       size_t dest_index) {
-  unsigned int retVal = 0;
+  size_t retVal = 0;
 
   if (kSP_edgeList == 0) build_KSP_EdgeList();
 
@@ -186,8 +186,6 @@ unsigned int ResourceManager::calculate_span_distance(size_t src_index,
   memcpy(kSP_params.edge_list, kSP_edgeList,
          sizeof(kShortestPathEdges) * kSP_params.total_edges);
 
-  unsigned int num = 0;
-
   kShortestPathReturn* kSP_return = new kShortestPathReturn();
 
   kSP_return->pathinfo = new size_t[1 * (kSP_params.total_nodes - 1)];
@@ -198,7 +196,7 @@ unsigned int ResourceManager::calculate_span_distance(size_t src_index,
 
   delete[] kSP_params.edge_list;
 
-  retVal = static_cast<unsigned int>(kSP_return->pathcost[0]);
+  retVal = static_cast<size_t>(kSP_return->pathcost[0]);
 
   delete[] kSP_return->pathinfo;
   delete[] kSP_return->pathcost;
@@ -1503,7 +1501,7 @@ long long int ResourceManager::choose_wavelength(
 ///////////////////////////////////////////////////////////////////
 double ResourceManager::estimate_Q(long long int lambda, Edge** Path,
                                    size_t pathLen, double* xpm, double* fwm,
-                                   double* ase, size_t ci) {
+                                   double* ase, size_t ci) const {
   double noise = 0.0;
   double Q = 0.0;
 
@@ -1532,7 +1530,7 @@ double ResourceManager::estimate_Q(long long int lambda, Edge** Path,
 //
 ///////////////////////////////////////////////////////////////////
 double ResourceManager::path_ase_noise(long long int lambda, Edge** Path,
-                                       size_t pathLen, size_t ci) {
+                                       size_t pathLen, size_t ci) const {
   double spans = 0.0;
 
   for (unsigned int r = 0; r < pathLen; ++r) {
@@ -1549,7 +1547,7 @@ double ResourceManager::path_ase_noise(long long int lambda, Edge** Path,
 //
 ///////////////////////////////////////////////////////////////////
 double ResourceManager::path_xpm_noise(long long int lambda, Edge** Path,
-                                       size_t pathLen, size_t ci) {
+                                       size_t pathLen, size_t ci) const {
   double noise = 0.0;
 
   for (int wave = 0;
@@ -1613,7 +1611,7 @@ double ResourceManager::path_xpm_noise(long long int lambda, Edge** Path,
 //
 ///////////////////////////////////////////////////////////////////
 double ResourceManager::path_xpm_term(size_t spans, size_t lambda,
-                                      size_t wave) {
+                                      size_t wave) const {
   return sys_link_xpm_database[lambda * threadZero->getNumberOfWavelengths() +
                                wave] *
          double(spans) * double(spans);
@@ -1626,7 +1624,7 @@ double ResourceManager::path_xpm_term(size_t spans, size_t lambda,
 //
 ///////////////////////////////////////////////////////////////////
 double ResourceManager::path_fwm_noise(long long int lambda, Edge** Path,
-                                       size_t pathLen, size_t ci) {
+                                       size_t pathLen, size_t ci) const {
   double noise = 0.0;
 
   for (int r = 0; r < static_cast<int>(fwm_combinations[lambda].size() / 4);
@@ -1819,7 +1817,7 @@ int ResourceManager::degeneracy(int fi, int fj, int fk) {
 //
 ///////////////////////////////////////////////////////////////////
 double ResourceManager::path_fwm_term(size_t spans, double fi, double fj,
-                                      double fk, double fc, int dgen) {
+                                      double fk, double fc, int dgen) const {
   double c = 2.99792457778e+8;
   double pi = 3.14159265358979323846;
   double lambdac = c / fc;
@@ -2343,10 +2341,10 @@ void ResourceManager::initSPMatrix() {
   SP_paths = new kShortestPathReturn*[threadZero->getNumberOfRouters() *
                                       threadZero->getNumberOfRouters()];
 
-  for (unsigned int p = 0;
+  for (size_t p = 0;
        p < threadZero->getNumberOfRouters() * threadZero->getNumberOfRouters();
        ++p) {
-    SP_paths[p] = 0;
+    SP_paths[p] = nullptr;
   }
 }
 
@@ -2421,7 +2419,7 @@ void ResourceManager::build_KSP_EdgeList() {
 ///////////////////////////////////////////////////////////////////
 void ResourceManager::print_connection_info(CreateConnectionProbeEvent* ccpe,
                                             double Q_factor, double ase,
-                                            double fwm, double xpm, size_t ci) {
+                                            double fwm, double xpm, size_t ci) const {
   std::string line;
 
   line.append("SETUP CONNECTION: Routers[" +
