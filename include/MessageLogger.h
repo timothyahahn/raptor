@@ -34,7 +34,7 @@ class MessageLogger
 		MessageLogger(const std::string&, const std::string&, const std::string&, const std::string&);
 		~MessageLogger();
 
-		void recordEvent(const std::string &e, bool print, unsigned int ci);
+		void recordEvent(const std::string &e, bool print, size_t ci);
 
 		void flushLog(bool print);
 

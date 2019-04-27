@@ -73,7 +73,8 @@ char folder[50];
 //pointer to the class due to a circular reference.
 Thread* threadZero = nullptr;
 Thread** threads = nullptr;
-unsigned int threadCount = 0;
+
+size_t threadCount = 0;
 
 std::vector<AlgorithmToRun*> algParams;
 
@@ -87,7 +88,6 @@ int main( int argc, const char* argv[] )
 	if(argc != 7)
 	{
 		std::cerr << "Usage: " << argv[0] << " <Topology> <Wavelengths> <Random Seed> <Thread Count> <Iteration Count> <Probe Count>" << std::endl;
-
 		std::cerr << std::endl;
 
 		std::cerr << "Topology: NSF, Mesh, Mesh6x6, Mesh8x8, Mesh10x10" << std::endl;
@@ -199,9 +199,9 @@ void runSimulation(int argc, const char* argv[])
 	pthread_mutex_init(&ScheduleMutex,nullptr);
 
 	if(threadCount > algParams.size())
-		threadCount = static_cast<unsigned int>(algParams.size());
+		threadCount = algParams.size();
 
-	for(unsigned int t = 1; t < threadCount; ++t)
+	for(size_t t = 1; t < threadCount; ++t)
 	{
 		Thread* thread = new Thread(t,argc,argv,false);
 		pThreads.push_back(new pthread_t);
@@ -214,14 +214,20 @@ void runSimulation(int argc, const char* argv[])
 	threadZero->recordEvent(buffer.str(),true,0);
 	threadZero->flushLog(true);
 
-	for(unsigned int t = 1; t < threadCount; ++t)
+	for(size_t t = 1; t < threadCount; ++t)
 	{
-		pthread_create(pThreads[t-1],nullptr,runThread,new unsigned int(t));
+		int ret_code = pthread_create(pThreads[t-1],nullptr,runThread,new size_t(t));
+
+		if (ret_code != 0)
+		{
+			std::cerr << "ERROR: Thread creation failed with code: " << ret_code << std::endl;
+			return;
+		}
 	}
 
-	threadZeroReturn = static_cast<int*>(runThread(new unsigned int(0)));
+	threadZeroReturn = static_cast<int*>(runThread(new size_t(0)));
 
-	for(unsigned int t = 1; t < threadCount; ++t)
+	for(size_t t = 1; t < threadCount; ++t)
 	{
 		pthread_join(*pThreads[t-1],nullptr);
 
@@ -230,7 +236,7 @@ void runSimulation(int argc, const char* argv[])
 #endif
 	}
 
-	for(unsigned int t = 0; t < threadCount; ++t)
+	for(size_t t = 0; t < threadCount; ++t)
 	{
 		delete threads[t];
 
@@ -257,7 +263,7 @@ void runSimulation(int argc, const char* argv[])
 
 void *runThread(void* n)
 {
-	unsigned int* t_id = static_cast<unsigned int *>(n);
+	size_t* t_id = static_cast<size_t*>(n);
 
 	int *retVal = new int;
 

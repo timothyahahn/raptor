@@ -39,7 +39,8 @@ extern ALLEGRO_BITMAP *popup;
 
 extern Thread* threadZero;
 extern Thread** threads;
-extern unsigned int threadCount;
+
+extern size_t threadCount;
 
 extern std::vector<AlgorithmToRun*> algParams;
 
@@ -72,7 +73,7 @@ Thread::Thread() :
 //					and initializes the controller.
 //
 ///////////////////////////////////////////////////////////////////
-Thread::Thread(int ci, int argc, const char* argv[], bool isLPS) :
+Thread::Thread(size_t ci, int argc, const char* argv[], bool isLPS) :
 	CurrentActiveWorkstations(0), CurrentProbeStyle(ProbeStyle::NUMBER_OF_PROBE_STYLES), CurrentQualityAware(false), 
 	CurrentWavelengthAlgorithm(WavelengthAlgorithm::NUMBER_OF_WAVELENGTH_ALGORITHMS), globalTime(0.0), logger(nullptr),
 	maxRunCount(0), maxSpans(0), minDuration(0.0), numOfWavelengths(0), numberOfConnections(0), numberOfEdges(0), numberOfRouters(0),
@@ -433,7 +434,7 @@ void Thread::activate_workstations()
 	{
 		bool SP_active = false;
 
-		for(unsigned int t = 0; t < threadCount; ++t)
+		for(size_t t = 0; t < threadCount; ++t)
 		{
 			if(threads[t]->getCurrentRoutingAlgorithm() == SHORTEST_PATH)
 			{

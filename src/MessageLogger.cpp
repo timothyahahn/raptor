@@ -68,7 +68,7 @@ MessageLogger::~MessageLogger()
 //					value is set to true (that is the default)
 //
 ///////////////////////////////////////////////////////////////////
-void MessageLogger::recordEvent(const std::string &e, bool print, unsigned int ci)
+void MessageLogger::recordEvent(const std::string &e, bool print, size_t ci)
 {
 	if(threadZero->getQualityParams().detailed_log == false && print == false)
 	{

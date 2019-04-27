@@ -70,17 +70,17 @@ class Edge
 
 		void updateUsage();
 		
-		void updateQMDegredation(unsigned int ci, long long int wavelength);
-		void updateQFactorStats(unsigned int ci, long long int wavelength);
+		void updateQMDegredation(size_t ci, long long int wavelength);
+		void updateQFactorStats(size_t ci, long long int wavelength);
 
 		inline void resetAlgorithmUsage()
 			{ algorithmUsage = 0.0; };
 		void resetQMDegredation();
 
-		 void resetPheremone(unsigned int ci, size_t spans);
+		 void resetPheremone(size_t ci, size_t spans);
 
-		void evaporatePheremone(unsigned int ci);
-		void addPheremone(size_t hops, unsigned int ci);
+		void evaporatePheremone(size_t ci);
+		void addPheremone(size_t hops, size_t ci);
 
 #ifndef NO_ALLEGRO
 		void updateGUI();

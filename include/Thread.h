@@ -50,7 +50,7 @@ class Thread
 {
 	public:
 		Thread();
-		Thread(int ci, int argc, const char* argv[], bool isLPS);
+		Thread(size_t ci, int argc, const char* argv[], bool isLPS);
 		~Thread();
 
 		inline Router* getRouterAt(size_t i)
@@ -84,7 +84,7 @@ class Thread
 		inline QualityParameters getQualityParams()
 			{ return qualityParams; };
 
-		inline void recordEvent(const std::string& s, bool print, unsigned int ci)
+		inline void recordEvent(const std::string& s, bool print, size_t ci)
 		{
 			if(isLoadPrevious == true)
 				return;
@@ -342,7 +342,7 @@ class Thread
 
 #endif
 
-		unsigned int controllerIndex;
+		size_t controllerIndex;
 
 		RoutingAlgorithm CurrentRoutingAlgorithm;
 		WavelengthAlgorithm CurrentWavelengthAlgorithm;

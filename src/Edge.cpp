@@ -129,7 +129,7 @@ Edge::~Edge()
 // Description:		Evaporates the pheremone
 //
 ///////////////////////////////////////////////////////////////////
-void Edge::evaporatePheremone(unsigned int ci)
+void Edge::evaporatePheremone(size_t ci)
 {
 	pheremone = (1.0 - threadZero->getQualityParams().ACO_rho) * pheremone;
 
@@ -148,7 +148,7 @@ void Edge::evaporatePheremone(unsigned int ci)
 // Description:		Resets the pheremone levels to the initial value
 //
 ///////////////////////////////////////////////////////////////////
-void Edge::resetPheremone(unsigned int ci, size_t spans)
+void Edge::resetPheremone(size_t ci, size_t spans)
 {
 	if(threads[ci]->getCurrentRoutingAlgorithm() == MAX_MIN_ACO)
 	{
@@ -167,7 +167,7 @@ void Edge::resetPheremone(unsigned int ci, size_t spans)
 // Description:		Adds the pheremone level based upon the solution quality.
 //
 ///////////////////////////////////////////////////////////////////
-void Edge::addPheremone(size_t hops, unsigned int ci)
+void Edge::addPheremone(size_t hops, size_t ci)
 {
 	pheremone = pheremone + 1.0 / double(hops);
 
@@ -362,7 +362,7 @@ void Edge::updateUsage()
 // Description:		Updates the usage of the edges
 //
 ///////////////////////////////////////////////////////////////////
-void Edge::updateQMDegredation(unsigned int ci, long long int wavelength)
+void Edge::updateQMDegredation(size_t ci, long long int wavelength)
 {	
 	ResourceManager* rm = threadZero->getResourceManager();
 
@@ -451,7 +451,7 @@ void Edge::updateQMDegredation(unsigned int ci, long long int wavelength)
 // Description:		Updates the Q Factor stats
 //
 ///////////////////////////////////////////////////////////////////
-void Edge::updateQFactorStats(unsigned int ci, long long int wavelength)
+void Edge::updateQFactorStats(size_t ci, long long int wavelength)
 {
 	ResourceManager* rm = threadZero->getResourceManager();
 

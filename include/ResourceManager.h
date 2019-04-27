@@ -45,19 +45,19 @@ class ResourceManager
 		ResourceManager();
 		~ResourceManager();
 
-		kShortestPathReturn* calculate_SP_path(size_t src_index, size_t dest_index, size_t k, unsigned int ci);
-		kShortestPathReturn* calculate_LORA_path(size_t src_index, size_t dest_index, size_t k, unsigned int ci);
-		kShortestPathReturn* calculate_PAR_path(size_t src_index, size_t dest_index, size_t k, unsigned int ci);
-		kShortestPathReturn* calculate_IA_path(size_t src_index, size_t dest_index, unsigned int ci);
-		kShortestPathReturn* calculate_QM_path(size_t src_index, size_t dest_index, size_t k, unsigned int ci);
-		kShortestPathReturn* calculate_AQoS_path(size_t src_index, size_t dest_index, size_t k, unsigned int ci);
-		kShortestPathReturn* calculate_DP_path(size_t src_index, size_t dest_index, size_t k, unsigned int ci);
-		kShortestPathReturn* calculate_ACO_path(size_t src_index, size_t dest_index, size_t k, unsigned int ci);
-		kShortestPathReturn* calculate_MM_ACO_path(size_t src_index, size_t dest_index, size_t k, unsigned int ci);
+		kShortestPathReturn* calculate_SP_path(size_t src_index, size_t dest_index, size_t k, size_t ci);
+		kShortestPathReturn* calculate_LORA_path(size_t src_index, size_t dest_index, size_t k, size_t ci);
+		kShortestPathReturn* calculate_PAR_path(size_t src_index, size_t dest_index, size_t k, size_t ci);
+		kShortestPathReturn* calculate_IA_path(size_t src_index, size_t dest_index, size_t ci);
+		kShortestPathReturn* calculate_QM_path(size_t src_index, size_t dest_index, size_t k, size_t ci);
+		kShortestPathReturn* calculate_AQoS_path(size_t src_index, size_t dest_index, size_t k, size_t ci);
+		kShortestPathReturn* calculate_DP_path(size_t src_index, size_t dest_index, size_t k, size_t ci);
+		kShortestPathReturn* calculate_ACO_path(size_t src_index, size_t dest_index, size_t k, size_t ci);
+		kShortestPathReturn* calculate_MM_ACO_path(size_t src_index, size_t dest_index, size_t k, size_t ci);
 
-		long long int choose_wavelength(CreateConnectionProbeEvent* ccpe, unsigned int ci);
+		long long int choose_wavelength(CreateConnectionProbeEvent* ccpe, size_t ci);
 
-		double estimate_Q(long long int lambda, Edge **Path, size_t pathLen, double *xpm, double *fwm, double *ase, unsigned int ci);
+		double estimate_Q(long long int lambda, Edge **Path, size_t pathLen, double *xpm, double *fwm, double *ase, size_t ci);
 
 		void initSPMatrix();
 		void freeSPMatrix();
@@ -65,7 +65,7 @@ class ResourceManager
 		double path_fwm_term(size_t spans,double fi,double fj, double fk,double fc,int dgen);
 		double path_xpm_term(size_t spans, size_t lambda, size_t wave);
 
-		void print_connection_info(CreateConnectionProbeEvent* ccpe, double Q_factor, double ase, double fwm, double xpm, unsigned int ci);
+		void print_connection_info(CreateConnectionProbeEvent* ccpe, double Q_factor, double ase, double fwm, double xpm, size_t ci);
 
 		double* sys_fs;
 		std::vector<int>* fwm_combinations;
@@ -73,11 +73,11 @@ class ResourceManager
 		size_t* span_distance;
 
 	private:
-		double path_ase_noise(long long int lambda, Edge **Path, size_t pathLen, unsigned int ci);
+		double path_ase_noise(long long int lambda, Edge **Path, size_t pathLen, size_t ci);
 
-		double path_fwm_noise(long long int lambda, Edge **Path, size_t pathLen, unsigned int ci);
+		double path_fwm_noise(long long int lambda, Edge **Path, size_t pathLen, size_t ci);
 
-		double path_xpm_noise(long long int lambda, Edge **Path, size_t pathLen, unsigned int ci);
+		double path_xpm_noise(long long int lambda, Edge **Path, size_t pathLen, size_t ci);
 		
 		int build_FWM_fs(double *inter_fs,int *inter_indecies, int lambda);
 		int wave_combines(double fc, double *fs,int fs_num, std::vector<int> &fs_coms);
@@ -87,22 +87,22 @@ class ResourceManager
 		double* sys_link_xpm_database;
 		int sys_fs_num;
 
-		long long int first_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
-		long long int first_fit_with_ordering(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
+		long long int first_fit(CreateConnectionProbeEvent* ccpe, size_t ci, bool* wave_available);
+		long long int first_fit_with_ordering(CreateConnectionProbeEvent* ccpe, size_t ci, bool* wave_available);
 
-		long long int random_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available, size_t numberAvailableWaves);
+		long long int random_fit(CreateConnectionProbeEvent* ccpe, size_t ci, bool* wave_available, size_t numberAvailableWaves);
 
-		long long int most_used(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
+		long long int most_used(CreateConnectionProbeEvent* ccpe, size_t ci, bool* wave_available);
 
-		long long int quality_first_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves);
-		long long int quality_first_fit_with_ordering(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves);
+		long long int quality_first_fit(CreateConnectionProbeEvent* ccpe, size_t ci, bool* wave_available,size_t numberAvailableWaves);
+		long long int quality_first_fit_with_ordering(CreateConnectionProbeEvent* ccpe, size_t ci, bool* wave_available,size_t numberAvailableWaves);
 
-		long long int quality_random_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves);
+		long long int quality_random_fit(CreateConnectionProbeEvent* ccpe, size_t ci, bool* wave_available,size_t numberAvailableWaves);
 
-		long long int quality_most_used(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available,size_t numberAvailableWaves);
+		long long int quality_most_used(CreateConnectionProbeEvent* ccpe, size_t ci, bool* wave_available,size_t numberAvailableWaves);
 
-		long long int least_quality_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
-		long long int most_quality_fit(CreateConnectionProbeEvent* ccpe, unsigned int ci, bool* wave_available);
+		long long int least_quality_fit(CreateConnectionProbeEvent* ccpe, size_t ci, bool* wave_available);
+		long long int most_quality_fit(CreateConnectionProbeEvent* ccpe, size_t ci, bool* wave_available);
 
 		void precompute_fwm_fs(std::vector<int> &fwm_nums);
 		void precompute_fwm_combinations();
