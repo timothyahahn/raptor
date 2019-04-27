@@ -94,15 +94,14 @@ void OctaveWrapper::helloWorld()
 	clean_up_and_exit(0);*/
 	try
 	{
-		octave::interpreter interpreter;
-		interpreter.initialize_load_path("octave");
-		interpreter.initialize();
-		if (!interpreter.initialized())
+		octave::interpreter interp;
+		interp.initialize();
+		if (!interp.initialized())
 		{
 			std::cerr << "ERROR: Interpreter initialization failed" << std::endl;
 			return;
 		}
-		int status = interpreter.execute();
+		int status = interp.execute();
 		if (status != 0)
 		{
 			std::cerr << "ERROR: Creating embedded interpreter failed" << std::endl;
