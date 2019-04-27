@@ -52,87 +52,71 @@ class Thread {
   Thread(size_t ci, int argc, const char* argv[], bool isLPS);
   ~Thread();
 
-  inline Router* getRouterAt(size_t i) { return routers[i]; };
-  inline Workstation* getWorkstationAt(size_t i) { return workstations[i]; };
+  inline Router* getRouterAt(size_t i) const { return routers[i]; }
+  inline Workstation* getWorkstationAt(size_t i) const { return workstations[i]; }
+  inline double getGlobalTime() const { return globalTime; }
 
-  inline void addRouter(Router* r) { routers.push_back(r); };
-  inline void addWorkstation(Workstation* w) { workstations.push_back(w); };
+  inline void addRouter(Router* r) { routers.push_back(r); }
+  inline void addWorkstation(Workstation* w) { workstations.push_back(w); }\
+  inline void setGlobalTime(double t) { globalTime = t; }
+  inline void setControllerIndex(size_t ci) { controllerIndex = ci; }
 
-  inline double getGlobalTime() { return globalTime; };
-  inline void setGlobalTime(double t) { globalTime = t; };
-
-  inline GlobalStats& getGlobalStats() { return stats; };
-
-  inline void setControllerIndex(unsigned int ci) { controllerIndex = ci; };
+  inline GlobalStats& getGlobalStats() { return stats; }
+  inline QualityParameters& getQualityParams() { return qualityParams; }
 
   void initThread(AlgorithmToRun* alg);
 
   int runThread(AlgorithmToRun* alg);
 
-  void initPriorityQueue(unsigned int w);
+  void initPriorityQueue();
+
   void initResourceManager();
 
-  inline QualityParameters getQualityParams() { return qualityParams; };
+  void recordEvent(const std::string& s, bool print, size_t ci);
+  void flushLog(bool print);
 
-  inline void recordEvent(const std::string& s, bool print, size_t ci) {
-    if (isLoadPrevious == true)
-      return;
-    else if (controllerIndex == 0)
-      logger->recordEvent(s, print, ci);
-    else
-      exit(ERROR_RECORD_EVENT);
-  };
+  inline size_t getNumberOfRouters() const { return numberOfRouters; }
+  inline size_t getNumberOfWorkstations() const { return numberOfWorkstations; }
+  inline size_t getNumberOfEdges() const { return numberOfEdges; }
+  inline size_t getNumberOfWavelengths() const { return numOfWavelengths; }
+  inline size_t getRandomSeed() const { return randomSeed; }
 
-  inline void flushLog(bool print) {
-    if (isLoadPrevious == true)
-      return;
-    else if (controllerIndex == 0)
-      logger->flushLog(print);
-    else
-      exit(ERROR_NO_FLUSH);
-  }
+  inline void setNumberOfWavelengths(size_t n) { numOfWavelengths = n; }
 
-  inline size_t getNumberOfRouters() { return numberOfRouters; };
-  inline size_t getNumberOfWorkstations() { return numberOfWorkstations; };
-  inline size_t getNumberOfEdges() { return numberOfEdges; };
-  inline size_t getNumberOfWavelengths() { return numOfWavelengths; };
-  inline void setNumberOfWavelengths(size_t n) { numOfWavelengths = n; };
-  inline size_t getRandomSeed() { return randomSeed; };
+  inline ResourceManager* getResourceManager() const { return rm; }
 
-  inline ResourceManager* getResourceManager() { return rm; };
-
-  inline RoutingAlgorithm getCurrentRoutingAlgorithm() {
+  inline RoutingAlgorithm getCurrentRoutingAlgorithm() const {
     return CurrentRoutingAlgorithm;
-  };
-  inline WavelengthAlgorithm getCurrentWavelengthAlgorithm() {
+  }
+  inline WavelengthAlgorithm getCurrentWavelengthAlgorithm() const {
     return CurrentWavelengthAlgorithm;
-  };
-  inline ProbeStyle getCurrentProbeStyle() { return CurrentProbeStyle; };
-  inline bool getCurrentQualityAware() { return CurrentQualityAware; };
-  inline unsigned int getCurrentActiveWorkstations() {
+  }
+  inline ProbeStyle getCurrentProbeStyle() const { return CurrentProbeStyle; };
+  inline bool getCurrentQualityAware() const { return CurrentQualityAware; };
+  inline size_t getCurrentActiveWorkstations() const {
     return CurrentActiveWorkstations;
-  };
-  inline void setCurrentActiveWorkstations(unsigned int w) {
+  }
+  inline void setCurrentActiveWorkstations(size_t w) {
     CurrentActiveWorkstations = w;
   }
 
-  double getBeta();
+  double getBeta() const;
 
-  inline double getMinDuration() { return minDuration; };
-  inline size_t getMaxSpans() { return maxSpans; };
+  inline double getMinDuration() const { return minDuration; }
+  inline size_t getMaxSpans() const { return maxSpans; }
 
   void setMinDuration(size_t spans);
   void setQFactorMin(size_t spans);
 
-  inline const std::string getRoutingAlgorithmName(unsigned int a) {
+  inline const std::string& getRoutingAlgorithmName(size_t a) const {
     return RoutingAlgorithmNames[a];
-  };
-  inline const std::string getWavelengthAlgorithmName(unsigned int w) {
+  }
+  inline const std::string& getWavelengthAlgorithmName(size_t w) const {
     return WavelengthAlgorithmNames[w];
-  };
-  inline const std::string getProbeStyleName(unsigned int p) {
+  }
+  inline const std::string& getProbeStyleName(unsigned int p) const {
     return ProbeStyleNames[p];
-  };
+  }
 
 #ifndef NO_ALLEGRO
   void setTerminate() { terminateProgram = true; };
@@ -203,11 +187,24 @@ class Thread {
   void detailScreen();
 #endif
 
-  inline size_t getNumberOfConnections() { return numberOfConnections; };
+  inline size_t getNumberOfConnections() const { return numberOfConnections; };
 
   inline double generateRandomZeroToOne() {
     return generateZeroToOne(generator);
   }
+
+  inline const std::string& getTopology() const { return topology; };
+
+  inline void setTopology(const std::string& t) { topology = t; };
+
+  inline MessageLogger* getLogger() { return logger; };
+
+ private:
+  std::vector<Router*> routers;
+  std::vector<Workstation*> workstations;
+
+  void setTopologyParameters(const std::string& f);
+  void setWorkstationParameters(const std::string& f);
 
   std::default_random_engine generator;
 
@@ -216,22 +213,6 @@ class Thread {
 
   std::exponential_distribution<double> generateRandomDuration;
   std::exponential_distribution<double> generateArrivalInterval;
-
-  inline const std::string& getTopology() { return topology; };
-
-  inline void setTopology(const std::string& t) { topology = t; };
-
-  inline MessageLogger* getLogger() { return logger; };
-
-  static const int MORE_SIMULATIONS;
-  static const int COMPLETED_ALL_SIMULATIONS;
-
- private:
-  std::vector<Router*> routers;
-  std::vector<Workstation*> workstations;
-
-  void setTopologyParameters(const std::string& f);
-  void setWorkstationParameters(const std::string& f);
 
   EventQueue* queue;
 
@@ -245,8 +226,7 @@ class Thread {
   std::string WavelengthAlgorithmNames[NUMBER_OF_WAVELENGTH_ALGORITHMS];
   std::string ProbeStyleNames[NUMBER_OF_PROBE_STYLES];
 
-  void setAlgorithmParameters(const std::string& f,
-                              unsigned int iterationCount);
+  void setAlgorithmParameters(const std::string& f, size_t iterationCount);
 
   void activate_workstations();
   void deactivate_workstations();
@@ -310,7 +290,7 @@ class Thread {
   WavelengthAlgorithm CurrentWavelengthAlgorithm;
   ProbeStyle CurrentProbeStyle;
   bool CurrentQualityAware;
-  unsigned int CurrentActiveWorkstations;
+  size_t CurrentActiveWorkstations;
 
   QualityParameters qualityParams;
   void setQualityParameters(const std::string& f);
@@ -326,12 +306,12 @@ class Thread {
   bool order_init;
   size_t* workstationOrder;
 
-  double calculateDelay(size_t spans);
+  double calculateDelay(size_t spans) const;
 
   bool sendResponse(CreateConnectionProbeEvent* probe);
   void clearResponses(CreateConnectionProbeEvent* probe);
   bool moreProbes(CreateConnectionProbeEvent* probe);
-  int otherResponse(CreateConnectionProbeEvent* probe);
+  long long int otherResponse(CreateConnectionProbeEvent* probe);
 
   void updateQMDegredation(Edge** connectionPath, size_t connectionLength,
                            long long int wavelength);

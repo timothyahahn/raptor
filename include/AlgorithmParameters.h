@@ -56,7 +56,7 @@ struct AlgorithmToRun {
   WavelengthAlgorithm wa;
   ProbeStyle ps;
   bool qa;
-  unsigned int workstations;
+  size_t workstations;
 };
 
 #endif
