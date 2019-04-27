@@ -1914,13 +1914,8 @@ void Thread::setWorkstationParameters(const std::string& f) {
 
     // If workstations are not specified, then just uniformly distribute them
     // amongst the routers.
-    for (unsigned int n = static_cast<unsigned int>(workstations.size());
-         n < numberOfWorkstations; ++n) {
-      Workstation* w = new Workstation();
-
-      w->setParentRouterIndex(n % getNumberOfRouters());
-
-      addWorkstation(w);
+    for (size_t n = workstations.size(); n < numberOfWorkstations; ++n) {
+	  addWorkstation(new Workstation(n % getNumberOfRouters()));
     }
 
     inFile.close();

@@ -22,7 +22,7 @@ project(raptor CXX C)
 
 use_cxx11()
 
-add_executable(raptor src/Edge.cpp src/EventQueue.cpp src/GUI.cpp src/Main.cpp src/MessageLogger.cpp src/OctaveWrapper.cpp src/ResourceManager.cpp src/Router.cpp src/Thread.cpp src/Workstation.cpp)
+add_executable(raptor src/Edge.cpp src/EventQueue.cpp src/GUI.cpp src/Main.cpp src/MessageLogger.cpp src/OctaveWrapper.cpp src/ResourceManager.cpp src/Router.cpp src/Thread.cpp)
 
 target_include_directories(raptor PUBLIC kshortestpath/include)
 target_include_directories(raptor PUBLIC include)

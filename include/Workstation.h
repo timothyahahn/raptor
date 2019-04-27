@@ -23,17 +23,16 @@
 
 class Workstation {
  public:
-  Workstation();
-  ~Workstation();
+  Workstation(size_t p) { active = false; parentRouterIndex = p; }
+  ~Workstation() {}
 
-  inline unsigned int getParentRouterIndex() { return parentRouterIndex; };
-  inline void setParentRouterIndex(unsigned int p) { parentRouterIndex = p; };
+  inline size_t getParentRouterIndex() const { return parentRouterIndex; };
 
   inline void setActive(bool a) { active = a; };
-  inline bool getActive() { return active; };
+  inline bool getActive() const { return active; };
 
  private:
-  unsigned int parentRouterIndex;
+  size_t parentRouterIndex;
 
   bool active;
 };
