@@ -103,7 +103,7 @@ if(UNIX)
     SET(CMAKE_FIND_LIBRARY_PREFIXES "lib")
     SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a")
 
-    file(GLOB CANDIDATE_OCTAVE_LIB_DIRS /usr/lib64/octave/* /usr/lib64)
+    file(GLOB CANDIDATE_OCTAVE_LIB_DIRS /opt/octave/lib/octave/5.1.0)
 
     find_library( OCTAVE_LIB
                   NAMES octave
@@ -124,7 +124,7 @@ if(UNIX)
         target_link_libraries(raptor ${OCTINTERP_LIB})
     endif()
 
-    file(GLOB CANDIDATE_OCTAVE_HEADER_DIRS /usr/include/octave* /usr/include/octave*/octave /usr/include)
+    file(GLOB CANDIDATE_OCTAVE_HEADER_DIRS /opt/octave/include/octave-5.1.0 /opt/octave/include/octave-5.1.0/octave)
 
     find_path( OCTAVE_HEADERS
                NAMES octave/octave.h
