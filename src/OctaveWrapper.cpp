@@ -124,7 +124,7 @@ void OctaveWrapper::helloWorld()
 #ifndef NO_OCTAVE
 	try
 	{
-		octave_value_list inputs;
+		octave_value_list inputs(0);
 		const octave_value_list result = octave::feval("hello_world", inputs, 0);
 		if (result.length() > 0)
 		{
@@ -166,7 +166,7 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 #ifndef NO_OCTAVE
 	try
 	{
-		octave_value_list inputs;
+		octave_value_list inputs(7);
 		NDArray fs_array(fs_num);
 		for (size_t f = 0; f < fs_num; ++f)
 		{
@@ -222,7 +222,7 @@ void OctaveWrapper::build_xpm_database(double* fs, int fs_num,
 #ifndef NO_OCTAVE
 	try
 	{
-		octave_value_list inputs;
+		octave_value_list inputs(7);
 		NDArray fs_array(fs_num);
 		for (size_t f = 0; f < fs_num; ++f)
 		{
@@ -265,8 +265,20 @@ void OctaveWrapper::load_xpm_database(double* store, int fs_num) {
 #ifndef NO_OCTAVE
 	try
 	{
-		octave_value_list inputs;
+		octave_value_list inputs(0);
 		octave_value_list result = octave::feval("load_xpm_database", inputs, 0);
+		if (result.length > 0)
+		{
+			NDArray r = result(0).array_value;
+
+			for (int a = 0; a < fs_num; ++a)
+				for (int b = 0; b < fs_num; ++b)
+					store[a * fs_num + b] = r(a, b);
+		}
+		else
+		{
+			std::cerr << "result.length() is unexpectedly 0" << std::endl;
+		}
 	}
 	catch (const octave::exit_exception &ex)
 	{
