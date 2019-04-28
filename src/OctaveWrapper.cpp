@@ -30,34 +30,40 @@ OctaveWrapper::OctaveWrapper()
 	: res_disp(0.0)
 {
 #ifndef NO_OCTAVE
+	threadZero->recordEvent("Initializing Octave Interpreter", true, 0);
+	threadZero->flushLog(true);
 	try
 	{
 		interp.initialize();
 		if (!interp.initialized())
 		{
-			std::cerr << "ERROR: Interpreter initialization failed" << std::endl;
+			threadZero->recordEvent("ERROR: Interpreter initialization failed", true, 0);
+			threadZero->flushLog(true);
 			return;
 		}
 		int status = interp.execute();
 		if (status != 0)
 		{
-			std::cerr << "ERROR: Creating embedded interpreter failed" << std::endl;
+			threadZero->recordEvent("ERROR: Creating embedded interpreter failed", true, 0);
+			threadZero->flushLog(true);
 			return;
 		}
 		interp.get_load_path().append("octave", true);
 	}
-	catch (const octave::exit_exception &ex)
+	catch (const octave::exit_exception & ex)
 	{
-		std::cerr << "Octave interpreter exited with status = "
-			<< ex.exit_status() << std::endl;
+		threadZero->recordEvent("ERROR: Octave interpreter exited with status = " + ex.exit_status(), true, 0);
+		threadZero->flushLog(true);
 	}
 	catch (const octave::execution_exception&)
 	{
-		std::cerr << "error encountered in Octave evaluator!" << std::endl;
+		threadZero->recordEvent("ERROR: encountered in Octave evaluator!", true, 0);
+		threadZero->flushLog(true);
 	}
-	catch (std::runtime_error &re)
+	catch (std::runtime_error & re)
 	{
-		std::cerr << re.what() << std::endl;
+		threadZero->recordEvent("ERROR: " + std::string(re.what()), true, 0);
+		threadZero->flushLog(true);
 	}
 #endif  // NO_OCTAVE
 }
@@ -95,11 +101,13 @@ void OctaveWrapper::build_nonlinear_datastructure(
   if (identical == 1)
   {
 	  threadZero->recordEvent("XPM Matrix is identical, will not recompute.",true,0);
+	  threadZero->flushLog(true);
 	  return;
   }
   else
   {
 	  threadZero->recordEvent("XPM Matrix is diifferent, will recompute.", true, 0);
+	  threadZero->flushLog(true);
   }
 
   build_xpm_database(
@@ -110,44 +118,6 @@ void OctaveWrapper::build_nonlinear_datastructure(
   load_xpm_database(sys_link_xpm_database, sys_fs_num);
 
   return;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// Function Name:	helloWorld
-// Description:		Simple function to test octave
-//
-//
-///////////////////////////////////////////////////////////////////
-void OctaveWrapper::helloWorld()
-{
-#ifndef NO_OCTAVE
-	try
-	{
-		const octave_value_list result = octave::feval("hello_world");
-		if (result.length() > 0)
-		{
-			std::cout << "hello_world returned " << result(0).int_value() << std::endl;
-		}
-		else
-		{
-			std::cerr << "ERROR: result.length() is 0" << std::endl;
-		}
-	}
-	catch (const octave::exit_exception &ex)
-	{
-		std::cerr << "Octave interpreter exited with status = "
-			<< ex.exit_status() << std::endl;
-	}
-	catch (const octave::execution_exception&)
-	{
-		std::cerr << "error encountered in Octave evaluator!" << std::endl;
-	}
-	catch (std::runtime_error &re)
-	{
-		std::cerr << re.what() << std::endl;
-	}
-#endif  // NO_OCTAVE
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -163,8 +133,16 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 	double alphaDB, double gamma,
 	double res_disp, double half_win) {
 #ifndef NO_OCTAVE
+	threadZero->recordEvent("Calling check_last_inputs.m", true, 0);
+	threadZero->flushLog(true);
 	try
 	{
+		if (!interp.initialized())
+		{
+			threadZero->recordEvent("ERROR: Interpreter not initialized", true, 0);
+			threadZero->flushLog(true);
+			return;
+		}
 		octave_value_list inputs(7);
 		dim_vector dv(fs_num,1);
 		Matrix fs_array(dv);
@@ -182,26 +160,28 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 		const octave_value_list result = octave::feval("check_last_inputs", inputs, 1);
 		if (result.length() > 0)
 		{
-			std::cout << "check_last_inputs returned " << result(0).int_value() << std::endl;
 			return result(0).int_value();
 		}
 		else
 		{
-			std::cerr << "ERROR: result.length() is 0" << std::endl;
+			threadZero->recordEvent("ERROR: result.length() is 0", true, 0);
+			threadZero->flushLog(true);
 		}
 	}
-	catch (const octave::exit_exception &ex)
+	catch (const octave::exit_exception & ex)
 	{
-		std::cerr << "Octave interpreter exited with status = "
-			<< ex.exit_status() << std::endl;
+		threadZero->recordEvent("ERROR: Octave interpreter exited with status = " + ex.exit_status(), true, 0);
+		threadZero->flushLog(true);
 	}
 	catch (const octave::execution_exception&)
 	{
-		std::cerr << "error encountered in Octave evaluator!" << std::endl;
+		threadZero->recordEvent("ERROR: encountered in Octave evaluator!", true, 0);
+		threadZero->flushLog(true);
 	}
-	catch (std::runtime_error &re)
+	catch (std::runtime_error & re)
 	{
-		std::cerr << re.what() << std::endl;
+		threadZero->recordEvent("ERROR: " + std::string(re.what()), true, 0);
+		threadZero->flushLog(true);
 	}
 #endif  // NO_OCTAVE
 	return -1;
@@ -220,8 +200,16 @@ void OctaveWrapper::build_xpm_database(double* fs, int fs_num,
                                        double alphaDB, double gamma,
                                        double res_disp, double half_win) {
 #ifndef NO_OCTAVE
+	threadZero->recordEvent("Calling build_xpm_database.m", true, 0);
+	threadZero->flushLog(true);
 	try
 	{
+		if (!interp.initialized())
+		{
+			threadZero->recordEvent("ERROR: Interpreter not initialized", true, 0);
+			threadZero->flushLog(true);
+			return;
+		}
 		octave_value_list inputs(7);
 		dim_vector dv(fs_num, 1);
 		Matrix fs_array(dv);
@@ -240,16 +228,18 @@ void OctaveWrapper::build_xpm_database(double* fs, int fs_num,
 	}
 	catch (const octave::exit_exception &ex)
 	{
-		std::cerr << "Octave interpreter exited with status = "
-			<< ex.exit_status() << std::endl;
+		threadZero->recordEvent("ERROR: Octave interpreter exited with status = " + ex.exit_status(), true, 0);
+		threadZero->flushLog(true);
 	}
 	catch (const octave::execution_exception&)
 	{
-		std::cerr << "error encountered in Octave evaluator!" << std::endl;
+		threadZero->recordEvent("ERROR: encountered in Octave evaluator!", true, 0);
+		threadZero->flushLog(true);
 	}
 	catch (std::runtime_error &re)
 	{
-		std::cerr << re.what() << std::endl;
+		threadZero->recordEvent("ERROR: " + std::string(re.what()), true, 0);
+		threadZero->flushLog(true);
 	}
 #endif  // NO_OCTAVE
   return;
@@ -264,8 +254,16 @@ void OctaveWrapper::build_xpm_database(double* fs, int fs_num,
 ///////////////////////////////////////////////////////////////////
 void OctaveWrapper::load_xpm_database(double* store, int fs_num) {
 #ifndef NO_OCTAVE
+	threadZero->recordEvent("Calling load_xpm_database.m", true, 0);
+	threadZero->flushLog(true);
 	try
 	{
+		if (!interp.initialized())
+		{
+			threadZero->recordEvent("ERROR: Interpreter not initialized", true, 0);
+			threadZero->flushLog(true);
+			return;
+		}
 		octave_value_list result = octave::feval("load_xpm_database");
 		if (result.length() > 0)
 		{
@@ -277,21 +275,24 @@ void OctaveWrapper::load_xpm_database(double* store, int fs_num) {
 		}
 		else
 		{
-			std::cerr << "result.length() is unexpectedly 0" << std::endl;
+			threadZero->recordEvent("ERROR: result.length() is unexpectedly 0", true, 0);
+			threadZero->flushLog(true);
 		}
 	}
 	catch (const octave::exit_exception &ex)
 	{
-		std::cerr << "Octave interpreter exited with status = "
-			<< ex.exit_status() << std::endl;
+		threadZero->recordEvent("ERROR: Octave interpreter exited with status = " + ex.exit_status(), true, 0);
+		threadZero->flushLog(true);
 	}
 	catch (const octave::execution_exception&)
 	{
-		std::cerr << "error encountered in Octave evaluator!" << std::endl;
+		threadZero->recordEvent("ERROR: encountered in Octave evaluator!", true, 0);
+		threadZero->flushLog(true);
 	}
 	catch (std::runtime_error &re)
 	{
-		std::cerr << re.what() << std::endl;
+		threadZero->recordEvent("ERROR: " + std::string(re.what()), true, 0);
+		threadZero->flushLog(true);
 	}
 #endif  // NO_OCTAVE
 	return;
