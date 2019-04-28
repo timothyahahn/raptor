@@ -90,6 +90,7 @@ void OctaveWrapper::build_nonlinear_datastructure(
 #ifdef NO_OCTAVE
   threadZero->recordEvent(
       "Octave support not enabled, no xpm calculations possible", true, 0);
+  threadZero->flushLog(true);
   return;
 #endif  // NO_OCTAVE
 
@@ -141,7 +142,7 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 		{
 			threadZero->recordEvent("ERROR: Interpreter not initialized", true, 0);
 			threadZero->flushLog(true);
-			return;
+			return ERROR_OCTAVE;
 		}
 		octave_value_list inputs(7);
 		dim_vector dv(fs_num,1);
@@ -184,7 +185,7 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 		threadZero->flushLog(true);
 	}
 #endif  // NO_OCTAVE
-	return -1;
+	return ERROR_OCTAVE;
 }
 
 ///////////////////////////////////////////////////////////////////
