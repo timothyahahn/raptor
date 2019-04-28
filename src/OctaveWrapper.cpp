@@ -46,7 +46,7 @@ OctaveWrapper::OctaveWrapper()
 		}
 		interp.get_load_path().append("octave", true);
 	}
-	catch (const octave::exit_exception & ex)
+	catch (const octave::exit_exception &ex)
 	{
 		std::cerr << "Octave interpreter exited with status = "
 			<< ex.exit_status() << std::endl;
@@ -54,6 +54,10 @@ OctaveWrapper::OctaveWrapper()
 	catch (const octave::execution_exception&)
 	{
 		std::cerr << "error encountered in Octave evaluator!" << std::endl;
+	}
+	catch (std::runtime_error &re)
+	{
+		std::cerr << re.what() << std::endl;
 	}
 #endif  // NO_OCTAVE
 }
@@ -131,7 +135,7 @@ void OctaveWrapper::helloWorld()
 			std::cerr << "ERROR: result.length() is 0" << std::endl;
 		}
 	}
-	catch (const octave::exit_exception & ex)
+	catch (const octave::exit_exception &ex)
 	{
 		std::cerr << "Octave interpreter exited with status = "
 			<< ex.exit_status() << std::endl;
@@ -139,6 +143,10 @@ void OctaveWrapper::helloWorld()
 	catch (const octave::execution_exception&)
 	{
 		std::cerr << "error encountered in Octave evaluator!" << std::endl;
+	}
+	catch (std::runtime_error &re)
+	{
+		std::cerr << re.what() << std::endl;
 	}
 #endif  // NO_OCTAVE
 }
@@ -182,7 +190,7 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 			std::cerr << "ERROR: result.length() is 0" << std::endl;
 		}
 	}
-	catch (const octave::exit_exception & ex)
+	catch (const octave::exit_exception &ex)
 	{
 		std::cerr << "Octave interpreter exited with status = "
 			<< ex.exit_status() << std::endl;
@@ -190,6 +198,10 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 	catch (const octave::execution_exception&)
 	{
 		std::cerr << "error encountered in Octave evaluator!" << std::endl;
+	}
+	catch (std::runtime_error &re)
+	{
+		std::cerr << re.what() << std::endl;
 	}
 #endif  // NO_OCTAVE
 	return -1;
@@ -225,7 +237,7 @@ void OctaveWrapper::build_xpm_database(double* fs, int fs_num,
 		inputs(6) = half_win;
 		octave_value_list result = octave::feval("build_libxpm_database", inputs, 7);
 	}
-	catch (const octave::exit_exception & ex)
+	catch (const octave::exit_exception &ex)
 	{
 		std::cerr << "Octave interpreter exited with status = "
 			<< ex.exit_status() << std::endl;
@@ -233,6 +245,10 @@ void OctaveWrapper::build_xpm_database(double* fs, int fs_num,
 	catch (const octave::execution_exception&)
 	{
 		std::cerr << "error encountered in Octave evaluator!" << std::endl;
+	}
+	catch (std::runtime_error &re)
+	{
+		std::cerr << re.what() << std::endl;
 	}
 #endif  // NO_OCTAVE
   return;
@@ -252,7 +268,7 @@ void OctaveWrapper::load_xpm_database(double* store, int fs_num) {
 		octave_value_list inputs;
 		octave_value_list result = octave::feval("load_xpm_database", inputs, 0);
 	}
-	catch (const octave::exit_exception & ex)
+	catch (const octave::exit_exception &ex)
 	{
 		std::cerr << "Octave interpreter exited with status = "
 			<< ex.exit_status() << std::endl;
@@ -260,6 +276,10 @@ void OctaveWrapper::load_xpm_database(double* store, int fs_num) {
 	catch (const octave::execution_exception&)
 	{
 		std::cerr << "error encountered in Octave evaluator!" << std::endl;
+	}
+	catch (std::runtime_error &re)
+	{
+		std::cerr << re.what() << std::endl;
 	}
 #endif  // NO_OCTAVE
 	return;
