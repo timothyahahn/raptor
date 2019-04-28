@@ -269,7 +269,7 @@ void OctaveWrapper::load_xpm_database(double* store, int fs_num) {
 		octave_value_list result = octave::feval("load_xpm_database", inputs, 0);
 		if (result.length() > 0)
 		{
-			NDArray r = result(0).array_value;
+			NDArray r = result(0).array_value();
 
 			for (int a = 0; a < fs_num; ++a)
 				for (int b = 0; b < fs_num; ++b)
