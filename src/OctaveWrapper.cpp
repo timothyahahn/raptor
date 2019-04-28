@@ -166,10 +166,11 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 	try
 	{
 		octave_value_list inputs(7);
-		NDArray fs_array(fs_num);
-		for (size_t f = 1; f <= fs_num; ++f)
+		dim_vector dv(fs_num,1);
+		Matrix fs_array(dv);
+		for (size_t f = 0; f < fs_num; ++f)
 		{
-			fs_array(f) = fs[f-1];
+			fs_array(f) = fs[f];
 		}
 		inputs(1) = fs_array;
 		inputs(2) = channel_power;
@@ -181,8 +182,8 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 		const octave_value_list result = octave::feval("check_last_inputs", inputs, 1);
 		if (result.length() > 0)
 		{
-			std::cout << "check_last_inputs returned " << result(1).int_value() << std::endl;
-			return result(1).int_value();
+			std::cout << "check_last_inputs returned " << result(0).int_value() << std::endl;
+			return result(0).int_value();
 		}
 		else
 		{
@@ -267,11 +268,11 @@ void OctaveWrapper::load_xpm_database(double* store, int fs_num) {
 		octave_value_list result = octave::feval("load_xpm_database");
 		if (result.length() > 0)
 		{
-			NDArray r = result(1).array_value();
+			Matrix m = result(0).array_value();
 
-			for (int a = 1; a <= fs_num; ++a)
-				for (int b = 1; b <= fs_num; ++b)
-					store[(a-1) * fs_num + (b-1)] = r(a, b);
+			for (int a = 0; a < fs_num; ++a)
+				for (int b = 0; b < fs_num; ++b)
+					store[a * fs_num + b] = m(a, b);
 		}
 		else
 		{
