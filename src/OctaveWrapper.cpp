@@ -94,11 +94,12 @@ void OctaveWrapper::helloWorld()
 			std::cerr << "ERROR: Creating embedded interpreter failed" << std::endl;
 			return;
 		}
+		interp.get_load_path().append("octave",true);
 		octave_value_list inputs;
 		const octave_value_list result = octave::feval("hello_world", inputs, 0);
 		if (result.length() > 0)
 		{
-			std::cout << "hello_world returned" << result(0).int_value();
+			std::cout << "hello_world returned " << result(0).int_value() << std::endl;
 		}
 		else
 		{
