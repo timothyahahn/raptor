@@ -146,6 +146,7 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 	try
 	{
 		octave::interpreter interp;
+		interp.verbose(true);
 		interp.initialize();
 		if (!interp.initialized())
 		{
@@ -212,6 +213,7 @@ void OctaveWrapper::build_xpm_database(double* fs, int fs_num,
 	try
 	{
 		octave::interpreter interp;
+		interp.verbose(true);
 		interp.initialize();
 		if (!interp.initialized())
 		{
@@ -265,6 +267,7 @@ void OctaveWrapper::load_xpm_database(double* store, int fs_num) {
 	try
 	{
 		octave::interpreter interp;
+		interp.verbose(true);
 		interp.initialize();
 		if (!interp.initialized())
 		{
