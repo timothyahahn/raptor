@@ -19,13 +19,6 @@
 
 #include "OctaveWrapper.h"
 
-#ifndef NO_OCTAVE
-#include <octave/oct.h>
-#include <octave/octave.h>
-#include <octave/parse.h>
-#include <octave/interpreter.h>
-#endif  // NO_OCTAVE
-
 #include "Thread.h"
 
 #include <algorithm>
@@ -33,7 +26,37 @@
 
 extern Thread* threadZero;
 
-double OctaveWrapper::res_disp = 0.0;
+OctaveWrapper::OctaveWrapper()
+	: res_disp(0.0)
+{
+#ifndef NO_OCTAVE
+	try
+	{
+		interp.initialize();
+		if (!interp.initialized())
+		{
+			std::cerr << "ERROR: Interpreter initialization failed" << std::endl;
+			return;
+		}
+		int status = interp.execute();
+		if (status != 0)
+		{
+			std::cerr << "ERROR: Creating embedded interpreter failed" << std::endl;
+			return;
+		}
+		interp.get_load_path().append("octave", true);
+	}
+	catch (const octave::exit_exception & ex)
+	{
+		std::cerr << "Octave interpreter exited with status = "
+			<< ex.exit_status() << std::endl;
+	}
+	catch (const octave::execution_exception&)
+	{
+		std::cerr << "error encountered in Octave evaluator!" << std::endl;
+	}
+#endif  // NO_OCTAVE
+}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -97,20 +120,6 @@ void OctaveWrapper::helloWorld()
 #ifndef NO_OCTAVE
 	try
 	{
-		octave::interpreter interp;
-		interp.initialize();
-		if (!interp.initialized())
-		{
-			std::cerr << "ERROR: Interpreter initialization failed" << std::endl;
-			return;
-		}
-		int status = interp.execute();
-		if (status != 0)
-		{
-			std::cerr << "ERROR: Creating embedded interpreter failed" << std::endl;
-			return;
-		}
-		interp.get_load_path().append("octave",true);
 		octave_value_list inputs;
 		const octave_value_list result = octave::feval("hello_world", inputs, 0);
 		if (result.length() > 0)
@@ -149,21 +158,6 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 #ifndef NO_OCTAVE
 	try
 	{
-		octave::interpreter interp;
-		interp.verbose(true);
-		interp.initialize();
-		if (!interp.initialized())
-		{
-			std::cerr << "ERROR: Interpreter initialization failed" << std::endl;
-			return -1;
-		}
-		int status = interp.execute();
-		if (status != 0)
-		{
-			std::cerr << "ERROR: Creating embedded interpreter failed" << std::endl;
-			return -1;
-		}
-		interp.get_load_path().append("octave", true);
 		octave_value_list inputs;
 		NDArray fs_array(fs_num);
 		for (size_t f = 0; f < fs_num; ++f)
@@ -216,21 +210,6 @@ void OctaveWrapper::build_xpm_database(double* fs, int fs_num,
 #ifndef NO_OCTAVE
 	try
 	{
-		octave::interpreter interp;
-		interp.verbose(true);
-		interp.initialize();
-		if (!interp.initialized())
-		{
-			std::cerr << "ERROR: Interpreter initialization failed" << std::endl;
-			return;
-		}
-		int status = interp.execute();
-		if (status != 0)
-		{
-			std::cerr << "ERROR: Creating embedded interpreter failed" << std::endl;
-			return;
-		}
-		interp.get_load_path().append("octave", true);
 		octave_value_list inputs;
 		NDArray fs_array(fs_num);
 		for (size_t f = 0; f < fs_num; ++f)
@@ -270,21 +249,6 @@ void OctaveWrapper::load_xpm_database(double* store, int fs_num) {
 #ifndef NO_OCTAVE
 	try
 	{
-		octave::interpreter interp;
-		interp.verbose(true);
-		interp.initialize();
-		if (!interp.initialized())
-		{
-			std::cerr << "ERROR: Interpreter initialization failed" << std::endl;
-			return;
-		}
-		int status = interp.execute();
-		if (status != 0)
-		{
-			std::cerr << "ERROR: Creating embedded interpreter failed" << std::endl;
-			return;
-		}
-		interp.get_load_path().append("octave", true);
 		octave_value_list inputs;
 		octave_value_list result = octave::feval("load_xpm_database", inputs, 0);
 	}
