@@ -107,16 +107,16 @@ void OctaveWrapper::build_nonlinear_datastructure(
   }
   else
   {
-	  threadZero->recordEvent("XPM Matrix is diifferent, will recompute.", true, 0);
+	  threadZero->recordEvent("XPM Matrix is different, will recompute.", true, 0);
 	  threadZero->flushLog(true);
   }
 
-  build_xpm_database(
+  build_libxpm_database(
       sys_fs, sys_fs_num, threadZero->getQualityParams().channel_power,
       threadZero->getQualityParams().D, threadZero->getQualityParams().alphaDB,
       threadZero->getQualityParams().gamma, res_disp, threadZero->getQualityParams().halfwavelength);
 
-  load_xpm_database(sys_link_xpm_database, sys_fs_num);
+  load_libxpm_database(sys_link_xpm_database, sys_fs_num);
 
   return;
 }
@@ -190,18 +190,18 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 
 ///////////////////////////////////////////////////////////////////
 //
-// Function Name:	build_xpm_database
+// Function Name:	build_libxpm_database
 // Description:		Builds a nonlinear database used to calculate
 //					the XPM through a series of Octave
 //calls.
 //
 ///////////////////////////////////////////////////////////////////
-void OctaveWrapper::build_xpm_database(double* fs, int fs_num,
+void OctaveWrapper::build_libxpm_database(double* fs, int fs_num,
                                        double channel_power, double D,
                                        double alphaDB, double gamma,
                                        double res_disp, double half_win) {
 #ifndef NO_OCTAVE
-	threadZero->recordEvent("Calling build_xpm_database.m", true, 0);
+	threadZero->recordEvent("Calling build_libxpm_database.m", true, 0);
 	threadZero->flushLog(true);
 	try
 	{
@@ -248,14 +248,14 @@ void OctaveWrapper::build_xpm_database(double* fs, int fs_num,
 
 ///////////////////////////////////////////////////////////////////
 //
-// Function Name:	load_xpm_database
+// Function Name:	load_libxpm_database
 // Description:		Loads the XPM database from the out matrix and
 //					stores it into the store database.
 //
 ///////////////////////////////////////////////////////////////////
-void OctaveWrapper::load_xpm_database(double* store, int fs_num) {
+void OctaveWrapper::load_libxpm_database(double* store, int fs_num) {
 #ifndef NO_OCTAVE
-	threadZero->recordEvent("Calling load_xpm_database.m", true, 0);
+	threadZero->recordEvent("Calling load_libxpm_database.m", true, 0);
 	threadZero->flushLog(true);
 	try
 	{
@@ -265,7 +265,7 @@ void OctaveWrapper::load_xpm_database(double* store, int fs_num) {
 			threadZero->flushLog(true);
 			return;
 		}
-		octave_value_list result = octave::feval("load_xpm_database");
+		octave_value_list result = octave::feval("load_libxpm_database");
 		if (result.length() > 0)
 		{
 			Matrix m = result(0).array_value();

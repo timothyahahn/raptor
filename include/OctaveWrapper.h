@@ -35,13 +35,13 @@ class OctaveWrapper {
                                             double *sys_link_xpm_database);
 
  private:
-  void build_xpm_database(double *fs, int fs_num, double channel_power,
+  void build_libxpm_database(double *fs, int fs_num, double channel_power,
                                  double D, double alphaDB, double gamma,
                                  double res_disp, double half_win);
   int check_last_inputs(double* fs, int fs_num, double channel_power,
 	                           double D, double alphaDB, double gamma,
 	                           double res_disp, double half_win);
-  void load_xpm_database(double *store, int fs_num);
+  void load_libxpm_database(double *store, int fs_num);
   int gen_frequency_comb(double *frequencies, double fc, double step,
                                 int left, int right, int wo_fc);
 
