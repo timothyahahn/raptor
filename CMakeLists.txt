@@ -82,7 +82,7 @@ if(WIN32)
     #    target_link_libraries(raptor ${OCTINTERP_LIB})
     #endif()
 
-    file(GLOB CANDIDATE_OCTAVE_HEADER_DIRS "C:/Octave/Octave-5.1.0.0/mingw32/include/octave-5.1.0")
+    file(GLOB CANDIDATE_OCTAVE_HEADER_DIRS "C:/Octave/Octave-5.1.0.0/mingw64/include/octave-5.1.0")
 
     find_path( OCTAVE_HEADERS
                NAMES octave/octave.h

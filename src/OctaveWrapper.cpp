@@ -28,6 +28,7 @@
 
 #include "Thread.h"
 
+#include <algorithm>
 #include <string>
 
 extern Thread* threadZero;
@@ -50,9 +51,8 @@ void OctaveWrapper::build_nonlinear_datastructure(
                          threadZero->getQualityParams().halfwavelength,
                          threadZero->getQualityParams().halfwavelength, 1);
 
-  for (size_t i = 0; i < threadZero->getNumberOfWavelengths(); i++)
-    for (size_t j = 0; j < threadZero->getNumberOfWavelengths(); j++)
-      sys_link_xpm_database[i * threadZero->getNumberOfWavelengths() + j] = 0.0;
+  std::fill(sys_link_xpm_database, sys_link_xpm_database + 
+	  threadZero->getNumberOfWavelengths() * threadZero->getNumberOfWavelengths(), 0.0);
 
 #ifdef NO_OCTAVE
   threadZero->recordEvent(
@@ -60,10 +60,21 @@ void OctaveWrapper::build_nonlinear_datastructure(
   return;
 #endif  // NO_OCTAVE
 
+  int identical = check_last_inputs(
+	  sys_fs, sys_fs_num, threadZero->getQualityParams().channel_power,
+	  threadZero->getQualityParams().D, threadZero->getQualityParams().alphaDB,
+	  threadZero->getQualityParams().gamma, res_disp, threadZero->getQualityParams().halfwavelength);
+
+  if (identical == 1)
+  {
+	  threadZero->recordEvent("XPM Matrix is identical, will not recompute.",true,0);
+	  return;
+  }
+
   build_xpm_database(
       sys_fs, sys_fs_num, threadZero->getQualityParams().channel_power,
       threadZero->getQualityParams().D, threadZero->getQualityParams().alphaDB,
-      threadZero->getQualityParams().gamma, res_disp);
+      threadZero->getQualityParams().gamma, res_disp, threadZero->getQualityParams().halfwavelength);
 
   load_xpm_database(sys_link_xpm_database, sys_fs_num);
 
@@ -79,6 +90,7 @@ void OctaveWrapper::build_nonlinear_datastructure(
 ///////////////////////////////////////////////////////////////////
 void OctaveWrapper::helloWorld()
 {
+#ifndef NO_OCTAVE
 	try
 	{
 		octave::interpreter interp;
@@ -115,6 +127,73 @@ void OctaveWrapper::helloWorld()
 	{
 		std::cerr << "error encountered in Octave evaluator!" << std::endl;
 	}
+#endif  // NO_OCTAVE
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// Function Name:	check_last_inputs
+// Description:		Checks the nonlinear datastructure to determine
+//                  if the inputs have changed and a recalculation
+//                  is necessary.
+//
+///////////////////////////////////////////////////////////////////
+int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
+	double channel_power, double D,
+	double alphaDB, double gamma,
+	double res_disp, double half_win) {
+#ifndef NO_OCTAVE
+	try
+	{
+		octave::interpreter interp;
+		interp.initialize();
+		if (!interp.initialized())
+		{
+			std::cerr << "ERROR: Interpreter initialization failed" << std::endl;
+			return -1;
+		}
+		int status = interp.execute();
+		if (status != 0)
+		{
+			std::cerr << "ERROR: Creating embedded interpreter failed" << std::endl;
+			return -1;
+		}
+		interp.get_load_path().append("octave", true);
+		octave_value_list inputs;
+		NDArray fs_array(fs_num);
+		for (size_t f = 0; f < fs_num; ++f)
+		{
+			fs_array(f) = fs[f];
+		}
+		inputs(0) = fs_array;
+		inputs(1) = channel_power;
+		inputs(2) = D;
+		inputs(3) = alphaDB;
+		inputs(4) = gamma;
+		inputs(5) = res_disp;
+		inputs(6) = half_win;
+		const octave_value_list result = octave::feval("check_last_inputs", inputs, 7);
+		if (result.length() > 0)
+		{
+			std::cout << "check_last_inputs returned " << result(0).int_value() << std::endl;
+			return result(0).int_value();
+		}
+		else
+		{
+			std::cerr << "ERROR: result.length() is 0" << std::endl;
+		}
+	}
+	catch (const octave::exit_exception & ex)
+	{
+		std::cerr << "Octave interpreter exited with status = "
+			<< ex.exit_status() << std::endl;
+	}
+	catch (const octave::execution_exception&)
+	{
+		std::cerr << "error encountered in Octave evaluator!" << std::endl;
+	}
+#endif  // NO_OCTAVE
+	return -1;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -128,51 +207,49 @@ void OctaveWrapper::helloWorld()
 void OctaveWrapper::build_xpm_database(double* fs, int fs_num,
                                        double channel_power, double D,
                                        double alphaDB, double gamma,
-                                       double res_disp) {
-  /*try {
-          mwArray in1(1,fs_num,mxDOUBLE_CLASS);
-          mwArray in2(1,1,mxDOUBLE_CLASS);
-          mwArray in3(1,1,mxDOUBLE_CLASS);
-          mwArray in4(1,1,mxDOUBLE_CLASS);
-          mwArray in5(1,1,mxDOUBLE_CLASS);
-          mwArray in6(1,1,mxDOUBLE_CLASS);
-          mwArray in7(1,1,mxDOUBLE_CLASS);
-
-          for(int id = 0;id<fs_num;id++)
-                  in1(1,id+1) = fs[id];
-
-          in2(1,1) = channel_power;
-          in3(1,1) = D;
-          in4(1,1) = alphaDB;
-          in5(1,1) = gamma;
-          in6(1,1) = res_disp;
-          in7(1,1) = threadZero->getQualityParams().nonlinear_halfwin;
-
-          int numberOfReturnVals = 1;
-          mwArray out1(1,1,mxDOUBLE_CLASS);
-
-          check_last_inputs(numberOfReturnVals,out1,in1,in2,in3,in4,in5,in6,in7);
-
-          if(static_cast<int>(out1(1,1)) == 1)
-          {
-                  //The previous inputs are identical. Just reload the matrix.
-                  printf("Reloading XPM matrix....");
-          }
-          else
-          {
-                  //The previous inputs were different. Rebuild the matrix.
-                  printf("Building XPM matrix...");
-                  build_libxpm_database(in1,in2,in3,in4,in5,in6,in7);
-          }
-
-  }
-catch (const mwException& e) {
-          std::cerr << e.what() << std::endl;
-}
-  catch (...) {
-          std::cerr << "Unexpected error thrown" << std::endl;
-}*/
-
+                                       double res_disp, double half_win) {
+#ifndef NO_OCTAVE
+	try
+	{
+		octave::interpreter interp;
+		interp.initialize();
+		if (!interp.initialized())
+		{
+			std::cerr << "ERROR: Interpreter initialization failed" << std::endl;
+			return;
+		}
+		int status = interp.execute();
+		if (status != 0)
+		{
+			std::cerr << "ERROR: Creating embedded interpreter failed" << std::endl;
+			return;
+		}
+		interp.get_load_path().append("octave", true);
+		octave_value_list inputs;
+		NDArray fs_array(fs_num);
+		for (size_t f = 0; f < fs_num; ++f)
+		{
+			fs_array(f) = fs[f];
+		}
+		inputs(0) = fs_array;
+		inputs(1) = channel_power;
+		inputs(2) = D;
+		inputs(3) = alphaDB;
+		inputs(4) = gamma;
+		inputs(5) = res_disp;
+		inputs(6) = half_win;
+		octave_value_list result = octave::feval("build_libxpm_database", inputs, 7);
+	}
+	catch (const octave::exit_exception & ex)
+	{
+		std::cerr << "Octave interpreter exited with status = "
+			<< ex.exit_status() << std::endl;
+	}
+	catch (const octave::execution_exception&)
+	{
+		std::cerr << "error encountered in Octave evaluator!" << std::endl;
+	}
+#endif  // NO_OCTAVE
   return;
 }
 
@@ -184,18 +261,37 @@ catch (const mwException& e) {
 //
 ///////////////////////////////////////////////////////////////////
 void OctaveWrapper::load_xpm_database(double* store, int fs_num) {
-  /*mwArray
-  out(threadZero->getNumberOfWavelengths(),threadZero->getNumberOfWavelengths(),mxDOUBLE_CLASS);
-  load_libxpm_database(1, out);
-
-  for(int i=0;i<fs_num;i++)
-          for(int j=0;j<fs_num;j++)
-                  store[i * threadZero->getNumberOfWavelengths() + j] =
-  out(i+1,j+1);
-
-  printf("done.\n");*/
-
-  return;
+#ifndef NO_OCTAVE
+	try
+	{
+		octave::interpreter interp;
+		interp.initialize();
+		if (!interp.initialized())
+		{
+			std::cerr << "ERROR: Interpreter initialization failed" << std::endl;
+			return;
+		}
+		int status = interp.execute();
+		if (status != 0)
+		{
+			std::cerr << "ERROR: Creating embedded interpreter failed" << std::endl;
+			return;
+		}
+		interp.get_load_path().append("octave", true);
+		octave_value_list inputs;
+		octave_value_list result = octave::feval("load_xpm_database", inputs, 0);
+	}
+	catch (const octave::exit_exception & ex)
+	{
+		std::cerr << "Octave interpreter exited with status = "
+			<< ex.exit_status() << std::endl;
+	}
+	catch (const octave::execution_exception&)
+	{
+		std::cerr << "error encountered in Octave evaluator!" << std::endl;
+	}
+#endif  // NO_OCTAVE
+	return;
 }
 
 ///////////////////////////////////////////////////////////////////
