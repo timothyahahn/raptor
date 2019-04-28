@@ -124,8 +124,7 @@ void OctaveWrapper::helloWorld()
 #ifndef NO_OCTAVE
 	try
 	{
-		octave_value_list inputs(0);
-		const octave_value_list result = octave::feval("hello_world", inputs, 0);
+		const octave_value_list result = octave::feval("hello_world");
 		if (result.length() > 0)
 		{
 			std::cout << "hello_world returned " << result(0).int_value() << std::endl;
@@ -179,7 +178,7 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 		inputs(4) = gamma;
 		inputs(5) = res_disp;
 		inputs(6) = half_win;
-		const octave_value_list result = octave::feval("check_last_inputs", inputs, 7);
+		const octave_value_list result = octave::feval("check_last_inputs", inputs, 1);
 		if (result.length() > 0)
 		{
 			std::cout << "check_last_inputs returned " << result(0).int_value() << std::endl;
@@ -235,7 +234,7 @@ void OctaveWrapper::build_xpm_database(double* fs, int fs_num,
 		inputs(4) = gamma;
 		inputs(5) = res_disp;
 		inputs(6) = half_win;
-		octave_value_list result = octave::feval("build_libxpm_database", inputs, 7);
+		octave_value_list result = octave::feval("build_libxpm_database", inputs, 0);
 	}
 	catch (const octave::exit_exception &ex)
 	{
@@ -265,8 +264,7 @@ void OctaveWrapper::load_xpm_database(double* store, int fs_num) {
 #ifndef NO_OCTAVE
 	try
 	{
-		octave_value_list inputs(0);
-		octave_value_list result = octave::feval("load_xpm_database", inputs, 0);
+		octave_value_list result = octave::feval("load_xpm_database");
 		if (result.length() > 0)
 		{
 			NDArray r = result(0).array_value();
