@@ -79,23 +79,10 @@ void OctaveWrapper::build_nonlinear_datastructure(
 ///////////////////////////////////////////////////////////////////
 void OctaveWrapper::helloWorld()
 {
-	/*string_vector argvv(2);
-	argvv(0) = "embedded";
-	argvv(1) = "-q";
-	octave_main(2, argvv.c_str_vec(), true);
-	std::string warn_for;
-	std::cerr << "about to call source_file" << std::endl;
-	source_file("octave/hello_world.m",std::string(),true,true,warn_for);
-	std::cerr << "returned from call source_file" << std::endl;
-	std::cerr << "warn_for = " << warn_for << std::endl;
-	octave_value_list inputs;
-	const octave_value_list result = feval("hello_world", inputs, 0);
-	result(0).print_raw(std::cout, true);
-	clean_up_and_exit(0);*/
 	try
 	{
 		octave::interpreter interp;
-		/*interp.initialize();
+		interp.initialize();
 		if (!interp.initialized())
 		{
 			std::cerr << "ERROR: Interpreter initialization failed" << std::endl;
@@ -116,8 +103,7 @@ void OctaveWrapper::helloWorld()
 		else
 		{
 			std::cerr << "ERROR: result.length() is 0" << std::endl;
-		}*/
-		interp.execute_command_line_file("octave/hello_world.m");
+		}
 	}
 	catch (const octave::exit_exception & ex)
 	{
