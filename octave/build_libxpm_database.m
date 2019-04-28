@@ -88,7 +88,7 @@ function ret = elc_gauss_filter(w)
   BWD_W  = 2*pi*BWD_elc;
 
   ret   = exp(-2*log(2)*(w/BWD_W)^2);
-end function
+endfunction
 
 function ret = non_filter(w)
   ret =1;
