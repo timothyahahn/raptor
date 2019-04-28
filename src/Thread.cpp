@@ -665,11 +665,13 @@ void Thread::deactivate_workstations() {
       << ") = " << stats.fwmNoiseTotal / double(stats.ConnectionSuccesses);
   threadZero->recordEvent(fwm.str(), true, controllerIndex);
 
+#ifndef NO_OCTAVE
   std::ostringstream xpm;
   xpm << "AVERAGE XPM NOISE (" << stats.xpmNoiseTotal << "/"
       << stats.ConnectionSuccesses
       << ") = " << stats.xpmNoiseTotal / double(stats.ConnectionSuccesses);
   threadZero->recordEvent(xpm.str(), true, controllerIndex);
+#endif //NO_OCTAVE
 
   std::ostringstream runtime;
   runtime << "AVERAGE RA RUN TIME (" << stats.raRunTime << "/"
