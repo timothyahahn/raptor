@@ -70,6 +70,10 @@ void OctaveWrapper::build_nonlinear_datastructure(
 	  threadZero->recordEvent("XPM Matrix is identical, will not recompute.",true,0);
 	  return;
   }
+  else
+  {
+	  threadZero->recordEvent("XPM Matrix is diifferent, will recompute.", true, 0);
+  }
 
   build_xpm_database(
       sys_fs, sys_fs_num, threadZero->getQualityParams().channel_power,
