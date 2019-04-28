@@ -168,7 +168,7 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 	{
 		octave_value_list inputs(7);
 		NDArray fs_array(fs_num);
-		for (size_t f = 0; f < fs_num; ++f)
+		for (size_t f = 1; f <= fs_num; ++f)
 		{
 			fs_array(f) = fs[f];
 		}
@@ -224,7 +224,7 @@ void OctaveWrapper::build_xpm_database(double* fs, int fs_num,
 	{
 		octave_value_list inputs(7);
 		NDArray fs_array(fs_num);
-		for (size_t f = 0; f < fs_num; ++f)
+		for (size_t f = 1; f <= fs_num; ++f)
 		{
 			fs_array(f) = fs[f];
 		}
