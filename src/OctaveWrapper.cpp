@@ -223,8 +223,9 @@ void OctaveWrapper::build_xpm_database(double* fs, int fs_num,
 	try
 	{
 		octave_value_list inputs(7);
-		NDArray fs_array(fs_num);
-		for (size_t f = 1; f <= fs_num; ++f)
+		dim_vector dv(fs_num, 1);
+		Matrix fs_array(dv);
+		for (size_t f = 0; f < fs_num; ++f)
 		{
 			fs_array(f) = fs[f];
 		}
