@@ -1,6 +1,6 @@
 #!/usr/bin/octave
 
-function build_libxpm_database(fs,channel_power,D,alphaDB,gam,res_Disp,HalfWindow)
+function build_libxpm_database(unused,fs,channel_power,D,alphaDB,gam,res_Disp,HalfWindow)
   fs_num = length(fs);
   xpm_matrix = zeros(fs_num,fs_num);
   
