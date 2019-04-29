@@ -1,6 +1,6 @@
 #!/usr/bin/octave
 
-function identical = check_last_inputs(unused,fs_new,channel_power_new,D_new,alphaDB_new,gam_new,res_Disp_new,HalfWindow_new)
+function identical = check_last_inputs(fs_new,channel_power_new,D_new,alphaDB_new,gam_new,res_Disp_new,HalfWindow_new)
 
     identical = 1;
 
