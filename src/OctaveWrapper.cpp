@@ -151,13 +151,13 @@ int OctaveWrapper::check_last_inputs(double* fs, int fs_num,
 		{
 			fs_array(f) = fs[f];
 		}
-		inputs(1) = fs_array;
-		inputs(2) = channel_power;
-		inputs(3) = D;
-		inputs(4) = alphaDB;
-		inputs(5) = gamma;
-		inputs(6) = res_disp;
-		inputs(7) = half_win;
+		inputs(0) = fs_array;
+		inputs(1) = channel_power;
+		inputs(2) = D;
+		inputs(3) = alphaDB;
+		inputs(4) = gamma;
+		inputs(5) = res_disp;
+		inputs(6) = half_win;
 		const octave_value_list result = octave::feval("check_last_inputs", inputs, 1);
 		if (result.length() > 0)
 		{
@@ -218,13 +218,13 @@ void OctaveWrapper::build_libxpm_database(double* fs, int fs_num,
 		{
 			fs_array(f) = fs[f];
 		}
-		inputs(1) = fs_array;
-		inputs(2) = channel_power;
-		inputs(3) = D;
-		inputs(4) = alphaDB;
-		inputs(5) = gamma;
-		inputs(6) = res_disp;
-		inputs(7) = half_win;
+		inputs(0) = fs_array;
+		inputs(1) = channel_power;
+		inputs(2) = D;
+		inputs(3) = alphaDB;
+		inputs(4) = gamma;
+		inputs(5) = res_disp;
+		inputs(6) = half_win;
 		octave_value_list result = octave::feval("build_libxpm_database", inputs, 0);
 	}
 	catch (const octave::exit_exception &ex)
